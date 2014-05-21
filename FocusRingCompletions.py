@@ -87,10 +87,8 @@ class RingLoader(PathLoader):
             pass
         except AttributeError:
             pass
-        if cls.full_view_check(view):
-            return [cls(ring = ring)]
-        else:
-            return []
+        return [cls(ring = ring)]
+
 
 class AliasRingLoader(RingLoader, FileLoader):
     """Loads completions from a View."""
