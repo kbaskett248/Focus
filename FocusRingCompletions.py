@@ -392,7 +392,7 @@ class StateRingLoader(RingLoader, FileLoader):
 
 
 class SystemLoader(StaticLoader):
-    """Loads completions from a View."""
+    """Loads System Variable completions."""
 
     EmptyReturn = ([], sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
     LoadAsync = False
@@ -478,4 +478,174 @@ class SystemLoader(StaticLoader):
     def load_completions(self, **kwargs):
         """Loads system variable completions."""
         self.completions = set([(v, ) for v in SystemLoader.SystemVariables])
+
+
+#==============================================================================
+# Include File CompletionLoaders
+#==============================================================================
+
+
+class IncludeFileLoader(FileLoader):
+    """Parent class for CompletionLoaders that load completions based on a Ring."""
+    LoadAsync = True
+    
+    @classmethod
+    def view_scope(cls):
+        """Return a scope to determine if the CompletionLoader will be enabled for a view."""
+        return Focus.scope_map('source')
+
+    @classmethod
+    def view_check(cls, view):
+        n = view.file_name()
+        if (n is None) or (n == ''):
+            return False
+
+        manager = RingFileManager.getInstance()
+        focus_file = manager.get_ring_file(view)
+        if focus_file is None:
+            return False
+
+        return True
+
+    @classmethod
+    def instances_for_view(cls, view):
+        """Returns a list of instances of the given class to be used for the given view."""
+        manager = RingFileManager.getInstance()
+        focus_file = manager.get_ring_file(view)
+        if focus_file is None:
+            return []
+
+        include_files = focus_file.get_include_files(view)
+        if not include_files:
+            return []
+
+        instances = set()
+        for f in include_files:
+            logger.debug('%s;  f = %s', cls, f)
+            try:
+                instances.add(cls.Instances[f])
+            except KeyError:
+                instances.add(cls(file_path = f))
+            except AttributeError:
+                instances.add(cls(file_path = f))
+        return instances
+
+
+class AliasIncludeLoader(IncludeFileLoader):
+    """Loads aliases defined in an Include File.
+
+    This only loads :Alias aliases since :EntryPoint aliases are always global.
+
+    """
+
+    EmptyReturn = ([], sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+
+    AliasMatcher = re.compile(r"^\s*:Alias\s+([^\n()\t]+?) *$", re.MULTILINE)
+
+    @classmethod
+    def completion_types(cls):
+        """Return a set of completion types that this CompletionLoader can return."""
+        return [CT_ALIAS]
+
+    def load_completions(self, **kwargs):
+        """Populate self.completions with Aliases from an Include file."""
+        self.completions = []
+
+        for match in AliasIncludeLoader.AliasMatcher.finditer(self.file_contents_as_string):
+            self.completions.append(
+                ('@@%s()\t\tInclude' % match.group(1), '%s()' % match.group(1)))
+        
+        # logger.debug('Alias Completions: %s', self.completions)
+
+
+class LocalIncludeLoader(IncludeFileLoader):
+    """Loads any locals used in an Include File."""
+
+    EmptyReturn = ([], sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+
+    LocalMatcher = re.compile(r"@(Get|Put)Local\(([A-Za-z0-9._\-]+)\)")
+
+    @classmethod
+    def completion_types(cls):
+        """Return a list of completion types that this CompletionLoader can return."""
+        return [CT_FOCUS_LOCAL]
+
+    def load_completions(self, **kwargs):
+        """Populate self.completions with Locals from an Include file."""
+        self.completions = []
+        
+        for match in LocalIncludeLoader.LocalMatcher.finditer(self.file_contents_as_string):
+            self.completions.append((match.group(2) + '\t\tInclude', match.group(2)))
+        # logger.debug('Local Completions: %s', self.completions)
+
+
+class ObjectIncludeLoader(IncludeFileLoader):
+    """Loads DataDef completions from an Include File."""
+
+    EmptyReturn = ([], sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+
+    CheckOrder = ('Object', 'Record', 'Field', 'Key')
+    
+    LineMatcher = re.compile(r'^\s*:([A-Za-z0-9]+)\s*(.+?)\s*$')
+    
+    @classmethod
+    def completion_types(cls):
+        """Return a list of completion types that this CompletionLoader can return."""
+        return [CT_OBJECT, CT_RECORD, CT_KEY, CT_FIELD]
+
+    def load_completions(self, **kwargs):
+        """Populate self.completions with objects from an Include file."""
+        # logger.debug('Loading object completions from %s', self.file_path)
+        self.completions = dict()
+        in_datadef = False
+        for l in self.file_contents:
+            if l == '':
+                continue
+            elif l[:2] == '//':
+                continue
+            elif l[0] == '#':
+                if l.startswith('#DataDef'):
+                    in_datadef = True
+                else:
+                    in_datadef = False
+                continue
+            elif in_datadef:
+                match = ObjectIncludeLoader.LineMatcher.match(l)
+                if match is not None:
+                    for t in ObjectIncludeLoader.CheckOrder:
+                        if t == match.group(1):
+                            v = match.group(2)
+                            if (t == 'Object'):
+                                object_ = v
+                            else:
+                                v = '%s.%s' % (object_, v)
+                            try:
+                                self.completions[t].add((v + '\t\tInclude', v))
+                            except KeyError:
+                                self.completions[t] = set()
+                                self.completions[t].add((v + '\t\tInclude', v))
+                            break
+        # logger.debug('Object Completions: %s', self.completions)
+
+
+class SubroutineIncludeLoader(IncludeFileLoader):
+    """Loads subroutine completions from an Include File."""
+
+    EmptyReturn = ([], sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+
+    SubroutineMatcher = re.compile(r"^:Code\s+([^\n()\t]+?) *$", re.MULTILINE)
+
+    @classmethod
+    def completion_types(cls):
+        """Return a list of completion types that this CompletionLoader can return."""
+        return [CT_SUBROUTINE]
+
+    def load_completions(self, **kwargs):
+        """Populate self.completions with subroutines from an Include file."""
+        self.completions = []
+
+        for match in SubroutineIncludeLoader.SubroutineMatcher.finditer(self.file_contents_as_string):
+            self.completions.append((match.group(1) + '\t\tInclude', match.group(1)))
+
+        # logger.debug('Subroutine Completions: %s', self.completions)
 
