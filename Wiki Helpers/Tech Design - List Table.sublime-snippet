@@ -1,0 +1,15 @@
+<snippet>
+    <content><![CDATA[
+{| border=1 cellspacing=0 cellpadding=2 width=75%
+| style="background:#CCCCCC;font-weight:bold;vertical-align:top" colspan=2|:List ${1:List Name} (${2:NEW}${3:EXISTING})
+|-
+| style="background:#CCCCCC;font-weight:bold;vertical-align:top" width=15%|${4:Changes to }List Contents:
+| $5
+|}<br />
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger></tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.wiki, text.plain</scope>
+    <description>M-AT Tools: Tech Design: List Table</description>
+</snippet>

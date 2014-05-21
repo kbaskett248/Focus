@@ -1,0 +1,397 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+name: M-AT
+scopeName: source.m-at
+fileTypes: [focus, fs]
+uuid: da222f5a-4cec-4bcd-82ec-93cedfde55b9
+
+patterns:
+- include: '#comment'
+
+- include: '#string'
+
+- include: '#string_list'
+
+- include: '#alias_translator'
+
+- include: '#datadef_translator'
+
+- include: '#importexport_translator'
+
+- include: '#include_translator'
+
+- include: '#local_translator'
+
+- include: '#magic_translator'
+
+- include: '#screen_translator'
+
+- include: '#screencomponent_translator'
+
+- include: '#screenrecord_translator'
+
+- include: '#screenpage_translator'
+
+- include: '#other_translator'
+
+- include: '#code_keyword'
+
+repository:
+  comment:
+    name: comment.line
+    begin: //
+    end: $
+    patterns:
+    - match: :Doc\s+(\w+\s?\w*)
+      captures:
+        '1': {name: comment.header}
+    - name: comment.header
+      match: '(IN|OUT|VARS|EFFECT|Input|INPUT|Output|OUTPUT|Actions|Descr|DESCR|Assume|Vars|PRE|DESC|Desc|In|Out|Sets|Bugs|Arg|Val|Var|S/E|LOCALS|RETURN|ASSUMES|WARNING|DESCRIPTION|ARGUMENTS|RESULTS|VARIABLES|UPPERSETS|SETS):'
+
+  alias_translator:
+    name: alias.translator.source.m-at
+    begin: ^(#Alias)\b
+    beginCaptures:
+      '1': {name: translator.source.m-at}
+    end: (?=^#)
+    patterns:
+    - name: alias.keyword.source.m-at
+      match: "^ *(:Alias) +([^()\n\t]+?) *$"
+      captures:
+        '1': {name: keyword.source.m-at}
+        '2': {name: alias.source.m-at}
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+
+  attribute_line:
+    name: other.attribute.source.m-at
+    begin: ^ +([A-Za-z]+)
+    beginCaptures:
+      '1': {name: attribute.source.m-at}
+    end: $
+    patterns:
+    - include: '#comment'
+    - include: '#string'
+    - include: '#string_list'
+    - include: '#code_region'
+
+  break:
+    comment: Break
+    name: debug.m-at
+    match: |-
+      @Break(Reset)?\(([^
+      \(\)]*)\)
+    captures:
+      '2': {name: arguments.m-at}
+
+  called_alias:
+    comment: Called Alias
+    match: |-
+      @@[^
+      ()]+?\(([^
+      ()]*?)\)
+    captures:
+      '0': {name: alias.source.m-at}
+      '1': {name: args.alias.source.m-at}
+
+  code_keyword:
+    comment: Code Member
+    name: codeblock.source.m-at
+    begin: "^ *((:Code) +([^\n()\t]+?)) *$"
+    beginCaptures:
+      '1': {name: subroutine.header.source.m-at}
+      '2': {name: keyword.source.m-at}
+      '3': {name: subroutine.name}
+    end: ;
+    patterns:
+    - include: '#code_region'
+
+  code_region:
+    patterns:
+    - include: '#comment'
+    - include: '#string'
+    - include: '#string_list'
+    - include: '#called_alias'
+    - include: '#break'
+    - include: '#mat_function'
+    - include: '#focus_var'
+    - include: '#control_flow'
+    - include: '#focus_function'
+
+  control_flow:
+    name: control.flow
+    begin: (@?(IF|DO)\{|@?\{)
+    end: \}
+    patterns:
+    - include: '#code_region'
+
+  datadef_translator:
+    name: datadef.translator.source.m-at
+    begin: ^(#DataDef)\b
+    beginCaptures:
+      '1': {name: translator.source.m-at}
+    end: (?=^#)
+    patterns:
+    - include: '#object_keyword'
+    - include: '#object_attribute'
+    - include: '#keyword_line'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+
+  focus_function:
+    comment: Magic Function
+    name: focus.function
+    match: (@(\p{Alpha}{2}|\p{Alpha}\d{1,3})|\bDO\b|\bIF\b)
+
+  focus_var:
+    comment: Focus Variable
+    match: (?<!@|\.)\b([A-Z])\b
+    captures:
+      '1': {name: var.source.m-at}
+
+  importexport_translator:
+    name: importexport.translator.source.m-at
+    begin: ^(#ImportExport)\b
+    beginCaptures:
+      '1': {name: translator.source.m-at}
+    end: (?=^#)
+    patterns:
+    - include: '#object_keyword'
+    - include: '#keyword_line'
+    - include: '#object_attribute'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+
+  include_translator:
+    name: include.translator.source.m-at
+    begin: ^(#Include)\b
+    beginCaptures:
+      '1': {name: translator.source.m-at}
+    end: (?=^#)
+    patterns:
+    - include: '#keyword_line'
+    - include: '#attribute_line'
+    - include: '#comment'
+
+  keyword_line:
+    comment: Keyword line
+    name: other.keyword.source.m-at
+    begin: ^ *(:\p{Alpha}+)
+    beginCaptures:
+      '1': {name: keyword.source.m-at}
+    end: $
+    patterns:
+    - include: '#comment'
+    - include: '#string'
+    - include: '#string_list'
+    - include: '#code_region'
+
+  list_keyword:
+    comment: List Member
+    name: listblock.source.m-at
+    begin: "^ *((:List) +([^\n()\t]+?)) *$"
+    beginCaptures:
+      '1': {name: list.header.source.m-at}
+      '2': {name: keyword.source.m-at}
+      '3': {name: subroutine.name}
+    end: (?=:)
+    patterns:
+    - include: '#comment'
+    - comment: String
+      name: string
+      match: |-
+        [\w\W&&[^\}^\{^|^
+        ]]*
+    - comment: List Delimiter
+      name: m-at.function
+      match: '[\}\{|]'
+
+  local_translator:
+    name: local.translator.source.m-at
+    begin: ^(#Locals)\b
+    beginCaptures:
+      '1': {name: translator.source.m-at}
+    end: (?=#)
+    patterns:
+    - name: name.keyword.source.m-at
+      match: ^ *(:Name) +([\w._-]+) *$
+      captures:
+        '1': {name: keyword.source.m-at}
+        '2': {name: local.source.m-at}
+    - include: '#comment'
+
+  magic_translator:
+    comment: Translators
+    name: magic.translator.source.m-at
+    begin: ^(#Magic)\b
+    beginCaptures:
+      '1': {name: translator.source.m-at}
+    end: (?=^#)
+    patterns:
+    - include: '#code_keyword'
+    - include: '#list_keyword'
+    - name: entrypoint.keyword.source.m-at
+      match: "^(:EntryPoint) +([^\n()\t]+?) *$"
+      captures:
+        '1': {name: keyword.source.m-at}
+        '2': {name: subroutine.name}
+    - name: alias.attribute.source.m-at
+      match: "^ *(Alias) +([^\n()\t]+?) *$"
+      captures:
+        '1': {name: attribute.source.m-at}
+        '2': {name: alias.source.m-at}
+    - include: '#translator_continuation'
+    - include: '#comment'
+
+  mat_function:
+    name: m-at.function
+    begin: '@\p{Alpha}{3,}\('
+    end: (\))
+    patterns:
+    - match: '(?<=CallSub\(|CallList\(|CodeMemberNumber\(|BatchesToStackWhile\()([^\n()\t]+)'
+      captures:
+        '1': {name: subroutine.name}
+    - match: '(?<=FileBatchesWhile\()([\w._-]+)(,[^\n()\t]+)'
+      captures:
+        '1': {name: object.source.m-at}
+        '2': {name: subroutine.name}
+    - name: local.source.m-at
+      match: (?<=(Get|Put)Local\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=OID\(|RID\(|RIDs\(|OIDs\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=CallStructuredImport\(|CallStructuredCreate\(|CallStructuredCopyLocal\(|CallStructuredExport\(|CallStructuredExportTxn\(|CallStructuredFlush\(|CallStructuredSubmit\(|CallStructuredPurge\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=ObjectLong\(|ProcessLong\()[\w._-]+
+    - match: (?<=CallStructuredImportAdditional\()([\w._-]+)(,[\w._-]+)
+      captures:
+        '1': {name: object.source.m-at}
+        '2': {name: argument.m-at}
+    - name: object.source.m-at
+      match: (?<=Field\(|Key\(|FieldExternal\(|KeyExternal\(|ElementLabel\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=File\(|Record\(|Records\(|FileCx\(|RecordCx\(|RecordsCx\(|Object\(|Objects\(|ObjectClass\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=LockSystemInfo\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=IndexLookup\(|Index\(|IndexEntry\(|IndexLookupCx\(|IndexLookupResults\(|IndexEntries\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=FullyInMemory\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=NextURN\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=NoDuplicateCheck\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=ToOID\(|ToOIDCx\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=RecordsChanged\(|RecordChanged\(|ObjectChanged\(|RecordCreated\(|RecordsCreated\(|ObjectDirtyFlags\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=RecordTag\()[\w._-]+
+    - name: object.source.m-at
+      match: (?<=ObjectSnapshot\(|SnapshotExists\()[\w._-]+
+    - include: '#control_flow'
+    - name: argument.m-at
+      match: '[^\n)(]*'
+  object_attribute:
+    comment: M-AT Attribute
+    name: object.attribute.source.m-at
+    match: ^ *(Name|File|Class|Record|Index|Pointer) +([\w.]+) *$
+    captures:
+      '1': {name: attribute.source.m-at}
+      '2': {name: object.source.m-at}
+  object_keyword:
+    name: object.keyword.source.m-at
+    match: ^ *(:(Object|Record|File|Field|Key|Index|Element|IndexKey)) +([\w.]+) *$
+    captures:
+      '1': {name: keyword.source.m-at}
+      '3': {name: object.source.m-at}
+  other_translator:
+    name: other.translator.source.m-at
+    begin: ^(#\p{Alpha}+) *$
+    beginCaptures:
+      '1': {name: translator.source.m-at}
+    end: (?=^#)
+    patterns:
+    - include: '#keyword_line'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+  screen_translator:
+    name: screen.translator.source.m-at
+    begin: ^(#Screen)\b
+    beginCaptures:
+      '1': {name: translator.source.m-at}
+    end: (?=^#)
+    patterns:
+    - include: '#keyword_line'
+    - include: '#object_attribute'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+  screencomponent_translator:
+    name: screencomponent.translator.source.m-at
+    begin: ^(#ScreenComponent)\b
+    beginCaptures:
+      '1': {name: translator.source.m-at}
+    end: (?=^#)
+    patterns:
+    - name: elementset.keyword.source.m-at
+      match: "^ *(:ElementSet) +([^\n()\t]+? *$)"
+      captures:
+        '1': {name: keyword.source.m-at}
+        '2': {name: elementset.source.m-at}
+    - name: other.attribute.source.m-at
+      match: "^ *(Name) +[^\n()\t]+? *$"
+      captures:
+        '1': {name: attribute.source.m-at}
+    - include: '#object_keyword'
+    - include: '#keyword_line'
+    - include: '#object_attribute'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+  screenpage_translator:
+    name: screenpage.translator.source.m-at
+    begin: ^(#ScreenPage)\b
+    beginCaptures:
+      '1': {name: translator.source.m-at}
+    end: (?=^#)
+    patterns:
+    - include: '#keyword_line'
+    - include: '#attribute_line'
+    - include: '#comment'
+  screenrecord_translator:
+    name: screenrecord.translator.source.m-at
+    begin: ^(#ScreenRecord)\b
+    beginCaptures:
+      '1': {name: translator.source.m-at}
+    end: (?=^#)
+    patterns:
+    - include: '#object_keyword'
+    - include: '#keyword_line'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+  string:
+    comment: String
+    name: string
+    match: '"[^"]*"'
+  string_list:
+    comment: List
+    name: string
+    match: '`[^'']*'''
+  translator_continuation:
+    name: other.keyword.source.m-at
+    begin: ^ *(-->)
+    beginCaptures:
+      '1': {name: keyword.source.m-at}
+    end: $
+    patterns:
+    - include: '#comment'
+    - include: '#string'
+    - include: '#string_list'
+    - include: '#code_region'
+foldingStartMarker: ^Code:.+$
+foldingStopMarker: ^;$

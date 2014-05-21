@@ -1,0 +1,205 @@
+# [PackageDev] target_format: plist
+comment: 'Last update: Feb 25 2013'
+name: Boron
+uuid: 4e4cdb00-2fb2-11e2-81c1-0800200c9a66
+settings:
+- settings:
+    background: '#151515'
+    caret: '#b0d0f0'
+    foreground: '#e8e8d3'
+    gutterForeground: '#373737'
+    invisibles: '#e8e8d3'
+    lineHighlight: '#010101'
+    selection: '#404040'
+- name: Comment
+  scope: comment
+  settings:
+    foreground: '#888888'
+- name: Comment Header
+  scope: comment.header
+  settings:
+    fontStyle: bold
+    foreground: '#888888'
+- name: String
+  scope: string
+  settings:
+    foreground: '#99ad6a'
+- name: String begin/end
+  scope: punctuation.definition.string.begin, punctuation.definition.string.end
+  settings:
+    foreground: '#556633'
+- name: Symbol
+  scope: constant.other
+  settings:
+    foreground: '#7697d6'
+- name: Regexp
+  scope: string.regexp
+  settings:
+    foreground: '#dd0093'
+- name: Variable
+  scope: variable, support.class
+  settings:
+    foreground: '#ffb964'
+- name: Number
+  scope: constant.numeric
+  settings:
+    foreground: '#cf6a4c'
+- name: Entity
+  scope: entity
+  settings:
+    foreground: '#ffb964'
+- name: Entity Function
+  scope: entity.name.function
+  settings:
+    foreground: '#fad07a'
+- name: Keyword
+  scope: keyword.control
+  settings:
+    foreground: '#8fbfdc'
+- name: Diff insertion
+  scope: diff.inserted, markup.inserted
+  settings:
+    foreground: '#558f1f'
+- name: Diff deletion
+  scope: diff.deleted, markup.deleted
+  settings:
+    foreground: '#a1000d'
+- name: Diff header
+  scope: meta.diff.header
+  settings:
+    background: '#4e738a'
+    foreground: '#FFFFFF'
+- name: Diff range
+  scope: meta.diff.range
+  settings:
+    fontStyle: italic
+    foreground: '#888888'
+- name: Diff changed
+  scope: markup.changed
+  settings:
+    foreground: '#967efb'
+# M-AT specific
+- name: Translator
+  scope: translator.source.m-at
+  settings:
+    fontStyle: bold
+    foreground: '#e8e8d3'
+- name: Keyword
+  scope: keyword.source.m-at
+  settings:
+    fontStyle: underline
+    foreground: '#e8e8d3'
+- name: Attribute
+  scope: attribute.source.m-at
+  settings:
+    fontStyle: italic
+    foreground: '#e8e8d3'
+- name: M-AT Function
+  scope: m-at.function
+  settings:
+    fontStyle: ''
+    foreground: '#e8e8d3'
+- name: Debugging Function
+  scope: debug.m-at
+  settings:
+    foreground: '#e8e8d3'
+- name: Subroutine
+  scope: sub.source.m-at
+  settings:
+    fontStyle: ''
+    foreground: '#fad07a'
+- name: Subroutine Name
+  scope: subroutine.name
+  settings:
+    fontStyle: ''
+    foreground: '#fad07a'
+- name: M-AT Alias
+  scope: alias.source.m-at
+  settings:
+    foreground: '#ffb964'
+- name: Focus Var
+  scope: var.source.m-at
+  settings:
+    fontStyle: bold
+    foreground: '#cf6a4c'
+- name: M-AT Local
+  scope: local.source.m-at
+  settings:
+    fontStyle: ''
+    foreground: '#cf6a4c'
+- name: M-AT Object
+  scope: object.source.m-at
+  settings:
+    foreground: '#7697d6'
+- name: M-AT Source
+  scope: source.m-at
+  settings:
+    fontStyle: ''
+    foreground: '#e8e8d3'
+# - name: M-AT Source
+#   scope: argument.m-at
+#   settings:
+#     fontStyle: ''
+#     foreground: '#CFCFC2'
+# Wiki specific
+- name: List
+  scope: list.source.wiki
+  settings:
+    fontStyle: ''
+    foreground: '#8fbfdc'
+- name: Wiki Source
+  scope: source.wiki
+  settings:
+    fontStyle: ''
+    foreground: '#e8e8d3'
+- name: Wiki Bold
+  scope: bold.source.wiki
+  settings:
+    fontStyle: bold
+    foreground: '#e8e8d3'
+- name: Wiki Italic
+  scope: italic.source.wiki
+  settings:
+    fontStyle: italic
+    foreground: '#e8e8d3'
+- name: Wiki Heading
+  scope: heading.source.wiki
+  settings:
+    fontStyle: bold
+    foreground: '#fad07a'
+- name: Wiki Heading
+  scope: heading2.source.wiki
+  settings:
+    fontStyle: underline
+    foreground: '#fad07a'
+- name: Links
+  scope: link.source.wiki
+  settings:
+    fontStyle: 'bold'
+    foreground: '#99ad6a'
+- name: Links
+  scope: link2.source.wiki
+  settings:
+    fontStyle: ''
+    foreground: '#99ad6a'
+- name: Template
+  scope: template.source.wiki
+  settings:
+    fontStyle: ''
+    foreground: '#cf6a4c'
+- name: Template
+  scope: template2.source.wiki
+  settings:
+    fontStyle: ''
+    foreground: '#cf6a4c'
+- name: HTML
+  scope: html2.source.wiki
+  settings:
+    fontStyle: ''
+    foreground: '#7697d6'
+- name: HTML
+  scope: html.source.wiki
+  settings:
+    fontStyle: ''
+    foreground: ''
+website: https://github.com/mjio/boron.tmtheme

@@ -1,0 +1,276 @@
+name: Monokai Soda
+settings:
+- settings:
+    background: '#181818'
+    caret: '#F8F8F0'
+    findHighlight: '#FFE792'
+    findHighlightForeground: '#000000'
+    foreground: '#F8F8F2'
+    invisibles: '#3B3A32'
+    lineHighlight: '#333333'
+    selection: '#444444'
+    selectionBorder: '#1c1c1c'
+- name: Comment
+  scope: comment
+  settings:
+    foreground: '#75715E'
+- name: Comment Header
+  scope: comment.header
+  settings:
+    fontStyle: bold
+    foreground: '#85816E'
+- name: String
+  scope: string
+  settings:
+    foreground: '#E6DB74'
+- name: Number
+  scope: constant.numeric
+  settings:
+    foreground: '#AE81FF'
+- name: Built-in constant
+  scope: constant.language
+  settings:
+    foreground: '#AE81FF'
+- name: User-defined constant
+  scope: constant.character, constant.other
+  settings:
+    foreground: '#AE81FF'
+- name: Variable
+  scope: variable
+  settings:
+    fontStyle: ''
+- name: Keyword
+  scope: keyword
+  settings:
+    foreground: '#F92672'
+- name: Storage
+  scope: storage
+  settings:
+    fontStyle: ''
+    foreground: '#F92672'
+- name: Storage type
+  scope: storage.type
+  settings:
+    fontStyle: italic
+    foreground: '#66D9EF'
+- name: Class name
+  scope: entity.name.class
+  settings:
+    fontStyle: underline
+    foreground: '#A6E22E'
+- name: Inherited class
+  scope: entity.other.inherited-class
+  settings:
+    fontStyle: italic underline
+    foreground: '#A6E22E'
+- name: Function name
+  scope: entity.name.function
+  settings:
+    fontStyle: ''
+    foreground: '#A6E22E'
+- name: Function argument
+  scope: variable.parameter
+  settings:
+    fontStyle: italic
+    foreground: '#FD971F'
+- name: Tag name
+  scope: entity.name.tag
+  settings:
+    fontStyle: ''
+    foreground: '#F92672'
+- name: Tag attribute
+  scope: entity.other.attribute-name
+  settings:
+    fontStyle: ''
+    foreground: '#A6E22E'
+- name: Library function
+  scope: support.function
+  settings:
+    fontStyle: ''
+    foreground: '#66D9EF'
+- name: Library constant
+  scope: support.constant
+  settings:
+    fontStyle: ''
+    foreground: '#66D9EF'
+- name: Library class/type
+  scope: support.type, support.class
+  settings:
+    fontStyle: italic
+    foreground: '#66D9EF'
+- name: Library variable
+  scope: support.other.variable
+  settings:
+    fontStyle: ''
+- name: Invalid
+  scope: invalid
+  settings:
+    background: '#F92672'
+    fontStyle: ''
+    foreground: '#F8F8F0'
+- name: Invalid deprecated
+  scope: invalid.deprecated
+  settings:
+    background: '#AE81FF'
+    foreground: '#F8F8F0'
+- name: JSON String
+  scope: meta.structure.dictionary.json string.quoted.double.json
+  settings:
+    foreground: '#CFCFC2'
+- name: diff.header
+  scope: meta.diff, meta.diff.header
+  settings:
+    foreground: '#75715E'
+- name: diff.deleted
+  scope: markup.deleted
+  settings:
+    foreground: '#F92672'
+- name: diff.inserted
+  scope: markup.inserted
+  settings:
+    foreground: '#A6E22E'
+- name: diff.changed
+  scope: markup.changed
+  settings:
+    foreground: '#E6DB74'
+- name: Translator
+  scope: translator.source.m-at
+  settings:
+    fontStyle: underline
+    foreground: '#A6E22E'
+- name: Keyword
+  scope: keyword.source.m-at
+  settings:
+    fontStyle: underline
+    foreground: '#A6E22E'
+- name: Attribute
+  scope: attribute.source.m-at
+  settings:
+    fontStyle: italic
+    foreground: '#A6E22E'
+- name: M-AT Function
+  scope: m-at.function
+  settings:
+    fontStyle: ''
+    foreground: '#FD971F'
+- name: Debugging Function
+  scope: debug.m-at
+  settings:
+    background: '#4F2607'
+    fontStyle: ''
+    foreground: '#FD971F'
+- name: Focus Function
+  scope: focus.function
+  settings:
+    fontStyle: ''
+    foreground: '#CFCFC2'
+- name: Subroutine
+  scope: sub.source.m-at
+  settings:
+    fontStyle: ''
+    foreground: '#AE81FF'
+- name: Subroutine Name
+  scope: subroutine.name
+  settings:
+    fontStyle: ''
+    foreground: '#AE81FF'
+- name: M-AT Alias
+  scope: alias.source.m-at
+  settings:
+    fontStyle: italic
+    foreground: '#66D9EF'
+- name: Focus Var
+  scope: var.source.m-at
+  settings:
+    background: '#664068'
+    fontStyle: bold
+    foreground: '#E6DB74'
+- name: M-AT Local
+  scope: local.source.m-at
+  settings:
+    fontStyle: ''
+    foreground: '#66D9EF'
+- name: M-AT Object
+  scope: object.source.m-at
+  settings:
+    fontStyle: italic
+    foreground: '#F92672'
+- name: M-AT Source
+  scope: source.m-at
+  settings:
+    fontStyle: ''
+    foreground: '#CFCFC2'
+- name: M-AT Source
+  scope: argument.m-at
+  settings:
+    fontStyle: ''
+    foreground: '#CFCFC2'
+- name: List
+  scope: list.source.wiki
+  settings:
+    fontStyle: ''
+    foreground: '#A6E22E'
+- name: Wiki Source
+  scope: source.wiki
+  settings:
+    fontStyle: ''
+    foreground: '#CFCFC2'
+- name: Wiki Bold
+  scope: bold.source.wiki
+  settings:
+    fontStyle: bold
+    foreground: '#DFDFD2'
+- name: Wiki Italic
+  scope: italic.source.wiki
+  settings:
+    fontStyle: italic
+    foreground: '#DFDFD2'
+- name: Wiki Heading
+  scope: heading.source.wiki
+  settings:
+    background: '#223846'
+    fontStyle: bold
+    foreground: '#66D9EF'
+- name: Wiki Heading
+  scope: heading2.source.wiki
+  settings:
+    background: '#223846'
+    fontStyle: underline
+    foreground: '#337278'
+- name: Links
+  scope: link.source.wiki
+  settings:
+    background: '#332034'
+    fontStyle: ''
+    foreground: '#AE81FF'
+- name: Links
+  scope: link2.source.wiki
+  settings:
+    background: '#332034'
+    fontStyle: ''
+    foreground: '#664088'
+- name: Template
+  scope: template.source.wiki
+  settings:
+    background: '#421318'
+    fontStyle: ''
+    foreground: '#FF5682'
+- name: Template
+  scope: template2.source.wiki
+  settings:
+    background: '#421318'
+    fontStyle: ''
+    foreground: '#872341'
+- name: HTML
+  scope: html2.source.wiki
+  settings:
+    background: '#3B371E'
+    fontStyle: ''
+    foreground: '#E6DB74'
+- name: HTML
+  scope: html.source.wiki
+  settings:
+    background: '#3B371E'
+    fontStyle: ''
+    foreground: ''
+uuid: 5EAF4173-5DDE-4D64-A1E8-C1671C7EE339

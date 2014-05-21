@@ -1,0 +1,9 @@
+{
+        "scope": "magic.translator.source.m-at, meta.translator.magic.focus, source.fs",
+        "completions":
+        [
+                { "trigger": ":Code", "contents": ":Code ${1:Subroutine}\n//:Doc Purpose\n//     $2\n//:Doc Arguments\n//     ${3:None}\n${4://:Doc Preconditions\n//     ${5:None}}\n//:Doc Local Variables\n//     ${6:None}\n${7://:Doc Data Structures\n//     ${8:None}}\n${9://:Doc Side Effects\n//     ${10:None}}\n//:Doc Returns\n//     ${11:None}\n${12://:Doc Additional Notes\n//     ${13:None}}\n$0\n;" },
+                { "trigger": ":EntryPoint", "contents": ":EntryPoint                       ${1:Subroutine}\n  Alias                           ${2:${3:${TM_FILENAME/.+?\\.(.+?)\\.[A-Z]\\.focus/$1/}}.${4:$1}}" },
+                { "trigger": ":List", "contents": ":List ${1:List}\n//:Doc Purpose\n//     $2\n{$0}" },
+	]
+}

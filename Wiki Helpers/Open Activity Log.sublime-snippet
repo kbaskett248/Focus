@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+[[Interface_Setup#Open_the_Interface_Activity_Log|Open the Interface Activity Log.]]
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>open activity log</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.wiki</scope>
+</snippet>

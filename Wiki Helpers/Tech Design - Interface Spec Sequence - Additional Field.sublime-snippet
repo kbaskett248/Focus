@@ -1,0 +1,26 @@
+<snippet>
+    <content><![CDATA[
+{|border=1 cellspacing=0 cellpadding=2 align="center" width=100% style="margin-top:5px;background:#444444;"
+|
+{|border=1 cellspacing=0 cellpadding=2 align="center" width=100%
+!width=30%|<!-- Object -->   ${1:Object}
+!width=30%|<!-- Record -->   ${2:Record}
+!width=30%|<!-- Field -->    ${3:Field}
+!width=10%|<!-- Outbound --> ${4:No}
+|}
+{|border=1 cellspacing=0 cellpadding=2 align="right" width=95% style="margin-top:2px"
+${5:|style="background:#999999;font-weight:bold" width=20%|Inbound Keys
+|<!-- Inbound Keys -->}$6${5/.+/\n|-\n/}|style="background:#999999;font-weight:bold" width=20%|Inbound Logic
+|<!-- Inbound Logic -->$7
+|-
+${5/Inbound Keys/Outbound Keys/g}${8:$6}${5/.+/\n|-\n/}|style="background:#999999;font-weight:bold" width=20%|Outbound Logic
+|<!-- Outbound Logic -->$9
+|}
+|}
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger></tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.wiki, text.plain</scope>
+    <description>M-AT Tools: Tech Design: Interface Spec Sequence: Additional Field</description>
+</snippet>

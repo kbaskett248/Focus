@@ -1,0 +1,18 @@
+<snippet>
+    <content><![CDATA[
+|-
+| <!-- FieldType -->${1:Field}${2:Key}
+| <!-- Name -->${3:Name}
+| <!-- Label -->${4:${3/(?<=[a-z])[A-Z]/ $0/g}}
+| <!-- DataType -->${5:FREE}
+| <!-- Length -->${6:30}
+| <!-- Choices -->${7:-}
+| <!-- Compute -->${8:-}
+| <!-- Offset -->${9:0}$0
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger></tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.wiki, text.plain</scope>
+    <description>M-AT Tools: Tech Design: DataDef Change - Field</description>
+</snippet>

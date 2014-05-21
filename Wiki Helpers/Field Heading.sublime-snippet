@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+<!-- Field --> <span style="color:#b66600;">${1:Field}:</span> 
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>field</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.wiki</scope>
+</snippet>

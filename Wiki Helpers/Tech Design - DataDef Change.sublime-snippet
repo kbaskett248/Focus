@@ -1,0 +1,43 @@
+<snippet>
+    <content><![CDATA[
+{| border=2 cellspacing=0 cellmargin=10 cellpadding=15 width=80% style="background:#444444;color:white"
+! <BIG>File: ${1:MasterFile}</BIG>
+{| border=1 cellspacing=0 cellpadding=5 align="center" style="background:#CCCCCC;margin-top:15px" width=100%
+! Record: ${2:Record}
+{| border=1 cellspacing=0 cellpadding=2 align="center" width=100% style="font-size:1.5ex;margin-top:5px"
+! style="background:#999999"|Parent
+! style="background:#999999"|ExtensionOf
+! style="background:#999999"|PreserveOrder
+|-
+| <!-- Parent -->${3:-}
+| <!-- ExtensionOf -->${4:-}
+| <!-- PreserveOrder -->${5:-}
+|}
+{| border=1 cellspacing=0 cellpadding=5 align="center" width=100% style="font-size:1.5ex;margin-top:10px"
+! style="background:#999999"|FieldType
+! style="background:#999999"|Name
+! style="background:#999999"|Label
+! style="background:#999999"|DataType
+! style="background:#999999"|Length
+! style="background:#999999"|Choices
+! style="background:#999999"|Compute
+! style="background:#999999"|Offset
+|-
+| <!-- FieldType -->${6:Field}${7:Key}
+| <!-- Name -->${8:Name}
+| <!-- Label -->${9:${8/(?<=[a-z])[A-Z]/ $0/g}}
+| <!-- DataType -->${10:FREE}
+| <!-- Length -->${11:30}
+| <!-- Choices -->${12:-}
+| <!-- Compute -->${13:-}
+| <!-- Offset -->${14:0}$0
+|}
+|}
+|}<br />
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger></tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.wiki, text.plain</scope>
+    <description>M-AT Tools: Tech Design: DataDef Change</description>
+</snippet>

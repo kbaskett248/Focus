@@ -1,0 +1,206 @@
+[
+    {
+        "id": "edit",
+        "children":
+        [
+            {
+                "id": "fold",
+                "children":
+                [
+                    { "caption": "-" },
+                    { "caption": "Fold all subroutines", "command": "fold_subroutine", "args": { "all_regions": true } },
+                    { "command": "fold_subroutine" }
+                ]
+            }
+        ]
+    },
+
+    {
+        "id": "preferences",
+        "children":
+        [
+            {
+                "caption": "Package Settings",
+                "mnemonic": "P",
+                "id": "package-settings",
+                "children":
+                [
+                    {
+                        "caption": "Focus",
+                        "children":
+                        [
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/Focus/m-at.sublime-settings"
+                                },
+                                "caption": "Settings – Default"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/User/m-at.sublime-settings"
+                                },
+                                "caption": "Settings – User"
+                            },
+                            { "caption": "-" },
+                            {
+                                "command": "open_file",
+                                "args": {
+                                    "file": "${packages}/Focus/Default (OSX).sublime-keymap",
+                                    "platform": "OSX"
+                                },
+                                "caption": "Key Bindings – Default"
+                            },
+                            {
+                                "command": "open_file",
+                                "args": {
+                                    "file": "${packages}/Focus/Default (Linux).sublime-keymap",
+                                    "platform": "Linux"
+                                },
+                                "caption": "Key Bindings – Default"
+                            },
+                            {
+                                "command": "open_file",
+                                "args": {
+                                    "file": "${packages}/Focus/Default (Windows).sublime-keymap",
+                                    "platform": "Windows"
+                                },
+                                "caption": "Key Bindings – Default"
+                            },
+                            {
+                                "command": "open_file",
+                                "args": {
+                                    "file": "${packages}/User/Default (OSX).sublime-keymap",
+                                    "platform": "OSX"
+                                },
+                                "caption": "Key Bindings – User"
+                            },
+                            {
+                                "command": "open_file",
+                                "args": {
+                                    "file": "${packages}/User/Default (Linux).sublime-keymap",
+                                    "platform": "Linux"
+                                },
+                                "caption": "Key Bindings – User"
+                            },
+                            {
+                                "command": "open_file",
+                                "args": {
+                                    "file": "${packages}/User/Default (Windows).sublime-keymap",
+                                    "platform": "Windows"
+                                },
+                                "caption": "Key Bindings – User"
+                            },
+                            { "caption": "-" },
+                            {
+                                "caption": "Logging",
+                                "children":
+                                [
+                                    {   "caption": "Enable logging to file", "command": "toggle_sublime_logging_setting", "checkbox": true,
+                                        "args": {
+                                            "file_name": "m-at.sublime-settings",
+                                            "setting_name": "log_to_file"
+                                        }
+                                    },
+                                    {   "caption": "File log level",
+                                        "children":
+                                        [
+                                            {   "caption": "Critical", "command": "set_sublime_logging_setting", "checkbox": true,
+                                                "args": {
+                                                    "file_name": "m-at.sublime-settings",
+                                                    "setting_name": "file_log_level",
+                                                    "value": "Critical"
+                                                } 
+                                            },
+                                            {   "caption": "Error", "command": "set_sublime_logging_setting", "checkbox": true,
+                                                "args": {
+                                                    "file_name": "m-at.sublime-settings",
+                                                    "setting_name": "file_log_level",
+                                                    "value": "Error"
+                                                } 
+                                            },
+                                            {   "caption": "Warning", "command": "set_sublime_logging_setting", "checkbox": true,
+                                                "args": {
+                                                    "file_name": "m-at.sublime-settings",
+                                                    "setting_name": "file_log_level",
+                                                    "value": "Warning"
+                                                } 
+                                            },
+                                            {   "caption": "Info", "command": "set_sublime_logging_setting", "checkbox": true,
+                                                "args": {
+                                                    "file_name": "m-at.sublime-settings",
+                                                    "setting_name": "file_log_level",
+                                                    "value": "Info"
+                                                } 
+                                            },
+                                            {   "caption": "Debug", "command": "set_sublime_logging_setting", "checkbox": true,
+                                                "args": {
+                                                    "file_name": "m-at.sublime-settings",
+                                                    "setting_name": "file_log_level",
+                                                    "value": "Debug"
+                                                } 
+                                            }
+                                        ]
+                                    },
+                                    {   "caption": "Enable logging to console", "command": "toggle_sublime_logging_setting", "checkbox": true,
+                                        "args": {
+                                            "file_name": "m-at.sublime-settings",
+                                            "setting_name": "log_to_console"
+                                        },
+                                    },
+                                    {   "caption": "Console log level",
+                                        "children":
+                                        [
+                                            {   "caption": "Critical", "command": "set_sublime_logging_setting", "checkbox": true,
+                                                "args": {
+                                                    "file_name": "m-at.sublime-settings",
+                                                    "setting_name": "console_log_level",
+                                                    "value": "Critical"
+                                                } 
+                                            },
+                                            {   "caption": "Error", "command": "set_sublime_logging_setting", "checkbox": true,
+                                                "args": {
+                                                    "file_name": "m-at.sublime-settings",
+                                                    "setting_name": "console_log_level",
+                                                    "value": "Error"
+                                                } 
+                                            },
+                                            {   "caption": "Warning", "command": "set_sublime_logging_setting", "checkbox": true,
+                                                "args": {
+                                                    "file_name": "m-at.sublime-settings",
+                                                    "setting_name": "console_log_level",
+                                                    "value": "Warning"
+                                                } 
+                                            },
+                                            {   "caption": "Info", "command": "set_sublime_logging_setting", "checkbox": true,
+                                                "args": {
+                                                    "file_name": "m-at.sublime-settings",
+                                                    "setting_name": "console_log_level",
+                                                    "value": "Info"
+                                                } 
+                                            },
+                                            {   "caption": "Debug", "command": "set_sublime_logging_setting", "checkbox": true,
+                                                "args": {
+                                                    "file_name": "m-at.sublime-settings",
+                                                    "setting_name": "console_log_level",
+                                                    "value": "Debug"
+                                                } 
+                                            }
+                                        ]
+                                    },
+                                    {   "caption": "-" },
+                                    {   "caption": "View log file", "command": "open_file", 
+                                        "args": {
+                                            "file": "${packages}/User/Logs/Focus.log"
+                                        },
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

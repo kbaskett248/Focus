@@ -1,0 +1,674 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+name: Focus
+scopeName: source.focus
+fileTypes: []
+uuid: da222f5a-4cec-4bcd-82ec-93cedfde55b9
+
+patterns:
+- include: '#comment'
+- include: '#alias_translator'
+- include: '#datadef_translator'
+- include: '#importexport_translator'
+- include: '#include_translator'
+- include: '#local_translator'
+- include: '#magic_translator'
+- include: '#screen_translator'
+- include: '#screencomponent_translator'
+- include: '#screenrecord_translator'
+- include: '#screenpage_translator'
+- include: '#other_translator'
+
+repository:
+  comment:
+    name: comment.line.double-slash.fs
+    begin: (//)
+    beginCaptures:
+      '1': {name: punctuation.definition.comment.fs}
+    end: '$\n?|(?=\p{Cntrl}\|)'
+    patterns:
+    - match: :Doc\s+(\w+\s?\w*)
+      captures:
+        '1': {name: comment.line.double-slash.header.fs}
+      # - match: '(?i:(in(put)?s?|out(put)?s?|(local )?var(iable)?s?|(side )?effects?|actions?|desc(r(iption)?)?|assumes?|pre|(upper|lower)? ?sets?|bugs?|arg(ument)?s?|val(ues)?|s/e|locals?|returns?|warning|results?)):'
+      # - match: '(?i:(IN|OUT|VARS|EFFECT|Input|INPUT|Output|OUTPUT|Actions|Descr|DESCR|Assume|Vars|PRE|DESC|Desc|In|Out|Sets|Bugs|Arg|Val|Var|S/E|LOCALS|RETURN|ASSUMES|WARNING|DESCRIPTION|ARGUMENTS|RESULTS|VARIABLES|UPPERSETS|SETS|locals|arguments|return)):'
+    - comment: Purpose
+      match: '(?i:((side )?effects?|actions?|desc(r(iption)?)?|assumes?|pre(conditions?)?|s/e|bugs?|warning)):'
+      name: comment.line.double-slash.header.fs
+    - comment: Arguments
+      match: '(?i:(in(put)?s?|arg(ument)?s?|val(ues)?)):'
+      name: comment.line.double-slash.header.fs
+    - comment: Variables
+      match: '(?i:((local )?var(iable)?s?|locals?)):'
+      name: comment.line.double-slash.header.fs
+    - comment: Sets
+      match: '(?i:((upper|lower)?(case)? ?(list)?sets?)):'
+      name: comment.line.double-slash.header.fs
+    - comment: Returns
+      match: '(?i:(out(put)?s?|ret(urn)?s?)):'
+      name: comment.line.double-slash.header.fs
+
+  alias_translator:
+    comment: Translator - #Alias
+    name: meta.translator.alias.focus
+    begin: ^(#Alias)\b\s*\n?
+    beginCaptures:
+      '0': {name: meta.translator.header.focus}
+      '1': {name: keyword.other.translator.focus}
+    end: (?=^#)
+    patterns:
+    - name: meta.keyword.alias.focus
+      match: "^ *(:Alias) +([^()\n\t]+?) *$\n?"
+      captures:
+        '1': {name: keyword.other.keyword.focus}
+        '2': {name: meta.value.attribute.focus meta.alias.defined.focus constant.other.alias.focus}
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+
+  attribute_line:
+    name: meta.attribute.focus
+    contentName: meta.value.attribute.focus
+    begin: ^ +([A-Za-z0-9]+) *
+    beginCaptures:
+      '1': {name: keyword.other.attribute.focus}
+    end: $\n?
+    patterns:
+    - include: '#externalized-list'
+    - include: '#comment'
+    - include: '#string'
+    - include: '#string-list'
+    - include: '#code-region'
+
+  externalized-list:
+    patterns:
+    - comment: Externalized list in dictionary source
+      name: meta.externalized-list.focus
+      begin: '\p{Cntrl}{'
+      beginCaptures:
+        '0': {name: punctuation.definition.externalized-list.begin.focus keyword.other.externalized-list.focus}
+      end: '\p{Cntrl}}'
+      endCaptures:
+        '0': {name: punctuation.definition.externalized-list.end.focus keyword.other.externalized-list.focus}
+      patterns:
+      - include: '#externalized-list-separator'
+      - include: '#code-region'
+
+    - comment: Externalized nil list in dictionary source
+      name: meta.externalized-list.nil-list.focus
+      match: '\p{Cntrl}~'
+      captures:
+        '0': {name: punctuation.definition.externalized-list.nil-list.focus keyword.other.externalized-list.focus}
+
+  externalized-list-separator:
+    comment: Externalized list separator
+    name: punctuation.definition.externalized-list.end.focus keyword.other.externalized-list.focus
+    match: '\p{Cntrl}\|'
+
+  break:
+    comment: Break
+    name: meta.function.focus meta.debug.focus
+    contentName: meta.function.arguments.translate-time.focus
+    begin: '@Break\('
+    beginCaptures:
+      '0': {name: support.function.focus}
+    end: \)
+    endCaptures:
+      '0': {name: support.function.focus}
+
+  called_alias:
+    comment: Called Alias
+    match: '(@@[^\n()]+?\()([^\n()]*?)(\))'
+    name: meta.alias.called.focus
+    captures:
+      '1': {name: constant.other.alias.focus}
+      '2': {name: source.args.alias.focus}
+      '3': {name: constant.other.alias.focus}
+
+  code-keyword:
+    comment: Code Member Keyword
+    name: meta.keyword.code.focus meta.subroutine.fs
+    begin: "^ *((:Code) +([^\n()\t]+?)) *$\n?"
+    beginCaptures:
+      '1': {name: meta.subroutine.header.fs}
+      '2': {name: keyword.other.keyword.focus}
+      '3': {name: meta.value.keyword.focus entity.name.subroutine.fs}
+    end: ;
+    patterns:
+    - include: '#code-region'
+
+  code-region:
+    patterns:
+    - include: '#externalized-list-separator'
+    
+    - include: '#comment'
+
+    - include: '#illegal-line-start'
+
+    - include: '#illegal-line-end'
+
+    - include: '#string'
+
+    - include: '#string-list'
+
+    # ---------------------------------------------------------------------------------------------------
+    - include: '#called_alias'
+    - include: '#break'
+    - include: '#mat_function'
+    # ---------------------------------------------------------------------------------------------------
+
+    - comment: FS Local Variable
+      match: (?<!@|\.)\b([A-Z])\b
+      captures:
+        '1': {name: meta.variable.other.local.fs constant.numeric}
+    - comment: FS Global Variable
+      match: (?<!@|\.)\b([a-z])\b
+      captures:
+        '1': {name: meta.variable.other.global.fs constant.numeric}
+
+    - include: '#control_flow'
+
+    - include: '#illegal-spaces'
+
+    - comment: Magic Upper Listset Function
+      name: meta.function.fs meta.function.listset.upper.fs
+      match: '@[A-Z](\d+)'
+      captures:
+        '1': {name: meta.function.listset.number.upper.fs}
+    - comment: Magic Lower Listset Function
+      name: meta.function.fs meta.function.listset.lower.fs
+      match: '@[a-z](\d+)'
+      captures:
+        '1': {name: meta.function.listset.number.lower.fs}
+    - comment: Magic Function
+      match: '@\p{Alpha}{2}'
+      name: meta.function.fs
+      
+    # - name: constant.numeric.integer.decimal.fs
+    #   match: \b([1-9]+[0-9]*|0) 
+    # - name: constant.numeric.float.fs
+    #   match: (?<=[^0-9a-zA-Z_])(?i:(\.\d+(e[\-\+]?\d+)?))
+
+    - include: '#illegal-block-start'
+
+    - comment: Comparison operators
+      name: keyword.operator.comparison.fs
+      match: '@?~?(\!|\&|\=|\<|\>)'
+    - comment: Arithmetic operators
+      name: keyword.operator.arithmetic.fs
+      match: '@?~?(\+|\-|\\|\*)'
+    - comment: Other operators
+      name: keyword.operator.other.fs
+      match: '@?~?(\#|\$|\%|\:|\|)'
+    - comment: Assignment operators
+      name: keyword.operator.assignment.fs
+      match: \^(?=[\{A-Za-z])
+    - comment: Illegal assignment
+      name: invalid.illegal.assignment.fs
+      match: \^(?=[^\{A-Za-z])
+
+    - include: '#blank-line-error'
+
+    - include: '#errant-bracket'
+
+  control_flow:
+    patterns:
+    - comment: "Conditional: IF{},@IF{}"
+      name: meta.control.flow.if.fs
+      begin: '@?IF({)'
+      beginCaptures:
+        '1': {name: punctuation.definition.if.begin.fs}
+      end: '}'
+      endCaptures:
+        '0': {name: punctuation.definition.if.end.fs}
+      patterns:
+      - include: '#illegal-line-start'
+      - include: '#conditional-line'
+      - include: '#comment'
+      - include: '#blank-line-error'
+
+    - comment: "DO Loop: DO{},@DO{}"
+      name: meta.control.flow.do.fs
+      begin: '@?DO({)'
+      beginCaptures:
+        '1': {name: punctuation.definition.do.begin.fs}
+      end: '}'
+      endCaptures:
+        '0': {name: punctuation.definition.do.end.fs}
+      patterns:
+      - include: '#illegal-line-start'
+      - include: '#conditional-line'
+      - include: '#comment'
+      - include: '#blank-line-error'
+
+    - comment: "Apply-To-All: @[]"
+      name: meta.control.flow.loop.fs
+      begin: '@(\[)'
+      beginCaptures:
+        '1': {name: punctuation.definition.loop.begin.fs}
+      end: '\]'
+      endCaptures:
+        '0': {name: punctuation.definition.loop.end.fs}
+      patterns:
+      - include: '#code-region'
+
+    - comment: "Pass-through: []"
+      name: meta.control.flow.pass-through.fs
+      begin: '\['
+      beginCaptures:
+        '0': {name: punctuation.definition.pass-through.begin.fs}
+      end: '\]'
+      endCaptures:
+        '0': {name: punctuation.definition.pass-through.end.fs}
+      patterns:
+      - include: '#code-region'
+
+    - comment: "Concatenation: (),@()"
+      name: meta.control.flow.concatenate.fs
+      begin: '@?(\()'
+      beginCaptures:
+        '1': {name: punctuation.definition.concatenate.begin.fs}
+      end: '\)'
+      endCaptures:
+        '0': {name: punctuation.definition.concatenate.end.fs}
+      patterns:
+      - name: punctuation.definition.separator.comma.fs 
+        match: ","
+      - include: '#code-region'
+
+    - comment: "Build List: {},@{}"
+      name: meta.control.flow.list.fs
+      begin: '(@(\{)|(\{)(?=\})|(\{))'
+      beginCaptures:
+        '2': {name: punctuation.definition.list.begin.fs}
+        '3': {name: punctuation.definition.list.begin.fs meta.empty-list.fs}
+        '5': {name: punctuation.definition.list.begin.fs}
+      end: (((?<=[^@]\{)\})|\})
+      endCaptures:
+        '1': {name: punctuation.definition.list.end.fs}
+        '2': {name: meta.empty-list.fs}
+      patterns:
+      - name: punctuation.definition.separator.comma.fs
+        match: ","
+      - include: '#code-region'
+
+  conditional-line:
+    comment: "A condition and action within a DO loop or IF statement"
+    name: meta.control.flow.check.fs
+    begin: (?=[^\s/])
+    end: ((;)|(?=}))
+    endCaptures:
+      '2': {name: punctuation.definition.separator.semicolon.fs}
+    patterns:
+    # - name: meta.control.flow.check.condition.fs
+    #   comment: "The left side of a conditional"
+    #   begin: (?<=IF{|  |;)(?=\S)
+    #   end: (?<=\S)(?= +\S|\}|;)
+    #   patterns:
+    #   - include: '#code-region'
+    # - name: meta.control.flow.check.action.fs
+    #   comment: "The right side of a conditional"
+    #   begin: (?<=\S )
+    #   end: (?=;|\})
+    #   patterns:
+    #   - include: '#code-region'
+    - comment: Too many spaces in a conditional
+      name: invalid.illegal.spaces.fs
+      match: (?<=\S)\ {2,}(?=[^\s/])
+    - comment: legal space
+      match: (?<=\S)\ (?=[^\s/])
+    - include: '#code-region'
+
+  datadef_translator:
+    comment: Translator - #Datadef
+    name: meta.translator.datadef.focus
+    begin: ^(#DataDef)\b\s*\n?
+    beginCaptures:
+      '0': {name: meta.translator.header.focus}
+      '1': {name: keyword.other.translator.focus}
+    end: (?=^#)
+    patterns:
+    - include: '#object_keyword'
+    - include: '#index_keyword'
+    - include: '#object_attribute'
+    - include: '#keyword_line'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+
+  importexport_translator:
+    name: meta.translator.importexport.focus
+    begin: ^(#ImportExport)\b\s*\n?
+    beginCaptures:
+      '0': {name: meta.translator.header.focus}
+      '1': {name: keyword.other.translator.focus}
+    end: (?=^#)
+    patterns:
+    - include: '#object_keyword'
+    - include: '#index_keyword'
+    - include: '#keyword_line'
+    - include: '#object_attribute'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+
+  include_translator:
+    name: meta.translator.include.focus
+    begin: ^(#Include)\b\s*\n?
+    beginCaptures:
+      '0': {name: meta.translator.header.focus}
+      '1': {name: keyword.other.translator.focus}
+    end: (?=^#)
+    patterns:
+    - include: '#keyword_line'
+    - include: '#attribute_line'
+    - include: '#comment'
+
+  keyword_line:
+    comment: Keyword line
+    name: meta.keyword.focus
+    contentName: meta.value.keyword.focus
+    begin: ^ *(:\p{Alpha}+) *
+    beginCaptures:
+      '1': {name: keyword.other.keyword.focus}
+    end: \s*$\n?
+    patterns:
+    - include: '#externalized-list'
+    - include: '#comment'
+    - include: '#string'
+    - include: '#string-list'
+    - include: '#code-region'
+
+  keyword-string-list:
+    name: meta.keyword-string-list.fs
+    comment: List of strings used in :List
+    begin: (\{)
+    beginCaptures:
+      '1': {name: keyword.operator.keyword-string-list.fs punctuation.definition.string-list.begin.fs}
+    end: '(\})'
+    endCaptures:
+      '1': {name: keyword.operator.keyword-string-list.fs punctuation.definition.string-list.end.fs}
+    patterns:
+    - include: '#keyword-string-list'
+    - name: keyword.operator.list-separator.fs punctuation.definition.separator.bar.fs
+      match: "|"
+    - include: '#blank-line-error'
+    - name: string.unquoted.string-list.fs
+      match: '[^{}|]' 
+
+  list-keyword:
+    comment: List Member Keyword
+    name: meta.keyword.list.focus meta.list.fs
+    begin: "^ *((:List) +([^\n()\t]+?)) *$\n?"
+    beginCaptures:
+      '1': {name: meta.list.header.fs}
+      '2': {name: keyword.other.keyword.focus}
+      '3': {name: meta.value.keyword.focus entity.name.list.fs}
+    end: (?=^$|^\s*:)
+    patterns:
+    - include: '#comment'
+
+    - include: '#keyword-string-list'
+
+  local_translator:
+    name: meta.translator.local.focus
+    begin: ^(#Locals)\b\s*\n?
+    beginCaptures:
+      '0': {name: meta.translator.header.focus}
+      '1': {name: keyword.other.translator.focus}
+    end: (?=#)
+    patterns:
+    - name: meta.keyword.local-name.focus
+      match: ^ *(:Name) +([\w._-]+) *$\n?
+      captures:
+        '1': {name: keyword.other.keyword.focus}
+        '2': {name: meta.value.keyword.focus variable.other.local.focus}
+    - include: '#comment'
+
+  magic_translator:
+    comment: Translators
+    name: meta.translator.magic.focus
+    begin: ^(#Magic)\b\s*\n?
+    beginCaptures:
+      '0': {name: meta.translator.header.focus}
+      '1': {name: keyword.other.translator.focus}
+    end: (?=^#)
+    patterns:
+    - include: '#code-keyword'
+    - include: '#list-keyword'
+    - name: meta.keyword.entrypoint.focus
+      match: "^(:EntryPoint) +([^\n()\t]+?) *$\n?"
+      captures:
+        '1': {name: keyword.other.keyword.focus}
+        '2': {name: meta.value.keyword.focus entity.name.subroutine.fs}
+    - name: meta.attribute.alias.focus
+      match: "^ *(Alias) +([^\n()\t]+?) *$\n?"
+      captures:
+        '1': {name: keyword.other.attribute.focus}
+        '2': {name: meta.value.keyword.focus meta.alias.defined.focus constant.other.alias.focus}
+    - include: '#translator_continuation'
+    - include: '#comment'
+
+  mat_function:
+    comment: Focus Function
+    name: meta.function.focus
+    contentName: meta.function.arguments.translate-time.focus
+    begin: '@\p{Alpha}{3,}\('
+    beginCaptures:
+      '0': {name: support.function.focus}
+    end: \)
+    endCaptures:
+      '0': {name: support.function.focus}
+    patterns:
+    - match: '(?<=CallSub\(|CallList\(|CodeMemberNumber\(|BatchesToStackWhile\()([^\n()\t]+)'
+      captures:
+        '1': {name: entity.name.subroutine.fs}
+    - match: '(?<=FileBatchesWhile\()([\w._-]+)(,[^\n()\t]+)'
+      captures:
+        '1': {name: variable.parameter.object.focus}
+        '2': {name: entity.name.subroutine.fs}
+    - name: variable.other.local.focus
+      match: (?<=(Get|Put)Local\()[\w._-]+
+    - name: variable.other.system.focus
+      match: (?<=(Get|Put)SystemVariable\()[\w._-]+
+    - name: variable.other.state.focus
+      match: (?<=(Get|Put)StateVariable\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=OID\(|RID\(|RIDs\(|OIDs\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=CallStructuredImport\(|CallStructuredCreate\(|CallStructuredCopyLocal\(|CallStructuredExport\(|CallStructuredExportTxn\(|CallStructuredFlush\(|CallStructuredSubmit\(|CallStructuredPurge\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=ObjectLong\(|ProcessLong\()[\w._-]+
+    - match: (?<=CallStructuredImportAdditional\()([\w._-]+),[\w._-]+
+      captures:
+        '1': {name: variable.parameter.object.focus}
+    - name: variable.parameter.object.focus
+      match: (?<=Field\(|Key\(|FieldExternal\(|KeyExternal\(|ElementLabel\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=File\(|Record\(|Records\(|FileCx\(|RecordCx\(|RecordsCx\(|Object\(|Objects\(|ObjectClass\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=LockSystemInfo\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=IndexLookup\(|Index\(|IndexEntry\(|IndexLookupCx\(|IndexLookupResults\(|IndexEntries\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=FullyInMemory\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=NextURN\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=NoDuplicateCheck\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=ToOID\(|ToOIDCx\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=RecordsChanged\(|RecordChanged\(|ObjectChanged\(|RecordCreated\(|RecordsCreated\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=RecordTag\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=ObjectSnapshot\(|SnapshotExists\()[\w._-]+
+    - include: '#control_flow'
+
+  object_attribute:
+    comment: M-AT Attribute
+    name: meta.attribute.object.focus
+    match: ^ *(Name|File|Class|Record|Index|Pointer) +([\w.]+) *$\n?
+    captures:
+      '1': {name: keyword.other.attribute.focus}
+      '2': {name: meta.value.attribute.focus variable.parameter.object.focus}
+
+  object_keyword:
+    name: meta.keyword.object.focus
+    match: ^ *(:(Object|Record|File|Field|Key|Element)) +([\w.]+) *$\n?
+    captures:
+      '1': {name: keyword.other.keyword.focus}
+      '3': {name: meta.value.keyword.focus variable.parameter.object.focus}
+
+  index_keyword:
+    name: meta.keyword.object.focus
+    match: ^ *(:(Index|IndexKey)) +([\w.]+) *$\n?
+    captures:
+      '1': {name: keyword.other.keyword.focus}
+      '3': {name: meta.value.keyword.focus variable.parameter.object.focus}
+
+  other_translator:
+    name: meta.translator.other.focus
+    begin: ^(#\p{Alpha}+) *$\n?
+    beginCaptures:
+      '0': {name: meta.translator.header.focus}
+      '1': {name: keyword.other.translator.focus}
+    end: (?=^#)
+    patterns:
+    - include: '#keyword_line'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+
+  screen_translator:
+    name: meta.translator.screen.focus
+    begin: ^(#Screen)\b\s*\n?
+    beginCaptures:
+      '0': {name: meta.translator.header.focus}
+      '1': {name: keyword.other.translator.focus}
+    end: (?=^#)
+    patterns:
+    - include: '#keyword_line'
+    - include: '#object_attribute'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+  
+  screencomponent_translator:
+    name: meta.translator.screencomponent.focus
+    begin: ^(#ScreenComponent)\b\s*\n?
+    beginCaptures:
+      '0': {name: meta.translator.header.focus}
+      '1': {name: keyword.other.translator.focus}
+    end: (?=^#)
+    patterns:
+    - name: meta.keyword.elementset.focus
+      match: "^ *(:ElementSet) +([^\n()\t]+?) *$\n?"
+      captures:
+        '1': {name: keyword.other.keyword.focus}
+        '2': {name: meta.value.keyword.focus meta.elementset-name.focus}
+    - name: meta.attribute.focus
+      match: "^ *(Name) +([^\n()\t]+?) *$\n?"
+      captures:
+        '1': {name: keyword.other.attribute.focus}
+        '2': {name: meta.value.attribute.focus}
+    - include: '#object_keyword'
+    - include: '#keyword_line'
+    - include: '#object_attribute'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+  
+  screenpage_translator:
+    name: meta.translator.screenpage.focus
+    begin: ^(#ScreenPage)\b\s*$\n?
+    beginCaptures:
+      '0': {name: meta.translator.header.focus}
+      '1': {name: keyword.other.translator.focus}
+    end: (?=^#)
+    patterns:
+    - include: '#keyword_line'
+    - include: '#attribute_line'
+    - include: '#comment'
+  
+  screenrecord_translator:
+    name: meta.translator.screenrecord.focus
+    begin: ^(#ScreenRecord)\b\s*$\n?
+    beginCaptures:
+      '0': {name: meta.translator.header.focus}
+      '1': {name: keyword.other.translator.focus}
+    end: (?=^#)
+    patterns:
+    - include: '#object_keyword'
+    - include: '#keyword_line'
+    - include: '#attribute_line'
+    - include: '#translator_continuation'
+    - include: '#comment'
+  
+  string:
+    comment: double quoted string
+    name: string.quoted.double.single-line.fs
+    begin: (")
+    beginCaptures:
+      '1': {name: punctuation.definition.string.begin.fs}
+    end: ((?<=")(")|")|(\n)
+    endCaptures:
+      '1': {name: punctuation.definition.string.end.fs}
+      '2': {name: meta.nil.fs}
+      '3': {name: invalid.illegal.unclosed-string.fs}
+
+  string-list:
+    comment: String List
+    name: meta.string-list.fs
+    begin: (`)
+    beginCaptures:
+      '1': {name: keyword.operator.string-list.fs punctuation.definition.string-list.begin.fs}
+    end: '('')'
+    endCaptures:
+      '1': {name: keyword.operator.string-list.fs punctuation.definition.string-list.end.fs}
+    patterns:
+    - include: '#string-list'
+    - name: keyword.operator.comma.fs punctuation.definition.separator.comma.fs
+      match: ","
+    - name: string.unquoted.string-list.fs
+      match: '[^,''`]' 
+  
+  translator_continuation:
+    name: meta.translator.continuation.focus
+    contentName: meta.value.attribute.focus
+    begin: ^ *(-->) +
+    beginCaptures:
+      '1': {name: keyword.other.attribute.focus}
+    end: $\n?
+    patterns:
+    - include: '#comment'
+    - include: '#string'
+    - include: '#string-list'
+    - include: '#code-region'
+
+  blank-line-error:
+    name: invalid.illegal.blank-line.fs
+    match: ^ *\n
+
+  illegal-line-start:
+    name: invalid.illegal.line-start.fs
+    match: ^ *(:|#)(?!Code)
+
+  illegal-line-end:
+    name: invalid.illegal.line-end.fs
+    match: '@\s*($|(?=//.*$))'
+
+  illegal-spaces:
+    comment: Disallowed spacing
+    name: invalid.illegal.spaces.fs
+    match: (?<=\S)\ +(?!\s|//|$)
+
+  errant-bracket:
+    comment: Extraneous brackets
+    name: invalid.illegal.bracket.fs
+    match: '[})\]].*$\n?'
+
+  illegal-block-start:
+    comment: Starting a new code block before the previous one is finished
+    name: invalid.illegal.block-start.fs
+    match: ':(Code|List)\s*.*'

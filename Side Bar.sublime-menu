@@ -1,0 +1,11 @@
+[
+    { "caption": "-" },
+    { 
+        "caption": "M-AT Tools: Update Ring", 
+        "command": "mat_update_sidebar", 
+        "args": {
+            "paths": []
+        }
+    },
+    { "caption": "-", "id": "end" }
+]

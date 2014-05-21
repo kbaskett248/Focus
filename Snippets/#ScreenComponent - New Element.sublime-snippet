@@ -1,0 +1,19 @@
+<snippet>
+    <content><![CDATA[
+:Element                      ${1:Object.Record}
+  Label                       "${2:Label}"
+  OverrideDisplay             []
+  AssistedEntry               ""
+  Width                       ${3:20%}
+  EditCondition               ${4:1}
+  ShowCondition               1
+  ChangeCondition             1
+  OnChange                    []
+  OnAfterChange               []
+$0
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>:Element</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.m-at, meta.translator.screencomponent.focus</scope>
+</snippet>

@@ -1,0 +1,16 @@
+<snippet>
+    <content><![CDATA[
+:Index                          ${1:IndexName}
+  Record                        ${2:Object.Record}
+  Rows                          ${3:10}
+  OnSelect                      []
+  OnSelectDown                  []
+  OnReturnKey                   []
+  OnExit                        []
+  $0
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>:Index</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.m-at, meta.translator.screencomponent.focus</scope>
+</snippet>

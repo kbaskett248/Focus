@@ -1,0 +1,36 @@
+<snippet>
+    <content><![CDATA[
+{| border=1 cellspacing=0 cellpadding=15 style="background:#CCCCCC;" width=80%
+| align="center" style="font-size:2ex;font-weight:bold" | Index: $1
+{| border=1 cellspacing=0 cellpadding=2 align="center" width=100% style="font-size:1.5ex;margin-top:5px"
+! style="background:#999999"|Type
+! style="background:#999999"|HashLength
+! style="background:#999999"|NumKeyFolders
+! style="background:#999999"|FirstKeyFolder
+|-
+| align="center" | <!-- Type -->${2:mtJo}
+| align="center" | <!-- HashLength -->${3:-}
+| align="center" | <!-- NumKeyFolders -->${4:-}
+| align="center" | <!-- FirstKeyFolder -->${5:-}
+|}
+{| border=1 cellspacing=0 cellpadding=2 width=100% style="font-size:1.5ex;margin-top:2px"
+| style="background:#999999" width=15%|Condition
+| <!-- Condition -->${6:None}
+|}
+{| border=1 cellspacing=0 cellpadding=5 align="center" width=100% style="font-size:1.5ex;margin-top:15px"
+! style="background:#999999"|IndexKey
+! style="background:#999999"|DisplayOnly
+! style="background:#999999"|AllowNilValue
+|-
+| <!-- IndexKey -->$7
+| align="center" | <!-- DisplayOnly -->${8:No}
+| align="center" | <!-- AllowNilValue -->${9:No}$0
+|}
+|}<br />
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger></tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.wiki, text.plain</scope>
+    <description>M-AT Tools: Tech Design: DataDef Change - Index</description>
+</snippet>

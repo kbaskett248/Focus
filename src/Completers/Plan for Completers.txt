@@ -1,0 +1,83 @@
+Plan for Completers
+
+A Completer loads and returns a specific set of completions. Each Completer is a mini-plugin that knows how to load its completions, maintains a cache of loaded completions (if necessary), returns its completions, and knows when completions should be marked for re-caching.
+
+ 1. Completers follow the standard mini-plugin format of automatically being loaded when plugin_loaded logic is run. 
+
+ 2. Completers fall into one of three categories: ViewCompleters, FileCompleters and RingCompleters. ViewCompleters grab completions from the current view, so their completions will frequently change while editing the file. However, retrieving their completions should be fairly quick since we can use all of the view-related stuff. Completions will be re-cached when the length of the file changes.
+
+    FileCompleters have completions which depend upon a file not in memory (primarily include files). These may also frequently change while editing, but less frequently than ViewCompleters. Completions will be cached along with the last modified date time of the file. If the file has been modified, completions will be re-cached. Since several views may need to use the same FileCompleter for the same language, a list will be maintained of FileCompleter instances. If you try to get a FileCompleter for a file that already has an instance, the same instance will be returned.
+
+    RingCompleters have completions which depend on the Ring. These will frequently remain static, so their completions are usually cached. However, there are TriggerEvents which can cause them to be updated. Each RingCompleter will exist for each ring only once.
+
+ 3. Completers are loaded (probably in the plugin_loaded logic of FocusFileCommands) and split into ViewCompleters, FileCompleters and RingCompleters. 
+
+ 4. ViewCompleter classes are passed to RingFileManager.add_completers(). Each of these is checked using enable_completer() with no arguments to determine if it should be used. If so, they are added to RingFileManager.completers_classes.
+
+ 5. RingCompleter classes are passed to RingManager.add_completers(). Each of these is checked using enable_completer() with no arguments to determine if it should be used. If so, they are added to RingManager.completer_classes.
+
+ 6. FileCompleter classes are passed to FocusFile.add_file_completers(). Each of these is checked using enable_completer() with no arguments to determine if it should be used. If so, they are added to FocusFile.file_completer_classes.
+
+ 7. When add_completers is run, the completer list is updated to match what was passed in. All existing rings and ringfiles are updated with the new completers.
+
+ 7. When a new Ring is instantiated, each RingCompleter class is checked using enable_completer(<Ring>) to determine if it should be used for the specific Ring. If so, an instance is created and added to <Ring>.completers.
+
+ 8. When a new File is instantiated, each ViewCompleter class is checked using enable_completer(<File>, <Ring>) to determine if it should be used for the specific File. If so, an instance is created and added to <FocusFile>.completers. 
+
+ 9. When on_query_completions() is run, the completion_checkers assigned to a view are run to get the types of completions for the current selection. If any types are returned, RingFile.get_completions is called, passing in all the types. All the ViewCompleters assigned to the file are added to a Queue of completers. Then, if the file has an associated ring, all the RingCompleters assigned to the ring are added to the Queue of completers. Finally, if the RingFile is a FocusFile, the file is checked for an include section. If one exists, a FileCompleter instance is added for each include file. enable_completer() is called for each of the FileCompleters beforehand, and any that return False are excluded.
+
+10. For each of the completers in the Queue, the completer is checked to see if it returns completions of the chosen type. If it does, get_completions() will be called and those completions will be added to the completions Queue. 
+
+11. get_completions() will sometimes be called before completions are loaded. If this is the case, and there is a lengthy loading process, set <Completer>.loading to True, spawn a thread to load the completions, and return an empty list or None. When completions are returned from on_query_completions(), if any of the completer values are None, than None will be returned. This will allow for showing the built in Sublime Text completions if the advanced completions aren't loaded. If get_completions() is called and <Completer>.loading is True, it should automatically return the empty return value.
+
+12. When running check() in multiple threads, use the following logic:
+        completed_queue = Queue()
+        running_completers = set()
+        matching_completers = set()
+        for c in completers:
+            c.check(completed_queue, ...)
+            running_completers.add(c)
+
+        continue = True
+        while continue and running_completers:
+            try:
+                c = completed_queue.get(True, 1)
+            except Empty:
+                logger.error("Failed to finish checking the following completers: %s", running_completers)
+                continue = False
+            else:
+                running_completers.remove(c[0])
+                if c[1]:
+                    matching_completers.add(c[0])
+
+
+Completer
+    loading = False
+    empty_return = None or []
+    enable_completer(cls, file_ = None, Ring = None)
+    check(self, completed_queue, focus_file, list of (region, scope, line, word))
+        returns True if the Completer should return completions for the current selection
+    get_completions(self)
+        returns a set of completion strings
+    is_view_completer(cls)
+        returns True if the completer is a ViewCompleter
+    is_ring_completer(cls)
+        returns True if the completer is a RingCompleter
+    is_file_completer(cls)
+
+
+ViewCompleter
+    __init__(self, focus_file)
+
+RingCompleter
+    __init__(self, ring)
+
+FileCompleter
+    __init__(self, file)
+
+    @classmethod
+    get_completer(class, file)
+        returns an instance of the completer for the specified file. A list of these is maintained so that only one instance of a completer exists for a given file.
+
+
+

@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+<span style="background-color:#ffffff;color:#354863;border-radius:8px;border:2px solid #ababab;padding:2px 7px;white-space: nowrap;">'''${1:Button Name}'''</span>${2: button}
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>button</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.wiki</scope>
+</snippet>

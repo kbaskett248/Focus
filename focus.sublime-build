@@ -1,0 +1,4 @@
+{
+    "target": "build_translate",
+    "selector": "source.m-at, text.xml, source.focus, source.fs"
+}

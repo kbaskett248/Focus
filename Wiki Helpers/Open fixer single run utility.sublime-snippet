@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+[[Interface_Setup#Open_the_Fixer_Single_Run_Utility|Open the Fixer Single Run Utility.]]
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>open fixer single run utility</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.wiki</scope>
+</snippet>
