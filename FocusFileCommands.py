@@ -33,24 +33,6 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
-def plugin_loaded():
-    """Loads DocFinders and Highlighters when the plugin is loaded."""
-
-    from Focus.src.Completers.Completer import Completer
-    completers = Completer.import_plugins()
-    completers = Completer.split_completers(completers)
-    FILE_MANAGER.completers = completers['ViewCompleter']
-
-    FILE_COMPLETERS.extend(completers['FileCompleter'])
-    logger.debug('FILE_COMPLETERS = %s', FILE_COMPLETERS)
-
-    rm = RingManager.getInstance()
-    rm.completers = completers['RingCompleter']
-
-    from .src.CompCheckers.CompChecker import CompChecker
-    comp_checkers = CompChecker.import_plugins()
-    FILE_MANAGER.comp_checkers = comp_checkers
-
 class FocusCommand(sublime_plugin.TextCommand):
     """Parent class for all the commands that rely on the file being a Focus File"""
 
