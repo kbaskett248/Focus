@@ -950,7 +950,7 @@
 		<key>illegal-line-start</key>
 		<dict>
 			<key>match</key>
-			<string>^ *(:|#)(?!Code)</string>
+			<string>^ *(((:|#)(?!Code))|(/[^/]))</string>
 			<key>name</key>
 			<string>invalid.illegal.line-start.fs</string>
 		</dict>

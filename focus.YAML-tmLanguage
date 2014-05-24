@@ -652,7 +652,7 @@ repository:
 
   illegal-line-start:
     name: invalid.illegal.line-start.fs
-    match: ^ *(:|#)(?!Code)
+    match: ^ *(((:|#)(?!Code))|(/[^/]))
 
   illegal-line-end:
     name: invalid.illegal.line-end.fs
