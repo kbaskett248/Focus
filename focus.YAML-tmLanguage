@@ -195,7 +195,7 @@ repository:
       match: '@?~?(\!|\&|\=|\<|\>)'
     - comment: Arithmetic operators
       name: keyword.operator.arithmetic.fs
-      match: '@?~?(\+|\-|\\|\*)'
+      match: '@?~?(\+|\-|\/|\*|\\)'
     - comment: Other operators
       name: keyword.operator.other.fs
       match: '@?~?(\#|\$|\%|\:|\|)'
