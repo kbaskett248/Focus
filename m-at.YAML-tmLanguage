@@ -39,7 +39,7 @@ repository:
   comment:
     name: comment.line
     begin: //
-    end: $
+    end: '$\n?|(?=\p{Cntrl}\|)'
     patterns:
     - match: :Doc\s+(\w+\s?\w*)
       captures:
