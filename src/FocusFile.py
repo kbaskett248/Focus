@@ -545,7 +545,7 @@ class FocusFile(RingFile):
 
     def find_subroutine(self, view, subroutine):
         file_ = self.filename
-        region = view.find(r":Code\s+" + subroutine + "$", 0)
+        region = view.find(r"^\s*:Code\s+" + subroutine + "$", 0)
         logger.debug('Region in current file: %s', region)
 
         if ((region is None) or region.empty()):
