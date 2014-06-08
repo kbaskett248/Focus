@@ -680,16 +680,17 @@ class CodeBlock(object):
         if (Focus.score_selector(view, point, 'subroutine') == 0):
             raise InvalidCodeblockError(view, point)
         self.codeblock_region = self.get_codeblock_region(point)
-        logger.debug('self.codeblock_region = %s', self.codeblock_region)
+        # logger.debug('self.codeblock_region = %s', self.codeblock_region)
         self.header_region, self.documentation_region, self.code_region = self.split_codeblock_region()
-        logger.debug('self.header_region = %s', self.header_region)
-        logger.debug('self.documentation_region = %s', self.documentation_region)
-        logger.debug('self.code_region = %s', self.code_region)
+        # logger.debug('self.header_region = %s', self.header_region)
+        # logger.debug('self.documentation_region = %s', self.documentation_region)
+        # logger.debug('self.code_region = %s', self.code_region)
         self.codeblock_name = self.view.substr(self.header_region)
-        logger.debug('self.codeblock_name = %s', self.codeblock_name)
         name_match = re.match(r':Code\s+(.+)', self.codeblock_name)
         if name_match is not None:
             self.codeblock_name = name_match.group(1)
+        # logger.debug('self.codeblock_name = %s', self.codeblock_name)
+        # logger.debug('Finished creating CodeBlock')
 
     def get_codeblock_region(self, point):
         """Gets the region containing the function surrounding the current point"""
@@ -917,6 +918,8 @@ class CodeBlockDocumentation(object):
         self.codeblock = codeblock
         self.doc_regions = dict()
         for region in self.split_doc_region():
+            # logger.debug('region = %s', region)
+            # logger.debug('region = %s', self.view.substr(region))
             if ( not region.empty() ):
                 dr = self.get_region( region )
                 self.doc_regions[dr.section] = dr
@@ -944,10 +947,13 @@ class CodeBlockDocumentation(object):
     def split_doc_region(self):
         reg_ex = r"//\s*:Doc\s+.+"
         f = self.view.find( reg_ex, self.region.begin() )
+        # logger.debug(self.region)
         if ( f and self.region.contains( f ) ):
             start = f.begin()
             f = self.view.find( reg_ex, f.end() )
+            # logger.debug('f = %s', f)
             while (f and self.region.contains( f ) ):
+                # logger.debug('f = %s', f)
                 yield sublime.Region(start, f.begin() - 1)
                 start = f.begin()
                 f = self.view.find( reg_ex, f.end() )
@@ -1074,7 +1080,7 @@ class CodeBlockDocumentation(object):
 
         def update(self, use_snippets):
             self.updated_header = '//:Doc {0}'.format(self.section)
-            print( self.current_body )
+            # logger.debug('current body: %s', self.current_body)
 
             if ( ( self.current_body == None ) or ( self.current_body == '' ) ):
                 self.update_none_section( use_snippets )

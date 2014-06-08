@@ -529,7 +529,6 @@ class AliasDocLink(DocLink):
 
     @classmethod
     def scope_selection_enabler(cls):
-        logger.debug('Getting selection enabler scope')
         return Focus.scope_map('alias')
     
     @classmethod
