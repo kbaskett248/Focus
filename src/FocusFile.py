@@ -1437,6 +1437,10 @@ class CodeBlockDocumentation(object):
                 self.setup = setup
                 self.results = results
 
+def line_match_region(line_region, match_object, match_group):
+    b = line_region.begin()
+    s = match_object.span(match_group)
+    return sublime.Region(b + s[0], b + s[1])
                 
 def extract_fs_function(view, sel):
     """Extracts the text and region of the FS function nearest to sel.
@@ -1594,10 +1598,17 @@ def extract_alias(view, sel):
     selection_2 = view.expand_by_class(selection, sublime.CLASS_WORD_START, ')')
     selection = selection_1.intersection(selection_2)
     substring = view.substr(selection)
-    
-    logger.debug(selection)
-    logger.debug(substring)
 
-    return (substring, selection)
+    match = re.match(r'\@\@[^()]+\([^()]*\)', substring)
+    if match is not None:
+        selection = line_match_region(selection, match, 0)
+        substring = match.group(0)
+    
+        logger.debug(selection)
+        logger.debug(substring)
+
+        return (substring, selection)
+    else:
+        return None
 
     
