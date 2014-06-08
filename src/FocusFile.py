@@ -772,11 +772,12 @@ class CodeBlock(object):
         return match_dictionary[key]
 
     def flatten_args(arg_list):
+        """Return a flat list of arguments from a possibly nested list."""
         flat_list = list()
 
         for a in arg_list:
             if isinstance( a, list ):
-                for p in CodeBlockDocumentation.flatten_args( a ):
+                for p in CodeBlock.flatten_args( a ):
                     flat_list.append( p )
             elif ( isinstance( a, str ) and a.isalpha() ):
                 flat_list.append( a )
