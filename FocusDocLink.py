@@ -1,6 +1,7 @@
 import functools
 import imp
 import inspect
+import json
 import os
 import re
 import sys
@@ -39,6 +40,7 @@ FS_WIKI = "http://stxwiki/magicfs6/"
 def plugin_loaded():
     for c in EntitySelector.get_defined_classes(globals()):
         c.add_possible_selector()
+    FSFunctionDocLink.load_doc_cache()
 
 def plugin_unloaded():
     for c in EntitySelector.get_defined_classes(globals()):
@@ -49,6 +51,14 @@ def line_match_region(line_region, match_object, match_group):
     b = line_region.begin()
     s = match_object.span(match_group)
     return sublime.Region(b + s[0], b + s[1])
+
+def create_folder(folder_path):
+    """Make the directory if it doesn't exist. If it does, just eat exception"""
+    try:
+        os.makedirs(folder_path)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
 
 
 class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
@@ -116,6 +126,14 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
     """DocLink class for FS functions. Shows the documentation for the function
     on the wiki."""
 
+    DocCachePartialPath = os.path.join('User', 'Focus', 'FS_Doc_cache.json')
+    DocumentationCache = dict()
+
+    def __init__(self, *args, **kwargs):
+        logger.debug("type(self): %s", type(self))
+        super(FSFunctionDocLink, self).__init__(*args, **kwargs)
+        self.doc_already_shown = False
+
     @classmethod
     def scope_view_enabler(cls):
         return Focus.scope_map('source') + ', source.fs'
@@ -137,21 +155,73 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
 
         return None
 
+    @classmethod
+    def doc_cache_path(cls):
+        """Return the path to the Documentation Cache file."""
+        return os.path.join(sublime.packages_path(), cls.DocCachePartialPath)
+
+    @classmethod
+    def load_doc_cache(cls):
+        """Loads the documentation cache into memory."""
+        cache_path = FSFunctionDocLink.doc_cache_path()
+        if os.path.exists(cache_path):
+            with open(cache_path, 'r') as cache_file:
+                FSFunctionDocLink.DocumentationCache = json.load(cache_file)
+
+    @classmethod
+    def save_doc_cache(cls):
+        """Saves the Documentation Cache to disk."""
+        cache_path = FSFunctionDocLink.doc_cache_path()
+        if not os.path.exists(cache_path):
+            create_folder(os.path.dirname(cache_path))
+        with open(cache_path, 'w') as cache_file:
+            json.dump(FSFunctionDocLink.DocumentationCache, cache_file,
+                      indent = '    ')
+
+    def get_doc_from_cache(self):
+        """Returns a doc dictionary from the cache.
+
+        If the doc is not contained in the cache, the page is scraped. Then
+        the documentation cache is saved.
+
+        """
+        doc = None
+        try:
+            doc = FSFunctionDocLink.DocumentationCache[self.get_url()]
+        except KeyError:
+            doc = self.scrape_page()
+            if doc is not None:
+                FSFunctionDocLink.DocumentationCache[self.get_url()] = doc
+                FSFunctionDocLink.save_doc_cache()
+        return doc
+
     def show_doc(self):
-        doc = self.format_documentation()
-        if doc is None:
+        """Shows documentation for the currently selected FS function.
+
+        If possible, documentation is scraped from the web page or retrieved 
+        from the documentation cache and shown in an output panel. Otherwise,
+        the web page is opened in the default browser. If the key is pressed 
+        a second time, the web page is opened.
+
+        """
+        doc = self.get_doc_from_cache()
+        if (doc is None) or self.doc_already_shown:
             url = self.get_url()
             if (url is not None):
                 sublime.status_message(self.open_status_message)
                 self.show_doc_on_web(url)
             return
-
-        window = self.view.window()
-        output_panel = window.create_output_panel('fs_function_doc')
-        output_panel.run_command('entity_select_insert_in_view', {'text': doc})
-        window.run_command('show_panel', {'panel': 'output.fs_function_doc'})
+        else:
+            sublime.status_message(self.open_status_message)
+            doc = self.format_documentation(doc)
+            window = self.view.window()
+            output_panel = window.create_output_panel('fs_function_doc')
+            output_panel.run_command('entity_select_insert_in_view', {'text': doc})
+            window.run_command('show_panel', {'panel': 'output.fs_function_doc'})
+            self.doc_already_shown = True
 
     def get_url(self):
+        """Return the url for the documentation web page."""
         match = re.match(r"@[A-Za-z]{1,2}", self.search_string)
         if (match is not None):
             return FS_WIKI + match.group(0)
@@ -166,6 +236,7 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
             return self._enable_highlight
 
     def is_listset_function(self):
+        """Return True if the selected FS function is a listset function."""
         sel = self.view.sel()[0]
         score_selector = functools.partial(Focus.score_selector, self.view, sel.begin())
 
@@ -256,6 +327,10 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         return 'Show all instances of ' + self.set
 
     def scrape_page(self):
+        """Parses the contents of the documentation page and returns them as a dictionary."""
+        logger.info('Scraping %s for documentation for %s', 
+                    self.get_url(), 
+                    self.search_string)
         try:
             f = urllib.request.urlopen(self.get_url()) 
         except urllib.error.URLError:
@@ -284,9 +359,9 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
             # logger.debug('scrape_page = %s', d)
             return d
 
-    def format_documentation(self):
-        d = self.scrape_page()
-        if d is None:
+    def format_documentation(self, doc):
+        """Formats a documentation dictionary for display."""
+        if doc is None:
             return None
         return ("\n{function}  {name}\n\n\n"
             "Function:         {function}\n"
@@ -300,17 +375,14 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
             "{comments}\n\n\n"
             "Code Examples\n"
             "-------------\n"
-            "{examples}\n").format(**d)
+            "{examples}\n").format(**doc)
 
     @property
     def status_string(self):
-        if self._status_string is not None:
-            pass
-        else:
-            d = self.scrape_page()
-            if d is None:
-                return None
-            self._status_string = "{function}: {name}".format(**d)
+        if self._status_string is None:
+            d = self.get_doc_from_cache()
+            if d is not None:
+                self._status_string = "{function}: {name}".format(**d)
         return self._status_string
     @status_string.setter
     def status_string(self, value):
