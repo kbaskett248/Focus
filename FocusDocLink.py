@@ -350,7 +350,10 @@ class SetDocHighlighter(Highlight):
         codeblock, set_doc_region = self.setup(self.view)
 
         function_sets = codeblock.get_sets_from_function()
-        regions.extend(function_sets[self.search_string].regions)
+        try:
+            regions.extend(function_sets[self.search_string].regions)
+        except KeyError:
+            pass
 
         doc_match = self.get_doc_match(self.search_string, set_doc_region)
         if (doc_match is not None):
