@@ -4,8 +4,7 @@
   Offset                  ${2:0}
   Label                   "${3:Label}"
   DataType                ${4:FREE}
-  $5
-$0
+  Length                  $5
 ]]></content>
     <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
     <tabTrigger>:Field</tabTrigger>
