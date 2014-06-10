@@ -101,7 +101,7 @@ repository:
 
   externalized-list-separator:
     comment: Externalized list separator
-    name: punctuation.definition.externalized-list.end.focus keyword.other.externalized-list.focus
+    name: punctuation.definition.externalized-list.separator.focus keyword.other.externalized-list.focus
     match: '\p{Cntrl}\|'
 
   break:

@@ -929,7 +929,7 @@
 			<key>match</key>
 			<string>\p{Cntrl}\|</string>
 			<key>name</key>
-			<string>punctuation.definition.externalized-list.end.focus keyword.other.externalized-list.focus</string>
+			<string>punctuation.definition.externalized-list.separator.focus keyword.other.externalized-list.focus</string>
 		</dict>
 		<key>illegal-block-start</key>
 		<dict>
