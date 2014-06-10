@@ -39,15 +39,11 @@ FS_WIKI = "http://stxwiki/magicfs6/"
 def plugin_loaded():
     for c in EntitySelector.get_defined_classes(globals()):
         c.add_possible_selector()
-    logger.debug('plugin_loaded')
-    logger.debug(DocLink.PossibleSelectors)
 
 def plugin_unloaded():
     for c in EntitySelector.get_defined_classes(globals()):
         c.remove_possible_selector()
     imp.reload(sys.modules[__name__])
-    logger.debug('plugin_unloaded')
-    logger.debug(DocLink.PossibleSelectors)
 
 def line_match_region(line_region, match_object, match_group):
     b = line_region.begin()
@@ -180,11 +176,11 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         
         fs_func, search_region = extract_fs_function(self.view, sel)
         set_number = fs_func[2:]
-        logger.debug('set_number = %s', set_number)
+        # logger.debug('set_number = %s', set_number)
         upper_or_lower = CodeBlockSet.determine_upper(fs_func)
-        logger.debug('upper_or_lower = %s', upper_or_lower)
+        # logger.debug('upper_or_lower = %s', upper_or_lower)
         search_string = CodeBlockSet.format_set(set_number, upper_or_lower)
-        logger.debug('self.search_string = %s', search_string)
+        # logger.debug('self.search_string = %s', search_string)
         self.set = search_string
         return True
 
@@ -285,7 +281,7 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
             examples = examples.find_next_sibling('div')
             examples = ''.join(list(examples.strings))
             d['examples'] = examples.strip()
-            logger.debug('scrape_page = %s', d)
+            # logger.debug('scrape_page = %s', d)
             return d
 
     def format_documentation(self):
