@@ -27,17 +27,6 @@ CT_FILE = "File"
 CT_KEY = "Key"
 CT_FIELD = "Field"
 
-# def add_loaders_to_focus_file(view, prefix, locations, completion_types):
-#     if Focus.score_selector(view, locations[0], 'source') <= 0:
-#         return
-
-#     if not ViewLoader.get_loaders_for_view(view):
-#         for l in ViewLoader.get_plugins():
-#             if l.view_scope_check(view) and l.view_check(view):
-#                 l.add_loader_to_view(view)
-
-# CompletionLoader.add_on_before_load_callback(add_loaders_to_focus_file)
-
 
 
 class FocusFunctionTrigger(CompletionTrigger):

@@ -460,69 +460,6 @@ class FocusFile(RingFile):
         logger.debug('translator_tree = %s', translator_tree)
         return translator_tree
 
-
-    # def build_translator_tree(self, view, trim_containers = False):
-    #     """Builds a list of (Translator option, Value)"""
-
-    #     tran_region = self.get_translator_regions(view, current_region = True)[0]
-    #     print(tran_region)
-
-    #     translator_tree = list()
-    #     tran_key = tran_value = None
-    #     current_line = view.line(view.sel()[0].begin())
-    #     current_line_text = view.substr(current_line)
-    #     pattern = r'^(\s*)([A-Za-z0-9:#]+)\s*(.*)$'
-    #     if (current_line_text.strip() == ''):
-    #         while ((len(current_line_text.strip()) == 0) or (current_line_text.strip()[0] != ':')) and (current_line.begin() > 0):
-    #             current_line = view.line(current_line.begin() - 1)
-    #             current_line_text = view.substr(current_line)
-
-    #     # logger.debug('current_line = %s', current_line)
-    #     # logger.debug('current_line_text = %s', current_line_text)
-    #     found_container = False
-    #     proceed = True
-    #     while ((tran_key == None) or (tran_key[0] != u'#')) and (current_line.begin() >= 1):
-    #         # current_line_text = view.substr(current_line)
-    #         # match = re.match(pattern, current_line_text)
-    #         # if (match is not None):
-    #         #     spacer = match.group(1)
-    #         #     tran_key = match.group(2)
-    #         #     tran_value = match.group(3)
-    #         #     # Only include the last container block since they can be nested
-    #         #     if (trim_containers and (tran_key == ':Container')):
-    #         #         if not found_container:
-    #         #             translator_tree.append((tran_key, tran_value))
-    #         #             found_container = True
-    #         #     else:
-    #         #         translator_tree.append((tran_key, tran_value))
-    #         #     pattern = r'^(' + spacer[2:] + ')([A-Za-z0-9:#]+)\s*(.*)'
-    #         # current_line = view.line(current_line.begin() - 1)
-    #         # # logger.debug('current_line = %s', current_line)
-    #         # # logger.debug('current_line_text = %s', current_line_text)
-    #         if current_line.begin() <= 0:
-    #             proceed = False
-    #         if current_line.empty():
-    #             current_line = view.line(current_line.begin() - 1)
-    #             continue
-    #         current_line_text = view.substr(current_line)
-    #         match = re.match(pattern, current_line_text)
-    #         if (match is not None):
-    #             spacer, tran_key, tran_value = match.groups()
-    #             if tran_key[0] == u'#':
-    #                 proceed = False
-    #             # Only include the last container block since they can be nested
-    #             if (trim_containers and (tran_key == ':Container')):
-    #                 if not found_container:
-    #                     translator_tree.append((tran_key, tran_value))
-    #                     found_container = True
-    #             else:
-    #                 translator_tree.append((tran_key, tran_value))
-    #             pattern = r'^(' + spacer[2:] + ')([A-Za-z0-9:#]+)\s*(.*)'
-    #         current_line = view.line(current_line.begin() - 1)
-        
-    #     translator_tree.reverse()
-    #     return translator_tree
-
     def find_alias(self, view, alias):
         line = view.find(r"^[ \t]+:Alias\s+%s" % alias, 1)
 
