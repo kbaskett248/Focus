@@ -300,6 +300,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#sortrecords</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#mat_function</string>
 				</dict>
 				<dict>
@@ -1516,6 +1520,12 @@
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
+					<key>match</key>
+					<string>(?&lt;=FlushWithTxn\()[\w._-]+</string>
+					<key>name</key>
+					<string>variable.parameter.object.focus</string>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>#control_flow</string>
 				</dict>
@@ -1819,6 +1829,52 @@
 				<dict>
 					<key>include</key>
 					<string>#comment</string>
+				</dict>
+			</array>
+		</dict>
+		<key>sortrecords</key>
+		<dict>
+			<key>begin</key>
+			<string>@SortRecords\(</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.focus</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Special handling for the @SortRecords function</string>
+			<key>contentName</key>
+			<string>meta.function.arguments.translate-time.focus</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.focus</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.function.focus</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(?&lt;=SortRecords\()[\w._-]+</string>
+					<key>name</key>
+					<string>variable.parameter.object.focus</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>,[AD](?=\))</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#code-region</string>
 				</dict>
 			</array>
 		</dict>

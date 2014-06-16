@@ -153,6 +153,7 @@ repository:
     # ---------------------------------------------------------------------------------------------------
     - include: '#called_alias'
     - include: '#break'
+    - include: '#sortrecords'
     - include: '#mat_function'
     # ---------------------------------------------------------------------------------------------------
 
@@ -448,6 +449,22 @@ repository:
     - include: '#translator_continuation'
     - include: '#comment'
 
+  sortrecords:
+    comment: Special handling for the @SortRecords function
+    name: meta.function.focus
+    contentName: meta.function.arguments.translate-time.focus
+    begin: '@SortRecords\('
+    beginCaptures:
+      '0': {name: support.function.focus}
+    end: \)
+    endCaptures:
+      '0': {name: support.function.focus}
+    patterns:
+    - name: variable.parameter.object.focus
+      match: (?<=SortRecords\()[\w._-]+
+    - match: ',[AD](?=\))'
+    - include: '#code-region'
+
   mat_function:
     comment: Focus Function
     name: meta.function.focus
@@ -503,6 +520,8 @@ repository:
       match: (?<=RecordTag\()[\w._-]+
     - name: variable.parameter.object.focus
       match: (?<=ObjectSnapshot\(|SnapshotExists\()[\w._-]+
+    - name: variable.parameter.object.focus
+      match: (?<=FlushWithTxn\()[\w._-]+
     - include: '#control_flow'
 
   object_attribute:

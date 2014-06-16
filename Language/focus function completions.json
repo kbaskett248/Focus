@@ -1,6 +1,7 @@
 {
     "AfterRID": ["Record"],
     "AnyRecords": ["Record"],
+    "AssociateStructuredFlushWithTxn": ["Object"],
     "CallStructuredCopyLocal": ["Object"],
     "CallStructuredCreate": ["Object"],
     "CallStructuredExport": ["Object"],
