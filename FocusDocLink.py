@@ -1,3 +1,4 @@
+import errno
 import functools
 import imp
 import inspect
@@ -41,6 +42,7 @@ def plugin_loaded():
     for c in EntitySelector.get_defined_classes(globals()):
         c.add_possible_selector()
     FSFunctionDocLink.load_doc_cache()
+    FocusFunctionDocLink.load_doc_cache()
 
 def plugin_unloaded():
     for c in EntitySelector.get_defined_classes(globals()):
@@ -64,6 +66,14 @@ def create_folder(folder_path):
 class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
     """DocLink class for Focus functions. Shows the documentation for the 
     function on the wiki."""
+
+    DocCachePartialPath = os.path.join('User', 'Focus', 'Focus_Doc_cache.json')
+    DocumentationCache = dict()
+
+    def __init__(self, *args, **kwargs):
+        logger.debug("type(self): %s", type(self))
+        super(FocusFunctionDocLink, self).__init__(*args, **kwargs)
+        self.doc_already_shown = False
 
     @classmethod
     def scope_view_enabler(cls):
@@ -91,9 +101,74 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
 
         return None
 
+    @classmethod
+    def doc_cache_path(cls):
+        """Return the path to the Documentation Cache file."""
+        return os.path.join(sublime.packages_path(), cls.DocCachePartialPath)
+
+    @classmethod
+    def load_doc_cache(cls):
+        """Loads the documentation cache into memory."""
+        logger.debug("Loading documentation cache")
+        cache_path = FocusFunctionDocLink.doc_cache_path()
+        if os.path.exists(cache_path):
+            with open(cache_path, 'r') as cache_file:
+                FocusFunctionDocLink.DocumentationCache = json.load(cache_file)
+
+    @classmethod
+    def save_doc_cache(cls):
+        """Saves the Documentation Cache to disk."""
+        cache_path = FocusFunctionDocLink.doc_cache_path()
+        if not os.path.exists(cache_path):
+            create_folder(os.path.dirname(cache_path))
+        with open(cache_path, 'w') as cache_file:
+            json.dump(FocusFunctionDocLink.DocumentationCache, cache_file,
+                      indent = '    ')
+
+    def get_url(self):
+        return FOCUS_WIKI + self.search_string
+
+    def get_doc_from_cache(self): 
+        """Returns a doc dictionary from the cache.
+
+        If the doc is not contained in the cache, the page is scraped. Then
+        the documentation cache is saved.
+
+        """
+        logger.debug('self.get_url() = %s', self.get_url())
+        doc = None
+        try:
+            doc = FocusFunctionDocLink.DocumentationCache[self.get_url()]
+        except KeyError:
+            doc = self.scrape_page()
+            if doc is not None:
+                FocusFunctionDocLink.DocumentationCache[self.get_url()] = doc
+                FocusFunctionDocLink.save_doc_cache()
+        return doc
+
     def show_doc(self):
-        sublime.status_message(self.open_status_message)
-        self.show_doc_on_web(FOCUS_WIKI + self.search_string)
+        logger.debug("Showing doc for %s", self)
+        doc = self.get_doc_from_cache()
+        logger.debug("doc = %s", doc)
+        if (doc is None) or self.doc_already_shown:
+            url = self.get_url()
+            if (url is not None):
+                sublime.status_message(self.open_status_message)
+                self.show_doc_on_web(url)
+            return
+        else:
+            sublime.status_message(self.open_status_message)
+            doc = self.format_documentation(doc)
+            window = self.view.window()
+            output_panel = window.create_output_panel('focus_function_doc')
+            output_panel.set_read_only(False)
+            output_panel.run_command('entity_select_insert_in_view', {'text': doc})
+            output_panel.set_read_only(True)
+            ops = output_panel.settings()
+            ops.set('word_wrap', True)
+            ops.set('wrap_width',100)
+            window.run_command('show_panel', {'panel': 'output.focus_function_doc'})
+            self.doc_already_shown = True
 
     def enable_highlight(self):
         if self.search_string == '@Break':
@@ -120,6 +195,93 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
         return ['%s: %s' % (self.view.rowcol(reg.begin())[0] + 1,
                            self.view.substr(reg)),
                 self.view.substr(self.view.line(reg))]
+
+    def scrape_page(self):
+        """Parses the contents of the documentation page and returns them as a dictionary."""
+        logger.info('Scraping %s for documentation for %s', 
+                    self.get_url(), 
+                    self.search_string)
+        try:
+            f = urllib.request.urlopen(self.get_url()) 
+        except urllib.error.URLError:
+            return None
+        else:
+            d = dict()
+            soup = BeautifulSoup(f)
+            content = soup.find('div', class_='mw-content-ltr')
+            # logger.debug('content = %s', content)
+
+            first_div = content.div
+            d['function'] = first_div.div.b.string
+
+            second_div = first_div.find_next_sibling('div')
+            d['usage'] = ''.join(list(second_div.code.stripped_strings))
+
+            tab = second_div.find_next_sibling('div').table
+
+            d['overview'] = ''
+            for r in tab.find_all('tr'):
+                e = list(r.stripped_strings)
+                if (('ide' in e[0]) and ('ffect' in e[0])):
+                    e[0] = 'Side Effect'
+                elif (('untime' in e[0]) and ('arg' in e[0])):
+                    e[0] = 'Runtime Arg'
+
+                if ('ranslation' in e[0]) and ('rg' in e[0]):
+                    try:
+                        d['translation args'] = d['translation args'] + ', ' + ' '.join(e[1:])
+                    except KeyError:
+                        d['translation args'] = ' '.join(e[1:])
+                else:
+                    d[e[0].lower()] = ' '.join(e[1:])
+
+            table_elements = ['runtime arg', 'translation args', 'precondition', 'return', 'side effect']
+            for e in table_elements:
+                if e not in d.keys():
+                    d[e] = 'None'
+
+            if d['overview']:
+                d['overview'] = 'Overview\n' + d['overview'] + '\n\n'
+
+            try:
+                examples = content.find('b', text='Example').parent
+            except AttributeError:
+                examples = ''
+            else:
+                examples = examples.find_next_sibling('pre')
+                examples = ''.join(list(examples.strings))
+            d['examples'] = examples.strip()
+
+            d['extra info'] = ''
+            for ei in content.find_all('dl'):
+                ei = list(ei.stripped_strings)
+                if len(ei) == 1:
+                    continue
+                d['extra info'] = d['extra info'] + ei[0] + '\n' + ' '.join(ei[1:]) + '\n\n'
+
+            footer = soup.find('div', id='footer')
+            credits = soup.find('li', id='credits')
+            d['modified time'] = next(credits.stripped_strings)
+
+            logger.debug("d = %s", d)
+            return d
+
+    def format_documentation(self, doc):
+        """Formats a documentation dictionary for display."""
+        if doc is None:
+            return None
+        return ("\n{function}\n\n"
+            "{overview}\n"
+            "Usage:                {usage}\n"
+            "Runtime Arg:          {runtime arg}\n"
+            "Translation Args:     {translation args}\n"
+            "Precondition:         {precondition}\n"
+            "Return:               {return}\n"
+            "Side effect:          {side effect}\n\n"
+            "{extra info}\n"
+            "Code Examples\n"
+            "-------------\n"
+            "{examples}\n").format(**doc)
 
 
 class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
