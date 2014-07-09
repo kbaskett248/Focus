@@ -147,7 +147,10 @@ class TranslatorTrigger(CompletionTrigger):
                         return [CT_TRANSLATOR]
                 return []
             else:
-                partial_completions = translator.children
+                try:
+                    partial_completions = translator.children
+                except AttributeError:
+                    return []
                 # logger.debug('partial_completions = %s', partial_completions)
 
         if ((match is None) or ((match.group(4) == '') and (match.group(5) == ''))):
