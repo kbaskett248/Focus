@@ -378,7 +378,9 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
             doc = self.format_documentation(doc)
             window = self.view.window()
             output_panel = window.create_output_panel('fs_function_doc')
+            output_panel.set_read_only(False)
             output_panel.run_command('entity_select_insert_in_view', {'text': doc})
+            output_panel.set_read_only(True)
             window.run_command('show_panel', {'panel': 'output.fs_function_doc'})
             self.doc_already_shown = True
 
