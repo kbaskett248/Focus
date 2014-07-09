@@ -98,11 +98,12 @@ def object_hook(object_dict):
 class TranslatorObject(object):
     """docstring for TranslatorObject"""
 
-    def __init__(self, children = {}, completions = [], completion_types = []):
+    def __init__(self, children = {}, completions = [], completion_types = [], required = False):
         super(TranslatorObject, self).__init__()
         self.children = children
         self.completions = completions
         self.completion_types = completion_types
+        self.required = required
 
     # def __str__(self):
     #     string = 'Completions: %s\nCompletion Types: %s\nSubitems:\n' % (self.completions, self.completion_types, self.children)
