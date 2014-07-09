@@ -509,14 +509,22 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
                     e[0] = 'Side Effect'
                 d[e[0].lower()] = ' '.join(e[1:])
 
-            comments = content.find('div', text='Comments').parent
-            comments = comments.find_next_sibling('div')
-            comments = ''.join(list(comments.strings))
+            try:
+                comments = content.find('div', text='Comments').parent
+            except AttributeError:
+                comments = ''
+            else:
+                comments = comments.find_next_sibling('div')
+                comments = ''.join(list(comments.strings))
             d['comments'] = comments.strip()
 
-            examples = content.find('div', text='Code Examples').parent
-            examples = examples.find_next_sibling('div')
-            examples = ''.join(list(examples.strings))
+            try:
+                examples = content.find('div', text='Code Examples').parent
+            except AttributeError:
+                examples = ''
+            else:
+                examples = examples.find_next_sibling('div')
+                examples = ''.join(list(examples.strings))
             d['examples'] = examples.strip()
             # logger.debug('scrape_page = %s', d)
             return d
