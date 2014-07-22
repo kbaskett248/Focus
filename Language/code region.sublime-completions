@@ -115,6 +115,7 @@
                 { "trigger": "@DeleteRecords", "contents": "@DeleteRecords(${1:Object.Record})" },
                 { "trigger": "@DeleteRecordsRT", "contents": "@DeleteRecordsRT()" },
                 { "trigger": "@DirtyData", "contents": "@DirtyData()" },
+                { "trigger": "@DiscardTxn", "contents": "@DiscardTxn()" },
                 { "trigger": "@DisplayHelp", "contents": "@DisplayHelp()" },
                 { "trigger": "@DisplayIcon", "contents": "@DisplayIcon()" },
                 { "trigger": "@DisplayNavBar", "contents": "@DisplayNavBar()" },
