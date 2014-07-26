@@ -292,8 +292,6 @@ class TranslatorViewLoader(ViewLoader):
         preceding_line = sublime.Region(self.view.line(selection.begin()).begin(), selection.end())
         preceding_line_string = self.view.substr(preceding_line)
         match = re.match(r'^(\s*)((:|#)[A-Za-z0-9]*|[A-Za-z0-9]+)(\s*)(.*)$', preceding_line_string)
-        if match and (match.group(3) == '#'):
-            return
 
         manager = RingFileManager.getInstance()
         focus_file = manager.get_ring_file(self.view)
@@ -303,11 +301,14 @@ class TranslatorViewLoader(ViewLoader):
 
         partial_completions = Focus.TranslatorCompletions
         # logger.debug('partial_completions = %s', partial_completions)
+        if match and (match.group(3) == '#'):
+            self.completions = set([(x,) for x in partial_completions])
+            return
 
         for k, v in tree:
             try:
                 translator = partial_completions[k]
-                print(k, translator)
+                # print(k, translator)
             except KeyError:
                 if ((k == current_item[0]) and (v == current_item[1])):
                     if ((match is None) or ((match.group(4) == '') and (match.group(5) == ''))):
