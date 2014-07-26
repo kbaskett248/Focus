@@ -6,6 +6,7 @@
                 { "trigger": "@AnyRecords", "contents": "@AnyRecords(${1:Object.Record})" },
                 { "trigger": "@ApplyIndexPattern", "contents": "@ApplyIndexPattern()" },
                 { "trigger": "@ApplyStyle", "contents": "@ApplyStyle()" },
+                { "trigger": "@AssociateStructuredFlushWithTxn", "contents": "@AssociateStructuredFlushWithTxn(${1:Object})" },
                 { "trigger": "@BeginTxn", "contents": "@BeginTxn()" },
                 { "trigger": "@Break", "contents": "@Break(${1:Label})" },
                 { "trigger": "@BreakReset", "contents": "@BreakReset()" },
