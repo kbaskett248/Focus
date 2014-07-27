@@ -20,10 +20,7 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 try:
-    from EntitySelect.src.EntitySelector import EntitySelector
-    from EntitySelect.src.DocLink import DocLink
-    from EntitySelect.src.Highlight import Highlight, PreemptiveHighlight
-    from EntitySelect.src.StatusIdentifier import StatusIdentifier
+    from EntitySelect import EntitySelector, DocLink, Highlight, PreemptiveHighlight, StatusIdentifier
 except ImportError as e:
     logger.error('EntitySelect package not installed')    
     raise e
