@@ -36,6 +36,15 @@ finally:
 
 from .src import FocusLanguage
 
+def _addLibToPath():
+    """Adds Lib to the system path so bs4 works correctly."""
+    path_to_lib = os.path.join(os.path.dirname(__file__), 'src', 'Lib')
+    if not path_to_lib in sys.path:
+        sys.path.append(path_to_lib)
+        print("Added %s to sys.path." % path_to_lib)
+
+_addLibToPath()
+
 TranslatorCompletions = dict()
 ScopeMappings = dict()
 
