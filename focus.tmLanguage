@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
-	<array/>
+	<array>
+		<string>focus</string>
+	</array>
 	<key>name</key>
 	<string>Focus</string>
 	<key>patterns</key>

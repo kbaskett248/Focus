@@ -1,7 +1,7 @@
 # [PackageDev] target_format: plist, ext: tmLanguage
 name: Focus
 scopeName: source.focus
-fileTypes: []
+fileTypes: [focus]
 uuid: da222f5a-4cec-4bcd-82ec-93cedfde55b9
 
 patterns:
