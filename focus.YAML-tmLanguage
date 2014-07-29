@@ -389,6 +389,7 @@ repository:
     endCaptures:
       '1': {name: keyword.operator.keyword-string-list.fs punctuation.definition.string-list.end.fs}
     patterns:
+    - include: '#comment'
     - include: '#keyword-string-list'
     - name: keyword.operator.list-separator.fs punctuation.definition.separator.bar.fs
       match: "|"

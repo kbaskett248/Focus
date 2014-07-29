@@ -1109,6 +1109,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#keyword-string-list</string>
 				</dict>
 				<dict>
