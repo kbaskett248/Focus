@@ -12,7 +12,6 @@
     "show_panel_on_build": false,
     "word_separators": "/\\()\"'-:,;<>~!#$%^@&*|+=[]{}`~?",
     "index_files": false,
-    "auto_complete_triggers": [ {"selector": "comment.line.double-slash.fs", "characters": ":Doc "} ],
     // Determines what character(s) are used to terminate each line in new files.
     // Valid values are 'system' (whatever the OS uses), 'windows' (CRLF) and
     // 'unix' (LF only).
