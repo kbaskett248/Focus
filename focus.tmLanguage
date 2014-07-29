@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
-	<array/>
+	<array>
+		<string>focus</string>
+	</array>
 	<key>name</key>
 	<string>Focus</string>
 	<key>patterns</key>
@@ -1105,6 +1107,10 @@
 			<string>meta.keyword-string-list.fs</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#keyword-string-list</string>

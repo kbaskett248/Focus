@@ -6,9 +6,11 @@ import sys
 
 import sublime
 
+SublimeLoggingInstalled = False
 try:
     import sublimelogging
     logger = sublimelogging.getLogger(__name__)
+    SublimeLoggingInstalled = True
 except ImportError:
     logger = logging.getLogger(__name__)
     logger.info('Using standard logging system')
@@ -35,7 +37,7 @@ finally:
 from .src import FocusLanguage
 
 def _addLibToPath():
-    """Adds Lib to the system path so sublimelogging is available to all packages."""
+    """Adds Lib to the system path so bs4 works correctly."""
     path_to_lib = os.path.join(os.path.dirname(__file__), 'src', 'Lib')
     if not path_to_lib in sys.path:
         sys.path.append(path_to_lib)
@@ -52,24 +54,25 @@ def plugin_loaded():
     There is no access to the settings until the plugin is loaded.
 
     """
-    stream_handler.addFilter(
-        sublimelogging.SettingsEnabledFilter('m-at.sublime-settings', 
-                                             'log_to_console')
-        )
-    stream_handler.addFilter(
-        sublimelogging.SettingsLevelFilter(stream_handler, 
-                                           'm-at.sublime-settings', 
-                                           'console_log_level')
-        )
-    timed_file_handler.addFilter(
-        sublimelogging.SettingsEnabledFilter('m-at.sublime-settings', 
-                                             'log_to_file')
-        )
-    timed_file_handler.addFilter(
-        sublimelogging.SettingsLevelFilter(timed_file_handler, 
-                                           'm-at.sublime-settings', 
-                                           'file_log_level')
-        )
+    if SublimeLoggingInstalled:
+        stream_handler.addFilter(
+            sublimelogging.SettingsEnabledFilter('m-at.sublime-settings', 
+                                                 'log_to_console')
+            )
+        stream_handler.addFilter(
+            sublimelogging.SettingsLevelFilter(stream_handler, 
+                                               'm-at.sublime-settings', 
+                                               'console_log_level')
+            )
+        timed_file_handler.addFilter(
+            sublimelogging.SettingsEnabledFilter('m-at.sublime-settings', 
+                                                 'log_to_file')
+            )
+        timed_file_handler.addFilter(
+            sublimelogging.SettingsLevelFilter(timed_file_handler, 
+                                               'm-at.sublime-settings', 
+                                               'file_log_level')
+            )
 
     FocusLanguage.plugin_loaded()
     load_translator_completions()

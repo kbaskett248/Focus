@@ -1,7 +1,7 @@
 # [PackageDev] target_format: plist, ext: tmLanguage
 name: Focus
 scopeName: source.focus
-fileTypes: []
+fileTypes: [focus]
 uuid: da222f5a-4cec-4bcd-82ec-93cedfde55b9
 
 patterns:
@@ -389,6 +389,7 @@ repository:
     endCaptures:
       '1': {name: keyword.operator.keyword-string-list.fs punctuation.definition.string-list.end.fs}
     patterns:
+    - include: '#comment'
     - include: '#keyword-string-list'
     - name: keyword.operator.list-separator.fs punctuation.definition.separator.bar.fs
       match: "|"
