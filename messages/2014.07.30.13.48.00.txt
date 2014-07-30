@@ -1,0 +1,8 @@
+Adds a preference to the package settings to enable or disable showing documentation within Sublime
+Text. 
+
+show_doc_in_panel - If this is set to True, documentation will be shown in an output panel within
+                    Sublime Text when available. Otherwise, documentation will behave as it has.
+                    The default value is False.
+
+To enable this behavior, add the preference to your user settings file (User\m-at.sublime-settings).

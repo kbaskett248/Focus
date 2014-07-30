@@ -59,6 +59,10 @@ def create_folder(folder_path):
         if e.errno != errno.EEXIST:
             raise
 
+def get_show_doc_setting():
+    settings = sublime.load_settings('m-at.sublime-settings')
+    return settings.get('show_doc_in_panel', False)
+
 
 class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
     """DocLink class for Focus functions. Shows the documentation for the 
@@ -145,8 +149,13 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
 
     def show_doc(self):
         logger.debug("Showing doc for %s", self)
-        doc = self.get_doc_from_cache()
-        logger.debug("doc = %s", doc)
+        show_doc_setting = get_show_doc_setting()
+        if show_doc_setting:
+            doc = self.get_doc_from_cache()
+            logger.debug("doc = %s", doc)
+        else:
+            doc = None
+            
         if (doc is None) or self.doc_already_shown:
             url = self.get_url()
             if (url is not None):
@@ -363,7 +372,13 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         a second time, the web page is opened.
 
         """
-        doc = self.get_doc_from_cache()
+        show_doc_setting = get_show_doc_setting()
+
+        if show_doc_setting:
+            doc = self.get_doc_from_cache()
+        else:
+            doc = None
+
         if (doc is None) or self.doc_already_shown:
             url = self.get_url()
             if (url is not None):
