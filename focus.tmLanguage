@@ -101,9 +101,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>^ *(:Alias) +([^()
-	]+?) *$
-?</string>
+					<string>^ *(:Alias) +([^()\n\t]+?) *$\n?</string>
 					<key>name</key>
 					<string>meta.keyword.alias.focus</string>
 				</dict>
@@ -229,9 +227,7 @@
 		<key>code-keyword</key>
 		<dict>
 			<key>begin</key>
-			<string>^ *((:Code) +([^
-()	]+?)) *$
-?</string>
+			<string>^ *((:Code) +([^\n()\t]+?)) *$\n?</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -1180,9 +1176,7 @@
 		<key>list-keyword</key>
 		<dict>
 			<key>begin</key>
-			<string>^ *((:List) +([^
-()	]+?)) *$
-?</string>
+			<string>^ *((:List) +([^\n()\t]+?)) *$\n?</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -1315,9 +1309,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>^(:EntryPoint) +([^
-()	]+?) *$
-?</string>
+					<string>^(:EntryPoint) +([^\n()\t]+?) *$\n?</string>
 					<key>name</key>
 					<string>meta.keyword.entrypoint.focus</string>
 				</dict>
@@ -1336,9 +1328,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>^ *(Alias) +([^
-()	]+?) *$
-?</string>
+					<string>^ *(Alias) +([^\n()\t]+?) *$\n?</string>
 					<key>name</key>
 					<string>meta.attribute.alias.focus</string>
 				</dict>
@@ -1703,9 +1693,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>^ *(:ElementSet) +([^
-()	]+?) *$
-?</string>
+					<string>^ *(:ElementSet) +([^\n()\t]+?) *$\n?</string>
 					<key>name</key>
 					<string>meta.keyword.elementset.focus</string>
 				</dict>
@@ -1724,9 +1712,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>^ *(Name) +([^
-()	]+?) *$
-?</string>
+					<string>^ *(Name) +([^\n()\t]+?) *$\n?</string>
 					<key>name</key>
 					<string>meta.attribute.focus</string>
 				</dict>

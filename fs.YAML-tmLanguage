@@ -10,7 +10,7 @@ patterns:
 
 - comment: Code Member Keyword
   name: meta.subroutine.fs
-  begin: "^ *((:Code) +([^\n()\t]+?)) *$"
+  begin: '^ *((:Code) +([^\n()\t]+?)) *$'
   beginCaptures:
     '1': {name: meta.subroutine.header.fs}
     '2': {name: keyword.other.fs}
@@ -22,7 +22,7 @@ patterns:
 
 - comment: List Member Keyword
   name: meta.list.fs
-  begin: "^ *((:List) +([^\n()\t]+?)) *$"
+  begin: '^ *((:List) +([^\n()\t]+?)) *$'
   beginCaptures:
     '1': {name: meta.list.header.fs}
     '2': {name: keyword.other.fs}
@@ -36,7 +36,7 @@ patterns:
 
 - comment: Toolset Keyword
   name: meta.toolset.fs
-  match: "^ *((:Toolset) +([^\n()\t]+?)) *$"
+  match: '^ *((:Toolset) +([^\n()\t]+?)) *$'
   captures:
     '1': {name: meta.toolset.header.fs}
     '2': {name: keyword.other.fs}
