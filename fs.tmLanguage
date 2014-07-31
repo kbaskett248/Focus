@@ -16,8 +16,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^ *((:Code) +([^
-()	]+?)) *$</string>
+			<string>^ *((:Code) +([^\n()\t]+?)) *$</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -52,8 +51,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^ *((:List) +([^
-()	]+?)) *$</string>
+			<string>^ *((:List) +([^\n()\t]+?)) *$</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -112,8 +110,7 @@
 			<key>comment</key>
 			<string>Toolset Keyword</string>
 			<key>match</key>
-			<string>^ *((:Toolset) +([^
-()	]+?)) *$</string>
+			<string>^ *((:Toolset) +([^\n()\t]+?)) *$</string>
 			<key>name</key>
 			<string>meta.toolset.fs</string>
 		</dict>

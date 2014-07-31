@@ -57,7 +57,7 @@ repository:
     end: (?=^#)
     patterns:
     - name: meta.keyword.alias.focus
-      match: "^ *(:Alias) +([^()\n\t]+?) *$\n?"
+      match: '^ *(:Alias) +([^()\n\t]+?) *$\n?'
       captures:
         '1': {name: keyword.other.keyword.focus}
         '2': {name: meta.value.attribute.focus meta.alias.defined.focus constant.other.alias.focus}
@@ -127,7 +127,7 @@ repository:
   code-keyword:
     comment: Code Member Keyword
     name: meta.keyword.code.focus meta.subroutine.fs
-    begin: "^ *((:Code) +([^\n()\t]+?)) *$\n?"
+    begin: '^ *((:Code) +([^\n()\t]+?)) *$\n?'
     beginCaptures:
       '1': {name: meta.subroutine.header.fs}
       '2': {name: keyword.other.keyword.focus}
@@ -400,7 +400,7 @@ repository:
   list-keyword:
     comment: List Member Keyword
     name: meta.keyword.list.focus meta.list.fs
-    begin: "^ *((:List) +([^\n()\t]+?)) *$\n?"
+    begin: '^ *((:List) +([^\n()\t]+?)) *$\n?'
     beginCaptures:
       '1': {name: meta.list.header.fs}
       '2': {name: keyword.other.keyword.focus}
@@ -438,12 +438,12 @@ repository:
     - include: '#code-keyword'
     - include: '#list-keyword'
     - name: meta.keyword.entrypoint.focus
-      match: "^(:EntryPoint) +([^\n()\t]+?) *$\n?"
+      match: '^(:EntryPoint) +([^\n()\t]+?) *$\n?'
       captures:
         '1': {name: keyword.other.keyword.focus}
         '2': {name: meta.value.keyword.focus entity.name.subroutine.fs}
     - name: meta.attribute.alias.focus
-      match: "^ *(Alias) +([^\n()\t]+?) *$\n?"
+      match: '^ *(Alias) +([^\n()\t]+?) *$\n?'
       captures:
         '1': {name: keyword.other.attribute.focus}
         '2': {name: meta.value.keyword.focus meta.alias.defined.focus constant.other.alias.focus}
@@ -583,12 +583,12 @@ repository:
     end: (?=^#)
     patterns:
     - name: meta.keyword.elementset.focus
-      match: "^ *(:ElementSet) +([^\n()\t]+?) *$\n?"
+      match: '^ *(:ElementSet) +([^\n()\t]+?) *$\n?'
       captures:
         '1': {name: keyword.other.keyword.focus}
         '2': {name: meta.value.keyword.focus meta.elementset-name.focus}
     - name: meta.attribute.focus
-      match: "^ *(Name) +([^\n()\t]+?) *$\n?"
+      match: '^ *(Name) +([^\n()\t]+?) *$\n?'
       captures:
         '1': {name: keyword.other.attribute.focus}
         '2': {name: meta.value.attribute.focus}
