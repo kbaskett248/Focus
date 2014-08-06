@@ -254,7 +254,8 @@ class ObjectRingLoader(RingLoader):
 
     def get_path_update_time(self):
         """Return the last time the file was modified."""
-        return os.path.getmtime(self.path)
+        object_path = os.path.join(os.path.dirname(self.path), 'Object')
+        return os.path.getmtime(object_path)
 
     def load_completions(self, **kwargs):
         """Loads the object completions from the ring.
