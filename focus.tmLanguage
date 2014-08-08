@@ -1113,7 +1113,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>|</string>
+					<string>\|</string>
 					<key>name</key>
 					<string>keyword.operator.list-separator.fs punctuation.definition.separator.bar.fs</string>
 				</dict>
