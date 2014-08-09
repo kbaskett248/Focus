@@ -3,10 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>fileTypes</key>
-	<array>
-		<string>focus</string>
-		<string>fs</string>
-	</array>
+	<array/>
 	<key>foldingStartMarker</key>
 	<string>^Code:.+$</string>
 	<key>foldingStopMarker</key>

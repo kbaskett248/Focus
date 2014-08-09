@@ -392,7 +392,7 @@ repository:
     - include: '#comment'
     - include: '#keyword-string-list'
     - name: keyword.operator.list-separator.fs punctuation.definition.separator.bar.fs
-      match: "|"
+      match: '\|'
     - include: '#blank-line-error'
     - name: string.unquoted.string-list.fs
       match: '[^{}|]' 
