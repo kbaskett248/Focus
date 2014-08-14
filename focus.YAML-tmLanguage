@@ -500,9 +500,13 @@ repository:
       captures:
         '1': {name: variable.parameter.object.focus}
     - name: variable.parameter.object.focus
-      match: (?<=Field\(|Key\(|FieldExternal\(|KeyExternal\(|ElementLabel\()[\w._-]+
+      match: (?<=Field\(|Key\(|FieldExternal\(|KeyExternal\(|ElementLabel\()([aqt]\!)?[\w._-]+
+      captures:
+        '1': {name: markup.bold}
     - name: variable.parameter.object.focus
-      match: (?<=File\(|Record\(|Records\(|FileCx\(|RecordCx\(|RecordsCx\(|Object\(|Objects\(|ObjectClass\()[\w._-]+
+      match: (?<=File\(|Record\(|Records\(|FileCx\(|RecordCx\(|RecordsCx\(|Object\(|Objects\(|ObjectClass\()([aqt]\!)?[\w._-]+
+      captures:
+        '1': {name: markup.bold}
     - name: variable.parameter.object.focus
       match: (?<=LockSystemInfo\()[\w._-]+
     - name: variable.parameter.object.focus

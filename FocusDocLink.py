@@ -22,7 +22,7 @@ except ImportError:
 try:
     from EntitySelect import EntitySelector, DocLink, Highlight, PreemptiveHighlight, StatusIdentifier
 except ImportError as e:
-    logger.error('EntitySelect package not installed')    
+    logger.error('EntitySelect package not installed')
     raise e
 
 import Focus
@@ -65,7 +65,7 @@ def get_show_doc_setting():
 
 
 class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
-    """DocLink class for Focus functions. Shows the documentation for the 
+    """DocLink class for Focus functions. Shows the documentation for the
     function on the wiki."""
 
     DocCachePartialPath = os.path.join('User', 'Focus', 'Focus_Doc_cache.json')
@@ -83,7 +83,7 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
     @classmethod
     def scope_selection_enabler(cls):
         return Focus.scope_map('focus_function_finder')
-    
+
     @classmethod
     def enable_for_selection(cls, view):
         sel = view.sel()[0]
@@ -97,7 +97,7 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
                 search_region = match[0][1]
                 search_region = sublime.Region(
                     search_region.begin()-1, search_region.end())
-                return {'search_string': search_string, 
+                return {'search_string': search_string,
                         'search_region': search_region}
 
         return None
@@ -129,7 +129,7 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
     def get_url(self):
         return FOCUS_WIKI + self.search_string
 
-    def get_doc_from_cache(self): 
+    def get_doc_from_cache(self):
         """Returns a doc dictionary from the cache.
 
         If the doc is not contained in the cache, the page is scraped. Then
@@ -155,7 +155,7 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
             logger.debug("doc = %s", doc)
         else:
             doc = None
-            
+
         if (doc is None) or self.doc_already_shown:
             url = self.get_url()
             if (url is not None):
@@ -204,11 +204,11 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
 
     def scrape_page(self):
         """Parses the contents of the documentation page and returns them as a dictionary."""
-        logger.info('Scraping %s for documentation for %s', 
-                    self.get_url(), 
+        logger.info('Scraping %s for documentation for %s',
+                    self.get_url(),
                     self.search_string)
         try:
-            f = urllib.request.urlopen(self.get_url()) 
+            f = urllib.request.urlopen(self.get_url())
         except urllib.error.URLError:
             return None
         else:
@@ -309,16 +309,16 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
     @classmethod
     def scope_selection_enabler(cls):
         return Focus.scope_map('fs_function')
-    
+
     @classmethod
     def enable_for_selection(cls, view):
         sel = view.sel()[0]
-        
+
         function = extract_fs_function(view, sel)
         if (function is not None):
             match = re.match(r"@[A-Z][A-Za-z0-9]", function[0])
             if match is not None:
-                return {'search_string': function[0], 
+                return {'search_string': function[0],
                         'search_region': function[1]}
 
         return None
@@ -366,9 +366,9 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
     def show_doc(self):
         """Shows documentation for the currently selected FS function.
 
-        If possible, documentation is scraped from the web page or retrieved 
+        If possible, documentation is scraped from the web page or retrieved
         from the documentation cache and shown in an output panel. Otherwise,
-        the web page is opened in the default browser. If the key is pressed 
+        the web page is opened in the default browser. If the key is pressed
         a second time, the web page is opened.
 
         """
@@ -420,7 +420,7 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
             return False
         elif score_selector('subroutine') <= 0:
             return False
-        
+
         fs_func, search_region = extract_fs_function(self.view, sel)
         set_number = fs_func[2:]
         # logger.debug('set_number = %s', set_number)
@@ -472,7 +472,7 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         if ((doc_match is not None) and region.intersects(doc_match)):
             substring = self.view.substr(doc_match)
             match = re.match(pattern, substring)
-            
+
             if (match is not None):
                 span = match.span(1)
                 r = sublime.Region(doc_match.begin() + span[0], doc_match.begin() + span[1])
@@ -485,15 +485,15 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
     @property
     def highlight_description_forward(self):
         return 'Next instance of ' + self.set
-    
+
     @property
     def highlight_description_backward(self):
         return 'Previous instance of ' + self.set
-    
+
     @property
     def highlight_description_clear(self):
         return 'Clear highlights'
-    
+
     @property
     def highlight_description_select_all(self):
         return 'Select all instances of ' + self.set
@@ -504,11 +504,11 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
 
     def scrape_page(self):
         """Parses the contents of the documentation page and returns them as a dictionary."""
-        logger.info('Scraping %s for documentation for %s', 
-                    self.get_url(), 
+        logger.info('Scraping %s for documentation for %s',
+                    self.get_url(),
                     self.search_string)
         try:
-            f = urllib.request.urlopen(self.get_url()) 
+            f = urllib.request.urlopen(self.get_url())
         except urllib.error.URLError:
             return None
         else:
@@ -582,12 +582,12 @@ class SetDocHighlighter(Highlight):
     @classmethod
     def scope_selection_enabler(cls):
         return Focus.scope_map('fs_set_doc_highlighter')
-    
+
     @classmethod
     def enable_for_selection(cls, view):
         sel = view.sel()[0]
         score_selector = functools.partial(Focus.score_selector, view, sel.begin())
-        
+
         codeblock, set_doc_region = cls.setup(view)
 
         if ((set_doc_region is not None) and sel.intersects(set_doc_region)):
@@ -598,7 +598,7 @@ class SetDocHighlighter(Highlight):
                     if match:
                         region = line_match_region(r, match, 1)
                         return {'search_region': region}
-        
+
         return None
 
     def get_highlight_regions(self):
@@ -645,7 +645,7 @@ class SetDocHighlighter(Highlight):
         if ((doc_match is not None) and region.intersects(doc_match)):
             substring = self.view.substr(doc_match)
             match = re.match(pattern, substring)
-            
+
             if (match is not None):
                 span = match.span(1)
                 r = sublime.Region(doc_match.begin() + span[0], doc_match.begin() + span[1])
@@ -672,12 +672,12 @@ class SubroutineDocLink(DocLink, Highlight):
 
     @classmethod
     def enable_for_view(cls, view):
-        focus_file = FILE_MANAGER.get_ring_file(view, 
+        focus_file = FILE_MANAGER.get_ring_file(view,
                 allowed_file_types = [FocusFile])
         if focus_file is None:
             return False
         return True
-    
+
     @classmethod
     def enable_for_selection(cls, view):
         sel = view.sel()[0]
@@ -710,7 +710,7 @@ class SubroutineDocLink(DocLink, Highlight):
             status_message_suffix = self.show_doc_in_file(file_, region)
 
         sublime.status_message(
-            "Documentation for {0} {1}".format(self.search_string, 
+            "Documentation for {0} {1}".format(self.search_string,
                                                status_message_suffix)
             )
 
@@ -736,7 +736,7 @@ class TranslatorDocLink(DocLink):
     @classmethod
     def scope_selection_enabler(cls):
         return Focus.scope_map('translator_finder')
-    
+
     @classmethod
     def enable_for_selection(cls, view):
         sel = view.sel()[0]
@@ -774,8 +774,8 @@ class TranslatorDocLink(DocLink):
 
 
 class AliasDocLink(DocLink):
-    """DocLink class for Home Care aliases. Displays the definition of the 
-    alias. If in another file, that file is opened. If the alias is for a 
+    """DocLink class for Home Care aliases. Displays the definition of the
+    alias. If in another file, that file is opened. If the alias is for a
     subroutine, that subroutine is displayed."""
 
     @classmethod
@@ -785,7 +785,7 @@ class AliasDocLink(DocLink):
     @classmethod
     def scope_selection_enabler(cls):
         return Focus.scope_map('alias')
-    
+
     @classmethod
     def enable_for_selection(cls, view):
         logger.debug('Alias scope matched')
@@ -806,7 +806,7 @@ class AliasDocLink(DocLink):
 
         status_message_suffix = self.show_doc_in_file(file_, region = region, row = row, col = col)
         sublime.status_message(
-            "Documentation for {0} {1}".format(self.search_string, 
+            "Documentation for {0} {1}".format(self.search_string,
                                                status_message_suffix)
             )
 
@@ -837,10 +837,10 @@ class AliasDocLink(DocLink):
 class IncludeFileDocLink(DocLink):
     """DocLink class for Included files and External Pagesets. Opens the file."""
 
-    IncludeFileMatcher = MultiMatch(patterns = {'Folder': r" *Folder +([A-Za-z0-9._]+)", 
+    IncludeFileMatcher = MultiMatch(patterns = {'Folder': r" *Folder +([A-Za-z0-9._]+)",
                 'File': r" *File +([A-Za-z0-9._]+)"})
 
-    ExternalPageMatcher = MultiMatch(patterns = {'Codebase': r" *Code[Bb]ase +([A-Za-z0-9]+)", 
+    ExternalPageMatcher = MultiMatch(patterns = {'Codebase': r" *Code[Bb]ase +([A-Za-z0-9]+)",
                 'Source': r" *Source +([\w._-]+)",
                 'PageName': r' *PageName +([\w.-_]+)',
                 'ContainerPage': r' *:ContainerPage +([\w._-]+)'
@@ -860,14 +860,14 @@ class IncludeFileDocLink(DocLink):
 
     @classmethod
     def enable_for_view(cls, view):
-        focus_file = FILE_MANAGER.get_ring_file(view, 
+        focus_file = FILE_MANAGER.get_ring_file(view,
                 allowed_file_types = [FocusFile])
         if focus_file is None:
             return False
         elif focus_file.ring is None:
             return False
         return True
-    
+
     @classmethod
     def enable_for_selection(cls, view):
         logger.debug('Checking if IncludeFileDocLink is enabled for this selection')
@@ -894,7 +894,7 @@ class IncludeFileDocLink(DocLink):
                         'type_': 'External Pageset'}
 
         return None
-        
+
     def show_doc(self):
         focus_file = FILE_MANAGER.get_ring_file(self.view)
         sublime.status_message(self.open_status_message)
@@ -919,7 +919,7 @@ class IncludeFileDocLink(DocLink):
 
 
 class LocalDocLink(DocLink, Highlight):
-    """DocLink class for Focus locals. Displays the definition of the local 
+    """DocLink class for Focus locals. Displays the definition of the local
     from the #Locals section."""
 
     @classmethod
@@ -936,7 +936,7 @@ class LocalDocLink(DocLink, Highlight):
         except AttributeError:
             self._enable_doc_link = Focus.score_selector(self.view, self.regions[0].begin(), 'focus_function') > 0
             return self._enable_doc_link
-    
+
     @classmethod
     def enable_for_selection(cls, view):
         sel = view.sel()[0]
@@ -949,12 +949,12 @@ class LocalDocLink(DocLink, Highlight):
         sublime.status_message(self.open_status_message)
         focus_file = FILE_MANAGER.get_ring_file(self.view)
         file_, region = focus_file.find_local(self.view, self.search_string)
-        
-        status_message_suffix = self.show_doc_in_file(file_, region, 
+
+        status_message_suffix = self.show_doc_in_file(file_, region,
                                                       show_at_top = False)
 
         sublime.status_message(
-            "Documentation for {0} {1}".format(self.search_string, 
+            "Documentation for {0} {1}".format(self.search_string,
                                                status_message_suffix)
             )
 
@@ -970,7 +970,7 @@ class LocalDocLink(DocLink, Highlight):
 
 
 class ObjectDocLink(DocLink):
-    """DocLink class for Focus objects. Displays the definition of the object 
+    """DocLink class for Focus objects. Displays the definition of the object
     entity. If the definition is contained in an external file, the file is opened."""
 
     @classmethod
@@ -986,6 +986,8 @@ class ObjectDocLink(DocLink):
         sel = view.sel()[0]
         search_region = view.word(sel.begin())
         if view.word(sel.end()) != search_region:
+            return False
+        elif view.substr(search_region.begin()-1) == '!':
             return False
         return {'search_region': search_region}
 
@@ -1009,11 +1011,11 @@ class ObjectDocLink(DocLink):
                     pass
                 else:
                     if (type_ == 'IndexKey'):
-                        parts.extend([('Index', string_parts[1]), 
+                        parts.extend([('Index', string_parts[1]),
                                       ('IndexKey', string_parts[2])])
                     else:
                         parts.append((type_, string_parts[1]))
-        elif ((Focus.score_selector(self.view, region.begin(), 'keyword_line') > 0) or 
+        elif ((Focus.score_selector(self.view, region.begin(), 'keyword_line') > 0) or
               (Focus.score_selector(self.view, region.begin(), 'attribute_line') > 0)):
             focus_file = FILE_MANAGER.get_ring_file(self.view)
             if line_text.startswith(':Element'):
@@ -1040,7 +1042,7 @@ class ObjectDocLink(DocLink):
                                     row, col, show_at_top = False)
 
         sublime.status_message(
-            "Documentation for {0} {1}".format(self.search_string, 
+            "Documentation for {0} {1}".format(self.search_string,
                                                status_message_suffix)
             )
 
@@ -1109,7 +1111,7 @@ class ObjectDocLink(DocLink):
 
     def find_object_in_ring(self, object_, parts, focus_file):
         """Finds documentation for the object in a datadef defined in the ring."""
-        file_ = os.path.join(focus_file.ring_object.datadefs_path, 
+        file_ = os.path.join(focus_file.ring_object.datadefs_path,
             'Standard', object_ + '.focus')
         file_, row, col = self.find_object_in_other_file(file_, parts)
 
@@ -1141,12 +1143,12 @@ class ObjectDocLink(DocLink):
                         break
             if (match is not None):
                 return (file_, line+1, match.start(2)+1)
-       
+
         return (None, None, None)
 
     def get_object_match_pattern(self, types, value):
         """Returns a RegEx pattern given the types and value.
-        
+
         Keyword arguments:
         types - String or list of strings: Object, record, field, etc.
         value - Value for that item
@@ -1172,7 +1174,7 @@ class ScreenComponentDocLink(DocLink):
     @classmethod
     def scope_selection_enabler(cls):
         return Focus.scope_map('#ScreenPage')
-    
+
     @classmethod
     def enable_for_selection(cls, view):
         sel = view.sel()[0]
@@ -1209,7 +1211,7 @@ class ScreenComponentDocLink(DocLink):
     def show_doc(self):
         sublime.status_message(self.open_status_message)
         focus_file = FILE_MANAGER.get_ring_file(self.view)
-        file_, region = focus_file.find_screen_component(self.view, self.type_, 
+        file_, region = focus_file.find_screen_component(self.view, self.type_,
                             self.search_string)
         logger.debug('File: %s; Region: %s', file_, region)
         if isinstance(region, tuple):
@@ -1219,9 +1221,9 @@ class ScreenComponentDocLink(DocLink):
             row = col = None
 
         status_message_suffix = self.show_doc_in_file(file_, region, row, col)
-        
+
         sublime.status_message(
-            "Documentation for {0} {1}".format(self.search_string, 
+            "Documentation for {0} {1}".format(self.search_string,
                                                status_message_suffix)
             )
 
@@ -1239,7 +1241,7 @@ class FSLocalHighlighter(Highlight):
     @classmethod
     def scope_selection_enabler(cls):
         return Focus.scope_map('fs_local_highlighter')
-    
+
     @classmethod
     def enable_for_selection(cls, view):
         sel = view.sel()[0]
@@ -1258,7 +1260,7 @@ class FSLocalHighlighter(Highlight):
                 doc_matches = view.find_all(r"[A-Z]\s*[-=:]\s*[\s\S]*?\n(?=//\s*[A-Z]\s*[-=:]|//:Doc)")
             elif (arg_doc_region and sel.intersects(arg_doc_region)):
                 doc_matches = view.find_all(r"[\{|]?[A-Z]\s*[-=:.]\s*[\s\S]*?\n(?=//\s*[\{|]?([A-Z]|\d{1,2})\s*[-=:]|//:Doc)")
-            
+
             for r in doc_matches:
                 if r.contains(sel):
                     match = re.search(r"([A-Z])\s*[-=:]\s*", view.substr(r))
