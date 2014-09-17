@@ -184,22 +184,16 @@ class Ring(object):
                                      parameters = parameters, 
                                      separate_process = separate_process)
             else:
-                run_path = self.get_file_path('OmniLaunch.mps')
-                if (run_path is not None):
-                    logger.debug('path = %s', path)
-                    if isinstance(parameters, list):
-                        parameters = '  '.join(parameters)
-                    parameters = '{0}  "{1}"  {2}'.format(
-                        os.sep + self.partial_path(path), 
-                        path, 
-                        parameters 
-                        )
-                    logger.debug('run_path = %s; parameters = %s', run_path, parameters)
-                    return self.run_file(full_path = run_path, 
-                                         parameters = parameters, 
-                                         separate_process = separate_process)
-                else:
-                    logger.debug("Can't find OmniLaunch")
+                run_path = os.path.join('PgmObject', 'Foc',
+                                        'FocZ.TextPad.Run.P.mps')
+                if isinstance(parameters, list):
+                    parameters = '  '.join(parameters)
+
+                logger.debug('parameters = %s', parameters)
+
+                return self.run_file(partial_path=run_path,
+                                     parameters=path + '  ' + parameters,
+                                     separate_process=separate_process)
 
 
 

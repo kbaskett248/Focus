@@ -432,4 +432,41 @@ class FocusFileDebugCommand(FocusCommand):
     def run(self, edit):
         """Formats the focus file."""
         print(self.focus_file.build_translator_tree(self.view))
-        
+
+
+class OpenInEditObjectCommand(FocusCommand):
+
+    def run(self, edit, view=True):
+        if 'datadefs' not in self.filename.lower():
+            return
+
+        datadef = os.path.basename(self.filename[:-6])
+        vieworedit = 'View'
+        if not view:
+            vieworedit = 'Edit'
+
+        # params = "{{{datadef}|{vieworedit}}}".format(
+        #     start=chr(1), sep=chr(3), end=chr(2),
+        #     datadef=datadef, vieworedit=vieworedit)
+
+        params = [datadef, vieworedit]
+
+        self.ring_object.run_file_nice(
+            partial_path=os.path.join('PgmObject', 'Foc', 'FocObj.Mgmt.S.mps'),
+            parameters=params)
+
+    def description(self, view=True):
+        desc = "View "
+        if not view:
+            desc = "Edit "
+        desc += os.path.basename(self.filename[:-6])
+        return desc
+
+    def is_visible(self):
+        if (super(OpenInEditObjectCommand, self).is_visible() and
+                ('datadefs' in self.filename.lower())):
+            return True
+        return False
+
+    def is_enabled(self):
+        return self.is_visible()
