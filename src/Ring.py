@@ -113,11 +113,14 @@ class Ring(object):
     def pgm_path(self, use_cache = False):
         return self.ring_path
 
-    def run_file(self, partial_path = None, full_path = None, 
-        parameters = None, separate_process = True, use_cache = False):
-        """Runs a file in the Ring by calling it as an argument to magic.exe."""
+    def run_file(self, partial_path=None, full_path=None,
+                 parameters=None, separate_process=True, use_cache=False):
+        """
+        Runs a file in the Ring by calling it as an argument to magic.exe.
+        """
 
-        if not self.allow_running: return None
+        if not self.allow_running:
+            return None
 
         path = None
         cmd = None
@@ -148,13 +151,16 @@ class Ring(object):
 
         return cmd
 
-    def run_file_nice(self, partial_path = None, full_path = None, 
-        parameters = None, separate_process = True, use_cache = False):
+    def run_file_nice(self, partial_path=None, full_path=None,
+                      parameters=None, separate_process=True,
+                      use_cache=False):
+        """
+        Runs a file in the Ring using FocZ.TextPad.Run.P. If called
+        with parameters, Omnilaunch is used because it supports arguments.
+        """
 
-        """Runs a file in the Ring using FocZ.TextPad.Run.P. If called
-           with parameters, Omnilaunch is used because it supports arguments."""
-
-        if not self.allow_running: return None
+        if not self.allow_running:
+            return None
 
         logger.debug('allow_running = True')
         path = None
@@ -165,10 +171,11 @@ class Ring(object):
             path = full_path
 
         logger.debug('path = %s', path)
+        logger.debug("parameters = %s", parameters)
 
         if (path is not None):
             if (parameters is None):
-                run_path = os.path.join('PgmObject', 'Foc', 
+                run_path = os.path.join('PgmObject', 'Foc',
                                         'Focz.TextPad.Run.P.mps')
                 parameters = '"{0}"'.format(path)
                 logger.debug('run_path = %s', run_path)
@@ -177,22 +184,16 @@ class Ring(object):
                                      parameters = parameters, 
                                      separate_process = separate_process)
             else:
-                run_path = self.get_file_path('OmniLaunch.mps')
-                if (run_path is not None):
-                    logger.debug('path = %s', path)
-                    if isinstance(parameters, list):
-                        parameters = '  '.join(parameters)
-                    parameters = '{0}  "{1}"  {2}'.format(
-                        os.sep + self.partial_path(path), 
-                        path, 
-                        parameters 
-                        )
-                    logger.debug('run_path = %s; parameters = %s', run_path, parameters)
-                    return self.run_file(full_path = run_path, 
-                                         parameters = parameters, 
-                                         separate_process = separate_process)
-                else:
-                    logger.debug("Can't find OmniLaunch")
+                run_path = os.path.join('PgmObject', 'Foc',
+                                        'FocZ.TextPad.Run.P.mps')
+                if isinstance(parameters, list):
+                    parameters = '  '.join(parameters)
+
+                logger.debug('parameters = %s', parameters)
+
+                return self.run_file(partial_path=run_path,
+                                     parameters=path + '  ' + parameters,
+                                     separate_process=separate_process)
 
 
 

@@ -1,10 +1,4 @@
-from collections import defaultdict
-from gc import get_objects
-import imp
 import os
-import re
-import subprocess
-import sys
 
 import sublime
 import sublime_plugin
@@ -12,8 +6,7 @@ import sublime_plugin
 from .src.Managers.RingFileManager import RingFileManager
 from .src.FocusFile import FocusFile
 from .src.XMLRingFile import XMLRingFile
-from .src import FocusLanguage
-from .src.tools import get_env, debug, read_file, MultiMatch, merge_paths
+from .src.tools import merge_paths
 
 
 FILE_MANAGER = RingFileManager.getInstance()
@@ -25,8 +18,12 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
+
 class RingFileCommand(sublime_plugin.TextCommand):
-    """Parent class for TextCommands that rely on the file being a Ring File."""
+    """
+    Parent class for TextCommands that rely on the file being a Ring File.
+
+    """
 
     def __init__(self, view):
         super(RingFileCommand, self).__init__(view)
@@ -53,8 +50,7 @@ class RingFileCommand(sublime_plugin.TextCommand):
 
     def run_ring_method(self, command):
         """Runs a method of the ring file's ring."""
-        if ((self.ring_file is not None) and 
-            (self.ring_object is not None)):
+        if ((self.ring_file is not None) and (self.ring_object is not None)):
             command(self.ring_object)
 
     def is_visible(self):
@@ -62,6 +58,7 @@ class RingFileCommand(sublime_plugin.TextCommand):
 
     def is_enabled(self):
         return self.is_visible()
+
 
 class TranslateCommand(RingFileCommand):
     """Translate command for RingFiles.
@@ -316,4 +313,3 @@ class RingFileEventListener(sublime_plugin.EventListener):
         file = FILE_MANAGER.get_ring_file(view)
         if ((file is not None) and isinstance(file, XMLRingFile) and file.is_translatable()):
             view.run_command('translate')
-

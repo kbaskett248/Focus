@@ -1334,6 +1334,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#attribute_line</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#translator_continuation</string>
 				</dict>
 				<dict>
@@ -1450,14 +1454,30 @@
 					<string>(?&lt;=CallStructuredImportAdditional\()([\w._-]+),[\w._-]+</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>markup.bold</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>(?&lt;=Field\(|Key\(|FieldExternal\(|KeyExternal\(|ElementLabel\()[\w._-]+</string>
+					<string>(?&lt;=Field\(|Key\(|FieldExternal\(|KeyExternal\(|ElementLabel\()([aqt]\!)?[\w._-]+</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>markup.bold</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>(?&lt;=File\(|Record\(|Records\(|FileCx\(|RecordCx\(|RecordsCx\(|Object\(|Objects\(|ObjectClass\()[\w._-]+</string>
+					<string>(?&lt;=File\(|Record\(|Records\(|FileCx\(|RecordCx\(|RecordsCx\(|Object\(|Objects\(|ObjectClass\()([aqt]\!)?[\w._-]+</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>

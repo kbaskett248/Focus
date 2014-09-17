@@ -1,5 +1,14 @@
 [
     { "caption": "-" },
+
+    {   "caption": "View Object in Object Viewer", 
+        "command": "open_in_edit_object",
+        "args": {"view": true}
+    },
+    {   "caption": "Edit Object in Object Viewer", 
+        "command": "open_in_edit_object",
+        "args": {"view": false}
+    },
 	{   "caption": "Copy File to Cache and Open", 
         "command": "copy_file_to_cache" 
     },

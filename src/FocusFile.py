@@ -34,14 +34,14 @@ class FocusFile(RingFile):
 
     Extensions = ('focus',)
     FileType = 'Focus file'
-    
+
     RingManager = RingManager.getInstance()
-    
-    include_file_matcher = MultiMatch(patterns = {'Folder': r"\s*Folder\s+([A-Za-z0-9._]+)", 
+
+    include_file_matcher = MultiMatch(patterns = {'Folder': r"\s*Folder\s+([A-Za-z0-9._]+)",
                 'File': r"\s*File\s+([A-Za-z0-9._]+)"}
                 )
 
-    page_matcher = MultiMatch(patterns = {'Codebase': r"\s*Code[Bb]ase\s+([A-Za-z0-9]+)", 
+    page_matcher = MultiMatch(patterns = {'Codebase': r"\s*Code[Bb]ase\s+([A-Za-z0-9]+)",
                 'Source': r"\s*Source\s+([\w._-]+)",
                 'PageName': r'\s*PageName\s+([\w.-_]+)',
                 'ContainerPage': r'\s*:ContainerPage\s+([\w._-]+)'
@@ -60,11 +60,11 @@ class FocusFile(RingFile):
             super(FocusFile, self).__init__(view)
         except InvalidRingError:
             self.ring_object = None
-    
+
     @property
     def magic_path(self):
         return self.ring_object.magic_path
-    
+
     @property
     def system_path(self):
         return self.ring_object.system_path
@@ -84,7 +84,7 @@ class FocusFile(RingFile):
         #                 break
         # else:
         #     regions = Focus.find_by_selector(view, translator)
-        
+
         # for region in regions:
         #     start = region.begin()
         #     start_line_reg = view.line(start)
@@ -177,14 +177,14 @@ class FocusFile(RingFile):
                 elif ':Source' in FocusFile.include_file_matcher.match_string:
                     folder = None
                 elif bool(folder) and FocusFile.include_file_matcher.named_match('File'):
-                    partial_path = os.path.join('PgmSource', 
-                                                folder, 
+                    partial_path = os.path.join('PgmSource',
+                                                folder,
                                                 FocusFile.include_file_matcher.group(1))
                     file_name = self.ring_object.get_file_path(partial_path)
                     if (file_name is not None):
                         logger.debug(file_name)
                         include_files.append(file_name)
-                
+
         return include_files
 
     def get_externalpageset_files(self, view):
@@ -195,7 +195,7 @@ class FocusFile(RingFile):
         for i in Focus.find_by_selector(view, '#ScreenPage'):
             codebase = source = None
             in_pageset = False
-            
+
             for l in view.lines(i):
                 self.page_matcher.match_string = view.substr(l)
 
@@ -220,7 +220,7 @@ class FocusFile(RingFile):
                     if (file_name is not None):
                         external_page_sets.append(file_name)
                         in_pageset = False
-                
+
         logger.debug(external_page_sets)
         return external_page_sets
 
@@ -242,7 +242,7 @@ class FocusFile(RingFile):
                             documented_locals.add(local)
                             break
             logger.debug('Locals used in file: %s', used_locals)
-            
+
             if only_undocumented:
                 used_locals = used_locals - documented_locals
                 logger.debug('Undefined Locals in file: %s', used_locals)
@@ -272,7 +272,7 @@ class FocusFile(RingFile):
                 return [('', '')]
             else:
                 return None
-            
+
         for x in ('Object', 'Record', 'Key', 'Field'):
             if x in t:
                 elements = elements.union(self.get_object_completions_from_file(view, x))
@@ -299,7 +299,7 @@ class FocusFile(RingFile):
             for x in ('Purpose','Arguments','Preconditions','Local Variables',
                     'Data Structures','Side Effects','Returns','Additional Notes'):
                 elements.add(x)
-        
+
         if ((not elements) and (not return_empty)):
             del elements
             elements = None
@@ -328,14 +328,14 @@ class FocusFile(RingFile):
                         elements.add(FocusFile.object_matcher.group(1))
                     else:
                         completion_object = FocusFile.object_matcher.group(1)
-                elif ((completion_object is not None) and 
+                elif ((completion_object is not None) and
                     FocusFile.object_matcher.named_match('Type')):
                     elements.add(
-                        '%s.%s' % (completion_object, 
+                        '%s.%s' % (completion_object,
                                    FocusFile.object_matcher.group(1))
                         )
 
-        return elements                       
+        return elements
 
     def get_completions_from_include_files(self, view, completion_type):
         elements = set()
@@ -359,14 +359,14 @@ class FocusFile(RingFile):
         completion_object = None
 
         if (completion_type not in ['Subroutine','Local','Alias']):
-            FocusFile.object_matcher.add_pattern('Type', 
+            FocusFile.object_matcher.add_pattern('Type',
                 r"\s*:" + completion_type + r"\s+([A-Za-z0-9._\-]+)")
 
         try:
             file_contents = read_file(file_name)
         except FileNotFoundError:
             logger.warning('%s could not be found', file_name)
-            logger.warning('%s completions could not be loaded from %s', 
+            logger.warning('%s completions could not be loaded from %s',
                            completion_type, file_name
                            )
         else:
@@ -375,13 +375,13 @@ class FocusFile(RingFile):
 
                 if (l[:2] == '//'):
                     pass
-                elif ((completion_type == 'Subroutine') and 
+                elif ((completion_type == 'Subroutine') and
                       FocusFile.object_matcher.named_match('Subroutine')):
                     elements.add( FocusFile.object_matcher.group(1) )
-                elif ((completion_type == 'Local') and 
+                elif ((completion_type == 'Local') and
                       FocusFile.object_matcher.named_match('Local')):
                     elements.add( FocusFile.object_matcher.group(2) )
-                elif ((completion_type == 'Alias') and 
+                elif ((completion_type == 'Alias') and
                       FocusFile.object_matcher.named_match('Alias')):
                     elements.add(FocusFile.object_matcher.group(1))
                 else:
@@ -395,9 +395,9 @@ class FocusFile(RingFile):
                                 elements.add(FocusFile.object_matcher.group(1))
                             else:
                                 completion_object = FocusFile.object_matcher.group(1)
-                        elif ((completion_object is not None) and 
+                        elif ((completion_object is not None) and
                               FocusFile.object_matcher.named_match('Type')):
-                            elements.add('{0}.{1}'.format(completion_object, 
+                            elements.add('{0}.{1}'.format(completion_object,
                                 FocusFile.object_matcher.group(1)))
 
         return elements
@@ -408,7 +408,7 @@ class FocusFile(RingFile):
             tran_region = self.get_translator_regions(view, current_region = True)[0]
         except IndexError:
             logger.info('Not within a translator region')
-            return None        
+            return None
 
         translator_tree = list()
 
@@ -416,7 +416,7 @@ class FocusFile(RingFile):
         current_line_text = view.substr(current_line)
         pattern = r'^(\s*)((:|#)[A-Za-z0-9]*|[A-Za-z0-9]+)(\s*)(.*)$'
         match = re.match(pattern, current_line_text)
-        
+
         if match is None:
             translator_tree.append(('', ''))
             pattern = r"^(\s*)((:|#)[A-Za-z0-9]*)(\s*)(.*)$"
@@ -499,7 +499,7 @@ class FocusFile(RingFile):
                     file_ = f
                     region = (line+1, match.start(0))
                     break
-        
+
         yield file_
         yield region
 
@@ -524,7 +524,7 @@ class FocusFile(RingFile):
                     file_ = f
                     region = (line+1, match.start(0))
                     break
-        
+
         yield file_
         yield region
 
@@ -547,7 +547,7 @@ class FocusFile(RingFile):
                     file_ = f
                     region = (line+1, match.start(0))
                     break
-        
+
         yield file_
         yield region
 
@@ -566,10 +566,10 @@ class FocusFile(RingFile):
             return False
 
         full_path = None
-        default_path = os.path.join('PgmObject', 'Foc', 
+        default_path = os.path.join('PgmObject', 'Foc',
                                     'FocZ.Textpad.Translate.P.mps')
         partial_path = None
-        
+
         logger.debug('self.filename: %s', self.filename)
         partial_path = default_path
         settings = sublime.load_settings("m-at.sublime-settings")
@@ -580,22 +580,22 @@ class FocusFile(RingFile):
             if ((custom_file_path is not None) and os.path.isfile(custom_file_path)):
                 partial_path = custom_path
                 logger.info('Using %s for Translate command', partial_path)
-        
-        return self.ring_object.run_file(partial_path = partial_path, 
+
+        return self.ring_object.run_file(partial_path = partial_path,
             full_path = full_path, parameters = self.filename)
 
     def format(self):
         """Formats the Focus file"""
 
-        partial_path = os.path.join('PgmObject', 'Foc', 
+        partial_path = os.path.join('PgmObject', 'Foc',
                                     'FocZ.Textpad.Format.P.mps')
-        return self.ring_object.run_file(partial_path = partial_path, 
+        return self.ring_object.run_file(partial_path = partial_path,
                                          parameters = self.filename)
 
     def is_runnable(self):
         """Returns true if the file is a screen or process file and can be run"""
         l = self.filename.lower()
-        return ((self.ring_object is not None) and 
+        return ((self.ring_object is not None) and
                 (('.p.' in l) or ('.s.' in l)))
 
     def run(self):
@@ -607,7 +607,7 @@ class FocusFile(RingFile):
         l = self.filename.lower()
         logger.debug('File includable: %s', (l.endswith('.i.focus') or l.endswith('.d.focus')))
         return (l.endswith('.i.focus') or l.endswith('.d.focus'))
-        
+
 class CodeBlock(object):
     """Represents a single subroutine in a Focus file."""
 
@@ -643,8 +643,8 @@ class CodeBlock(object):
             region = self.view.extract_scope(point)
             point = region.end()
 
-        return region 
-        
+        return region
+
     def split_codeblock_region(self):
         """Splits the codeblock region into header region, documentation region and code region"""
         start = self.codeblock_region.begin()
@@ -738,7 +738,7 @@ class CodeBlock(object):
                 var = self.view.substr( r )
                 if var in codeblock_vars.keys():
                     codeblock_vars[var].add_region( r )
-                else: 
+                else:
                     is_arg = False
                     if ( var in codeblock_args ):
                         is_arg = True
@@ -761,7 +761,7 @@ class CodeBlock(object):
 
                 if listset in codeblock_sets.keys():
                     codeblock_sets[listset].add_region( r )
-                else: 
+                else:
                     cbs = CodeBlockSet( set_number, upper_or_lower, self.view, [r] )
                     codeblock_sets[cbs.set] = cbs
 
@@ -772,7 +772,7 @@ class CodeBlock(object):
         return documentation.update( update_only, use_snippets )
 
 class CodeBlockAttribute(object):
-    """Represents a piece of data used in a CodeBlock. 
+    """Represents a piece of data used in a CodeBlock.
        Meant to be a superclass for CodeBlockVar and CodeBlockSet."""
 
     def __init__(self, value, view, regions = list(), documentation = None):
@@ -801,7 +801,7 @@ class CodeBlockVar(CodeBlockAttribute):
 
     def __str__(self):
         return self.var
-    
+
 class CodeBlockSet(CodeBlockAttribute):
     """Represents an upper or lower listset within a codeblock."""
 
@@ -838,13 +838,13 @@ class CodeBlockSet(CodeBlockAttribute):
         if ( upper_or_lower == CodeBlockSet.LOWER ):
             prefix = 'L'
         return '{0}({1})'.format( prefix, set_number )
-    
+
 class CodeBlockDocumentation(object):
     """Represents the documentation for a CodeBlock."""
 
-    all_doc_sections = ['Purpose', 'Arguments', 'Preconditions', 
-                        'Local Variables', 'Data Structures', 'Side Effects', 
-                        'Returns', 'Additional Notes', 'Unit Test', 
+    all_doc_sections = ['Purpose', 'Arguments', 'Preconditions',
+                        'Local Variables', 'Data Structures', 'Side Effects',
+                        'Returns', 'Additional Notes', 'Unit Test',
                         'Deprecated']
 
     required_doc_sections = ('Purpose', 'Arguments', 'Local Variables', 'Returns')
@@ -866,7 +866,7 @@ class CodeBlockDocumentation(object):
         settings = sublime.load_settings('m-at.sublime-settings')
         requested_sections = settings.get('documentation_sections')
         if (requested_sections is not None):
-            self.omit_sections = list(set(CodeBlockDocumentation.all_doc_sections) - 
+            self.omit_sections = list(set(CodeBlockDocumentation.all_doc_sections) -
                                  set(requested_sections))
 
     @property
@@ -881,7 +881,7 @@ class CodeBlockDocumentation(object):
     @property
     def view(self):
         return self.codeblock.view
-    
+
     def split_doc_region(self):
         reg_ex = r"//\s*:Doc\s+.+"
         f = self.view.find( reg_ex, self.region.begin() )
@@ -924,7 +924,7 @@ class CodeBlockDocumentation(object):
             r = CodeBlockDocumentation.Region( self, region, section )
 
         return r
-    
+
     def update(self, update_only = False, use_snippets = False):
         """Generates an updated documentation section for the function"""
 
@@ -959,14 +959,14 @@ class CodeBlockDocumentation(object):
             self.separators['alpha'] = settings.get('default_variable_separator', ' - ')
             self.separators['numeric'] = settings.get('default_numeric_separator', '.  ')
             # logger.debug('self.separators = %s', self.separators)
-            self.separator_width = max(len(self.separators['alpha']), 
+            self.separator_width = max(len(self.separators['alpha']),
                                        len(self.separators['numeric']))
 
             if (region != None):
                 self.region = region
                 self.current_content = self.view.substr( self.region )
                 self.header_region, self.body_region, self.current_header, self.section, self.current_body = self.split_region()
-                
+
                 if (self.section == None):
                     if (section != None):
                         self.section = section
@@ -986,11 +986,11 @@ class CodeBlockDocumentation(object):
         @property
         def codeblock(self):
             return self.documentation.codeblock
-        
+
         @property
         def view(self):
             return self.documentation.view
-        
+
         def split_region(self):
             """Breaks the Doc_region up into header and content regions"""
 
@@ -1136,7 +1136,7 @@ class CodeBlockDocumentation(object):
                     if use_snippets:
                         content = '${0}'.format(self.documentation.snippet_counter)
 
-                updated_arg_text.append( '{0}{1}{2}{3}'.format(CodeBlockDocumentation.Region.body_prefix, 
+                updated_arg_text.append( '{0}{1}{2}{3}'.format(CodeBlockDocumentation.Region.body_prefix,
                     var, sep, content) )
             else:
                 updated_arg_text = self.format_list( arguments_in_use, documented_args, use_snippets )
@@ -1144,7 +1144,7 @@ class CodeBlockDocumentation(object):
             # Add the arguments that are no longer used
             for arg, sep, content in documented_args.values():
                 updated_arg_text.append(CodeBlockDocumentation.Region.body_prefix + arg + sep + '**Unused** ' + content)
-                
+
             # Store the updated doc.
             self.updated_header = '//:Doc {0}'.format(self.section)
             if (len(updated_arg_text) == 0):
@@ -1177,11 +1177,11 @@ class CodeBlockDocumentation(object):
                         sub_list = self.format_list( var, documented_args, use_snippets, temp_indent )
                         print(sub_list)
                         var = str( index )
-                        
+
                         sub_list[0] = sub_list[0][len( temp_indent ):]
 
                         content = '\n'.join( sub_list )
-                    
+
                 else:
                     try:
                         var, sep, content = documented_args[var]
@@ -1199,7 +1199,7 @@ class CodeBlockDocumentation(object):
                 updated_arg_text.append( updated_line )
 
             return updated_arg_text
-            
+
     class LocalVarsRegion(Region):
         """CodeBlock Documentation Region for Local Variables. Local Variables require special parsing and updating."""
 
@@ -1216,7 +1216,7 @@ class CodeBlockDocumentation(object):
                     self.documented_vars[var] = (var, sep, content)
                     if (len(sep) > self.separator_width):
                         self.separator_width = len(sep)
-                
+
             # normalize separators
             self.documented_vars = self.normalize_separators( self.documented_vars )
 
@@ -1254,10 +1254,10 @@ class CodeBlockDocumentation(object):
             else:
                 self.updated_body = '\n'.join( updated_var_text )
                 self.updated_content = self.updated_header + '\n' + self.updated_body
-            
+
     class DataStrucRegion(Region):
         """CodeBlock Documentation Region for Data Structures. Data Structures require special parsing and updating."""
-        
+
         def __init__(self, documentation, region = None, section = None):
             super(CodeBlockDocumentation.DataStrucRegion, self).__init__( documentation, region, section )
             self.documented_sets = dict()
@@ -1271,7 +1271,7 @@ class CodeBlockDocumentation(object):
                     self.documented_sets[set] = (set, sep, content)
                     if (len(sep) > self.separator_width):
                         self.separator_width = len(sep)
-                
+
             # normalize separators
             self.documented_sets = self.normalize_separators(self.documented_sets)
 
@@ -1310,10 +1310,10 @@ class CodeBlockDocumentation(object):
             else:
                 self.updated_body = '\n'.join( updated_set_text )
                 self.updated_content = self.updated_header + '\n' + self.updated_body
-            
+
     class UnitTestRegion(Region):
         """CodeBlock Documentation Region for Data Structures. Data Structures require special parsing and updating."""
-        
+
         def __init__(self, documentation, region = None, section = None):
             super(CodeBlockDocumentation.UnitTestRegion, self).__init__( documentation, region, section )
             self.unit_tests = []
@@ -1327,7 +1327,7 @@ class CodeBlockDocumentation(object):
                     self.documented_sets[set] = (set, sep, content)
                     if (len(sep) > self.separator_width):
                         self.separator_width = len(sep)
-                
+
             # normalize separators
             self.documented_sets = self.normalize_separators( self.documented_sets )
 
@@ -1351,11 +1351,11 @@ class CodeBlockDocumentation(object):
                     if use_snippets:
                         content = '${{{0}:{1}}}'.format( self.documentation.snippet_counter, content )
 
-                updated_set_text.append( 
-                    '{0}{1}{2}{3}'.format( 
-                        CodeBlockDocumentation.Region.body_prefix, listset, 
-                        sep, content 
-                    ) 
+                updated_set_text.append(
+                    '{0}{1}{2}{3}'.format(
+                        CodeBlockDocumentation.Region.body_prefix, listset,
+                        sep, content
+                    )
                 )
 
             self.updated_header = '//:Doc ' + self.section
@@ -1378,19 +1378,19 @@ def line_match_region(line_region, match_object, match_group):
     b = line_region.begin()
     s = match_object.span(match_group)
     return sublime.Region(b + s[0], b + s[1])
-                
+
 def extract_fs_function(view, sel):
     """Extracts the text and region of the FS function nearest to sel.
 
     Keyword arguments:
     view - The view to extract from
     sel - a single Region
-    
+
     """
     scope_name = view.scope_name(sel.begin()).strip()
     if (Focus.score_selector(view, sel.begin(), 'fs_function') == 0):
         return None
-        
+
     selection = sel
     substring = view.substr(selection)
     # Find the location of the closest @ in or left of the selection
@@ -1403,8 +1403,8 @@ def extract_fs_function(view, sel):
         selection = sublime.Region(temp_start, selection.end())
     else:
         selection = sublime.Region(selection.begin() + at_loc, selection.end())
-    
-    end = view.find_by_class(selection.begin(), True, sublime.CLASS_WORD_END, 
+
+    end = view.find_by_class(selection.begin(), True, sublime.CLASS_WORD_END,
                              "/\\()\"'-:,;<>~!#$%^@&*|+=[]{}`~?.")
     selection = sublime.Region(selection.begin(), end)
     substring = view.substr(selection)
@@ -1419,17 +1419,17 @@ def extract_focus_function(view, sel):
     Keyword arguments:
     view - The view to extract from
     sel - a single Region
-    
+
     """
     if isinstance(sel, int):
         if Focus.score_selector(view, sel, 'focus_function') <= 0:
             return None
-            
+
         selection = sublime.Region(sel, sel)
     else:
         if Focus.score_selector(view, sel.begin(), 'focus_function') <= 0:
             return None
-            
+
         selection = sel
     substring = view.substr(selection)
     # Find the location of the closest @ in or left of the selection
@@ -1451,7 +1451,7 @@ def extract_focus_function(view, sel):
     selection_2 = view.expand_by_class(selection, sublime.CLASS_PUNCTUATION_END, ')')
     selection = selection_1.intersection(selection_2)
     substring = view.substr(selection)
-    
+
     logger.debug(selection)
     logger.debug(substring)
 
@@ -1488,7 +1488,7 @@ def extract_focus_function_name(view, sel):
     Keyword arguments:
     view - The view to extract from
     sel - a single Region
-    
+
     """
     match = extract_focus_function(view, sel)
 
@@ -1509,11 +1509,11 @@ def extract_alias(view, sel):
     Keyword arguments:
     view - The view to extract from
     sel - a single Region
-    
+
     """
     if Focus.score_selector(view, sel.begin(), 'called_alias') <= 0:
         return None
-        
+
     selection = sel
     substring = view.substr(selection)
     logger.debug(selection)
@@ -1540,7 +1540,7 @@ def extract_alias(view, sel):
     if match is not None:
         selection = line_match_region(selection, match, 0)
         substring = match.group(0)
-    
+
         logger.debug(selection)
         logger.debug(substring)
 
@@ -1548,4 +1548,3 @@ def extract_alias(view, sel):
     else:
         return None
 
-    
