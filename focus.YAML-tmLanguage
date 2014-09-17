@@ -447,6 +447,7 @@ repository:
       captures:
         '1': {name: keyword.other.attribute.focus}
         '2': {name: meta.value.keyword.focus meta.alias.defined.focus constant.other.alias.focus}
+    - include: '#attribute_line'
     - include: '#translator_continuation'
     - include: '#comment'
 

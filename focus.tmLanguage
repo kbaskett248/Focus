@@ -1334,6 +1334,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#attribute_line</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#translator_continuation</string>
 				</dict>
 				<dict>

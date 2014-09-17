@@ -508,6 +508,7 @@
                     },
                     ":LongLock": {
                         "children": {
+                            "ConditionFailureMessage": {},
                             "Name": {
                                 "completion_types": ["LongLock"]
                             }
