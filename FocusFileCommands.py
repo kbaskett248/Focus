@@ -1,23 +1,13 @@
-import collections
-from gc import get_objects
-import imp
-import importlib
 import os
-from queue import Queue
 import re
-import subprocess
-import sys
-import threading
 
 import sublime
 import sublime_plugin
 
 import Focus
 from .src.Managers.RingFileManager import RingFileManager
-from .src.Managers.RingManager import RingManager
-from .src.FocusFile import FocusFile, InvalidFileFormat, CodeBlock, CodeBlockVar, CodeBlockSet, CodeBlockDocumentation
+from .src.FocusFile import FocusFile
 from .src import FocusLanguage
-from .src.tools import get_env, debug, read_file, MultiMatch
 
 
 FILE_MANAGER = RingFileManager.getInstance()
@@ -29,8 +19,11 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
+
 class FocusCommand(sublime_plugin.TextCommand):
-    """Parent class for all the commands that rely on the file being a Focus File"""
+    """
+    Parent class for all the commands that rely on the file being a Focus File
+    """
 
     def __init__(self, view):
         super(FocusCommand, self).__init__(view)
@@ -40,11 +33,11 @@ class FocusCommand(sublime_plugin.TextCommand):
     @property
     def focus_file(self):
         if (not self._initialized):
-            self._focus_file = FILE_MANAGER.get_ring_file(self.view, 
-                allowed_file_types = [FocusFile])
+            self._focus_file = FILE_MANAGER.get_ring_file(
+                self.view, allowed_file_types=[FocusFile])
             self._initialized = True
         return self._focus_file
-    
+
     @property
     def filename(self):
         """Returns the filename of the file associated with the command."""
@@ -61,6 +54,7 @@ class FocusCommand(sublime_plugin.TextCommand):
     def is_enabled(self):
         return self.is_visible()
 
+
 class FormatCommand(FocusCommand):
     """Formats a Focus file"""
 
@@ -68,9 +62,13 @@ class FormatCommand(FocusCommand):
         """Formats the focus file."""
         self.focus_file.format()
 
+
 class TranslatorIndentCommand(sublime_plugin.TextCommand):
-    """Command to indent the right side of translator sections to the correct point."""
-    
+    """
+    Command to indent the right side of translator sections to the correct
+    point.
+    """
+
     def run(self, edit):
         """Indents the right side of translator sections to 34 spaces."""
         pattern = re.compile(r"(\s*[:#]?\w+)(\s*)(.*)")
@@ -87,27 +85,32 @@ class TranslatorIndentCommand(sublime_plugin.TextCommand):
                     if (len(result.group(1)) < 34):
                         s = (34 - (len(result.group(1)))) * " "
                         s = result.group(1) + s
-                        point = self.view.text_point(row, (len(result.group(1)) + len(result.group(2))))
+                        point = self.view.text_point(
+                            row, (len(result.group(1)) + len(result.group(2))))
                         r = sublime.Region(line.begin(), point)
                         self.view.replace(edit, r, s)
                     else:
                         s = result.group(1) + "  "
-                        point = self.view.text_point(row, (len(result.group(1)) + len(result.group(2))))
+                        point = self.view.text_point(
+                            row, (len(result.group(1)) + len(result.group(2))))
                         r = sublime.Region(line.begin(), point)
                         self.view.replace(edit, r, s)
 
+
 class CommentHomeCommand(sublime_plugin.TextCommand):
-    """ When the home key is pressed on a comment-only line, this will imitate
-        the behavior of pressing the home key on an indented line. The cursor 
-        will first move to the beginning of the comment (after the // and any
-        indentation). If the cursor is already at that position, or the home
-        key is pressed a second time, the cursor will move to the beginning of
-        the line. There is also support for shift + home to highlight the 
-        comment. """
+    """
+    When the home key is pressed on a comment-only line, this will imitate
+    the behavior of pressing the home key on an indented line. The cursor
+    will first move to the beginning of the comment (after the // and any
+    indentation). If the cursor is already at that position, or the home
+    key is pressed a second time, the cursor will move to the beginning of
+    the line. There is also support for shift + home to highlight the
+    comment.
+    """
 
     CommentPattern = re.compile(r'(//\s*)[^\s].*')
-    
-    def run(self, edit, extend = False):
+
+    def run(self, edit, extend=False):
         regions_to_add = []
         regions_to_remove = []
         view = self.view
@@ -121,15 +124,19 @@ class CommentHomeCommand(sublime_plugin.TextCommand):
 
             move_forward = start = None
             if (col == 0) and self.CommentPattern.match(line_string):
-                move_forward = len(self.CommentPattern.match(line_string).group(1))
+                move_forward = len(
+                    self.CommentPattern.match(line_string).group(1)
+                    )
                 start = point
             elif self.CommentPattern.match(line_pre_string):
-                move_forward = len(self.CommentPattern.match(line_pre_string).group(1))
+                move_forward = len(
+                    self.CommentPattern.match(line_pre_string).group(1)
+                    )
                 start = line.begin()
             elif (line_pre_string.strip() == '//'):
                 move_forward = 0
                 start = line.begin()
-                
+
             if start is not None:
                 regions_to_remove.append(r)
                 end = start + move_forward
@@ -146,24 +153,37 @@ class CommentHomeCommand(sublime_plugin.TextCommand):
         for r in regions_to_add:
             sel.add(r)
 
+
 class GenerateDocCommand(FocusCommand):
     """Command for generating documentation for a code member."""
 
-    def run(self, edit, update_only = False, use_snippets = False):
-        """Parse and update existing doc sections, and add new ones if needed."""
-        codeblock = self.focus_file.get_codeblock( self.view )
-        contents = codeblock.update_documentation( update_only, use_snippets )
+    def run(self, edit, update_only=False, use_snippets=False):
+        """
+        Parse and update existing doc sections, and add new ones if needed.
+        """
+        codeblock = self.focus_file.get_codeblock(self.view)
+        contents = codeblock.update_documentation(update_only, use_snippets)
         if use_snippets:
             # Move to the end of the code header
             self.view.run_command('move_to', {'to': 'hardbol'})
-            while (not self.view.sel()[0].intersects(codeblock.header_region)) and (self.view.sel()[0].begin() > codeblock.header_region.begin()):
-                self.view.run_command('move', {'by': 'lines', 'forward': False})
+            while (
+                    (not self.view.sel()[0].intersects(
+                        codeblock.header_region)
+                     ) and
+                    (self.view.sel()[0].begin() >
+                        codeblock.header_region.begin()
+                     )
+                    ):
+                self.view.run_command(
+                    'move', {'by': 'lines', 'forward': False}
+                    )
             self.view.run_command('move_to', {'to': 'hardeol'})
-            
+
             # If there was no doc, we need to add a new line for the doc
             if (codeblock.documentation_region.empty()):
                 contents = '\n' + contents
-            # Otherwise, we need to remove the old doc and move down to the empty line
+            # Otherwise, we need to remove the old doc and move down to the
+            # empty line
             else:
                 # Remove the old doc
                 self.view.replace(edit, codeblock.documentation_region, '')
@@ -176,7 +196,10 @@ class GenerateDocCommand(FocusCommand):
             self.view.replace(edit, codeblock.documentation_region, contents)
 
     def is_enabled(self):
-        return (Focus.score_selector(self.view, self.view.sel()[0].begin(), 'subroutine') > 0)
+        return (Focus.score_selector(
+            self.view, self.view.sel()[0].begin(), 'subroutine'
+            ) > 0)
+
 
 class DocumentLocalsCommand(FocusCommand):
     """Command to find all undocumented locals and add them to the #Locals section."""
@@ -235,6 +258,7 @@ class DocumentLocalsCommand(FocusCommand):
     def snippet_counter(self):
         self._snippet_counter += 1
         return self._snippet_counter
+    
     
 class FoldSubroutineCommand(FocusCommand):
     """Command to fold subroutines."""

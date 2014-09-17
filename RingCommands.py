@@ -130,7 +130,7 @@ class LaunchMatUtilityCommand(RingCommand):
             self.partial_path = self.commands[utility]
             self.partial_path = os.path.join('PgmObject', self.partial_path)
             self.choose_installed_ring(self.launch_utility)
-        elif (utility == None):
+        elif (utility is None):
             self.choose_installed_ring(self.choose_utility)
         else:
             logger.error('No command defined: %s', utility)
