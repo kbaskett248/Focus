@@ -1,5 +1,6 @@
 <snippet>
     <content><![CDATA[
+<!-- $1 -->
 {| border=1 cellspacing=0 cellpadding=2 width=75%
 | style="background:#CCCCCC;font-weight:bold;vertical-align:top" colspan=2|:Code ${1:Function Name} (${2:NEW}${3:EXISTING})
 |-
