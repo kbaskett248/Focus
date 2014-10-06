@@ -16,7 +16,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^ *((:Code) +([^\n()\t]+?)) *$</string>
+			<string>^ *((:Code)(\.| +)([^\n\t]+?)) *$</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -29,7 +29,7 @@
 					<key>name</key>
 					<string>keyword.other.fs</string>
 				</dict>
-				<key>3</key>
+				<key>4</key>
 				<dict>
 					<key>name</key>
 					<string>entity.name.subroutine.fs</string>
@@ -51,7 +51,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^ *((:List) +([^\n()\t]+?)) *$</string>
+			<string>^ *((:List) +([^\n\t]+?)) *$</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -149,6 +149,40 @@
 					<string>#string-list</string>
 				</dict>
 				<dict>
+					<key>begin</key>
+					<string>@[A-Z]\(</string>
+					<key>comment</key>
+					<string>Magic Upper Listset Function</string>
+					<key>end</key>
+					<string>\)\B</string>
+					<key>name</key>
+					<string>meta.function.listset.upper.fs support.function.fs</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#code-region</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>@[a-z]\(</string>
+					<key>comment</key>
+					<string>Magic Lower Listset Function</string>
+					<key>end</key>
+					<string>\)\B</string>
+					<key>name</key>
+					<string>meta.function.listset.lower.fs support.function.fs</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#code-region</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
 					<key>captures</key>
 					<dict>
 						<key>1</key>
@@ -196,7 +230,7 @@
 					<key>comment</key>
 					<string>Magic Upper Listset Function</string>
 					<key>match</key>
-					<string>@[A-Z](\d+)</string>
+					<string>@[A-Z](\d+)\b</string>
 					<key>name</key>
 					<string>meta.function.listset.upper.fs support.function.fs</string>
 				</dict>
@@ -212,7 +246,7 @@
 					<key>comment</key>
 					<string>Magic Lower Listset Function</string>
 					<key>match</key>
-					<string>@[a-z](\d+)</string>
+					<string>@[a-z](\d+)\b</string>
 					<key>name</key>
 					<string>meta.function.listset.lower.fs support.function.fs</string>
 				</dict>
@@ -220,7 +254,7 @@
 					<key>comment</key>
 					<string>Magic Function</string>
 					<key>match</key>
-					<string>@\p{Alpha}{2}</string>
+					<string>@\p{Alpha}{2}\b</string>
 					<key>name</key>
 					<string>meta.function.fs support.function.fs</string>
 				</dict>
