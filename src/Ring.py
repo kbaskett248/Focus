@@ -15,7 +15,7 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
-ring_matcher = re.compile(r"((.*?\\([^:\\\/\n]+?)\.Universe)\\([^:\\\/\n]+?)\.Ring)(?![^\\])", 
+ring_matcher = re.compile(r"((.*?\\([^:\\\/\n]+?)\.Universe)\\([^:\\\/\n]+?)\.Ring)(?![^\\])",
     re.IGNORECASE)
 
 def parse_ring_path(file_path):
@@ -46,7 +46,7 @@ class Ring(object):
     def __init__(self, path):
         logger.debug(path)
         self.ring_path, self.universe_path, self.ring, self.universe = parse_ring_path(path)
-        
+
         if (self.ring_path is None):
             raise InvalidRingError(path)
 
@@ -180,8 +180,8 @@ class Ring(object):
                 parameters = '"{0}"'.format(path)
                 logger.debug('run_path = %s', run_path)
                 logger.debug('parameters = ' + parameters)
-                return self.run_file(partial_path = run_path, 
-                                     parameters = parameters, 
+                return self.run_file(partial_path = run_path,
+                                     parameters = parameters,
                                      separate_process = separate_process)
             else:
                 run_path = os.path.join('PgmObject', 'Foc',
@@ -198,9 +198,9 @@ class Ring(object):
 
 
     # def build_object_lists(self, separate_process = True):
-    #     """Builds the object lists for a ring and stores them in the given 
-    #     path. If the BuildObjectLists.P file does not exist in the current 
-    #     ring, this will attempt to create the source file, translate it, and 
+    #     """Builds the object lists for a ring and stores them in the given
+    #     path. If the BuildObjectLists.P file does not exist in the current
+    #     ring, this will attempt to create the source file, translate it, and
     #     run it."""
 
     #     # for t in self.ring_completions.keys():
@@ -208,7 +208,7 @@ class Ring(object):
     #     self.load_ring_completions(reload = True)
 
     #     # partial_tool_path = os.path.join('PgmObject', 'HHA', 'HhaZt.BuildObjectLists.P.mps')
-    #     # build_object_lists_path = os.path.join(self.pgm_path(True), 
+    #     # build_object_lists_path = os.path.join(self.pgm_path(True),
     #     #                                        partial_tool_path)
     #     # logger.debug(build_object_lists_path)
 
@@ -217,7 +217,7 @@ class Ring(object):
     #     # # If the tool does not exist, try to write it and translate it.
     #     # if (not file_existence):
     #     #     logger.debug('build_object_lists_path does not exist')
-    #     #     file_source = os.path.join(self.pgm_path(True), 'PgmSource', 'HHA', 
+    #     #     file_source = os.path.join(self.pgm_path(True), 'PgmSource', 'HHA',
     #     #         'HhaZt.BuildObjectLists.P.focus')
     #     #     logger.debug(file_source)
 
@@ -231,11 +231,11 @@ class Ring(object):
     #     #     # If the source exists now, translate it.
     #     #     if os.path.isfile(file_source):
     #     #         debug('translating source file')
-    #     #         translate_path = os.path.join('PgmObject', 'Foc', 
+    #     #         translate_path = os.path.join('PgmObject', 'Foc',
     #     #                                       'FocZ.TextPad.Translate.P.mps')
     #     #         logger.debug(
-    #     #             self.run_file(partial_path = translate_path, 
-    #     #                           parameters = "{0}".format(file_source), 
+    #     #             self.run_file(partial_path = translate_path,
+    #     #                           parameters = "{0}".format(file_source),
     #     #                           separate_process = False)
     #     #             )
 
@@ -245,9 +245,9 @@ class Ring(object):
     #     #     self.need_to_load_completions = True
     #     #     path = '"' + self.object_lists_path + os.sep + '"'
     #     #     return self.run_file_nice(
-    #     #         full_path = build_object_lists_path, 
-    #     #         parameters = path, 
-    #     #         separate_process = separate_process 
+    #     #         full_path = build_object_lists_path,
+    #     #         parameters = path,
+    #     #         separate_process = separate_process
     #     #         )
 
     # @property
@@ -256,7 +256,7 @@ class Ring(object):
     #     for cls in self.COMP_LOADER_CLASSES:
     #         types = types.union(set(cls.Types))
     #     return types
-    
+
 
     # def initialize_completion_lists(self, type_ = None):
     #     # types = ('Object', 'Record', 'File', 'Index', 'IndexKey', 'Key',
@@ -270,8 +270,8 @@ class Ring(object):
     #     self.alias_lookup = None
 
     # def get_ring_completions(self, type_, return_empty = False):
-    #     """Returns a set of the ring completions of the given types. t can be a 
-    #     list of types or a separated string of types. If return_empty is true, 
+    #     """Returns a set of the ring completions of the given types. t can be a
+    #     list of types or a separated string of types. If return_empty is true,
     #     an empty set will be returned. Otherwise, None will be returned."""
 
     #     logger.debug('Getting completions from Ring')
@@ -283,9 +283,9 @@ class Ring(object):
 
     #     need_to_load = set([x for x in types if self.completion_state[x] != 'Loaded'])
     #     logger.debug('need to load: %s', need_to_load)
-    #     if need_to_load: 
+    #     if need_to_load:
     #         self.load_ring_completions(need_to_load)
-        
+
     #     for x in types:
     #         if (self.completion_state[x] != 'Loaded'):
     #             continue
@@ -300,7 +300,7 @@ class Ring(object):
     #             elements = None
 
     #     return elements
-        
+
     # def load_ring_completions(self, type_ = None, reload = False, wait = False):
     #     """Loads a fresh copy of ring completions from the ring level folders."""
 
@@ -335,7 +335,7 @@ class Ring(object):
     #             t.start()
     #             for x in t.Types:
     #                 self.completion_state[x] = 'Loading'
-        
+
     #     if wait:
     #         loaders_to_remove.clear()
     #         for t in self.running_loaders:
@@ -365,7 +365,7 @@ class Ring(object):
     def completion_loaders(self, value):
         logger.debug('Adding completion_loaders to Ring')
         self._completion_loaders = set()
-        if value:          
+        if value:
             for c in value:
                 self._completion_loaders.add(c(self))
 
@@ -379,11 +379,13 @@ class Ring(object):
 
     def check_file_existence(self, partial_path):
         existing_paths = []
+        paths_set = set()
         for k, v in self.possible_paths:
             if (v is not None):
                 path = merge_paths(v, partial_path)
-                if os.path.exists(path):
+                if os.path.exists(path) and (path not in paths_set):
                     existing_paths.append((k, path))
+                    paths_set.add(path)
         return existing_paths
 
     def get_file_path(self, partial_path):
@@ -444,8 +446,8 @@ class Ring(object):
         if (alias in self.alias_lookup.keys()):
             alias_entry = self.alias_lookup[alias]
             logger.debug(alias_entry)
-            file_ = self.get_file_path(os.path.join('PgmSource', 
-                                                    alias_entry[0], 
+            file_ = self.get_file_path(os.path.join('PgmSource',
+                                                    alias_entry[0],
                                                     alias_entry[1] + '.focus')
                                                     )
             file_contents = read_file(file_, False)
@@ -508,13 +510,13 @@ class LocalRing(Ring):
 
     @property
     def local_ring(self):
-        return True    
+        return True
 
     def update(self):
         path = os.path.join('PgmSource', 'HHA', 'HhaZtSvn.CommandEe.S.focus')
         return self.run_file_nice(partial_path = path)
 
-    
+
 class ServerRing(Ring):
     """Represents a standard server ring."""
 
@@ -527,7 +529,7 @@ class ServerRing(Ring):
                                       self.ring + '.Ring')
         if os.path.isdir(self.ring_path):
             self.universe_path = os.path.dirname(self.ring_path)
-            self.cache_path = os.path.join(self.cache_root, 
+            self.cache_path = os.path.join(self.cache_root,
                                            self.universe + '.Universe',
                                            self.ring + '.Ring',
                                            '!AllUsers', 'Sys', 'PgmCache',
@@ -558,17 +560,17 @@ class ServerRing(Ring):
             # logger.info(platform.win32_ver())
             # logger.debug(version)
             if (version <= 5):
-                self._cache_root = os.path.join(get_env('ALLUSERSPROFILE'), 
-                                                'Application Data', 
+                self._cache_root = os.path.join(get_env('ALLUSERSPROFILE'),
+                                                'Application Data',
                                                 'Meditech')
             else:
-                self._cache_root = os.path.join(get_env('ALLUSERSPROFILE'), 
+                self._cache_root = os.path.join(get_env('ALLUSERSPROFILE'),
                                                 'Meditech')
             # logger.debug(self._cache_root)
             result = self._cache_root
         finally:
             return result
-    
+
     @property
     def local_ring(self):
         return False
@@ -576,13 +578,13 @@ class ServerRing(Ring):
     @property
     def possible_paths(self):
         paths = []
-        for p in (('Local Cache', self.cache_path), 
-                  ('Server', self.server_path), 
+        for p in (('Local Cache', self.cache_path),
+                  ('Server', self.server_path),
                   ('System', self.system_path)):
             if (p[1] is not None):
                 paths.append(p)
         return paths
-    
+
     def copy_source_to_cache(self, source, overwrite = True):
         partial_path = self.partial_path(source)
         if (partial_path is not None):
@@ -606,7 +608,7 @@ class ServerRing(Ring):
                     result = True
                     break
         return result
-        
+
     def pgm_path(self, use_cache = False):
         if use_cache:
             return self.cache_path
@@ -627,7 +629,7 @@ class ServerRing(Ring):
             if unv_server_drive is None:
                 path = None
             else:
-                path = os.path.join(unv_server_drive, 
+                path = os.path.join(unv_server_drive,
                                     self.universe + '.Universe',
                                     self.ring + '.Ring')
                 if not os.path.isdir(path):
