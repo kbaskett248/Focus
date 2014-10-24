@@ -1,0 +1,14 @@
+{
+	"scope": "comment.line.double-slash.header",
+	"completions":
+	[
+		{ "trigger": ":Doc Purpose", "contents": ":Doc Purpose\n//     "},
+		{ "trigger": ":Doc Arguments", "contents": ":Doc Arguments\n//     "},
+		{ "trigger": ":Doc Preconditions", "contents": ":Doc Preconditions\n//     "},
+		{ "trigger": ":Doc Local Variables", "contents": ":Doc Local Variables\n//     "},
+		{ "trigger": ":Doc Data Structures", "contents": ":Doc Data Structures\n//     "},
+		{ "trigger": ":Doc Side Effects", "contents": ":Doc Side Effects\n//     "},
+		{ "trigger": ":Doc Returns", "contents": ":Doc Returns\n//     "},
+		{ "trigger": ":Doc Additional Notes", "contents": ":Doc Additional Notes\n//     "}
+	]
+}

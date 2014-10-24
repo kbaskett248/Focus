@@ -10,11 +10,11 @@ patterns:
 
 - comment: Code Member Keyword
   name: meta.subroutine.fs
-  begin: '^ *((:Code) +([^\n()\t]+?)) *$'
+  begin: '^ *((:Code)(\.| +)([^\n\t]+?)) *$'
   beginCaptures:
     '1': {name: meta.subroutine.header.fs}
     '2': {name: keyword.other.fs}
-    '3': {name: entity.name.subroutine.fs}
+    '4': {name: entity.name.subroutine.fs}
   end: (;|(?=:Code))
   patterns:
   - include: '#code-region'
@@ -22,7 +22,7 @@ patterns:
 
 - comment: List Member Keyword
   name: meta.list.fs
-  begin: '^ *((:List) +([^\n()\t]+?)) *$'
+  begin: '^ *((:List) +([^\n\t]+?)) *$'
   beginCaptures:
     '1': {name: meta.list.header.fs}
     '2': {name: keyword.other.fs}
@@ -56,6 +56,19 @@ repository:
 
     - include: '#string-list'
 
+    - comment: Magic Upper Listset Function
+      name: meta.function.listset.upper.fs support.function.fs
+      begin: '@[A-Z]\('
+      end: '\)\B'
+      patterns:
+      - include: '#code-region'
+    - comment: Magic Lower Listset Function
+      name: meta.function.listset.lower.fs support.function.fs
+      begin: '@[a-z]\('
+      end: '\)\B'
+      patterns:
+      - include: '#code-region'
+
     - comment: FS Local Variable
       match: (?<!@|\.)\b([A-Z])\b
       captures:
@@ -71,16 +84,16 @@ repository:
 
     - comment: Magic Upper Listset Function
       name: meta.function.listset.upper.fs support.function.fs
-      match: '@[A-Z](\d+)'
+      match: '@[A-Z](\d+)\b'
       captures:
         '1': {name: meta.function.listset.number.upper.fs}
     - comment: Magic Lower Listset Function
       name: meta.function.listset.lower.fs support.function.fs
-      match: '@[a-z](\d+)'
+      match: '@[a-z](\d+)\b'
       captures:
         '1': {name: meta.function.listset.number.lower.fs}
     - comment: Magic Function
-      match: '@\p{Alpha}{2}'
+      match: '@\p{Alpha}{2}\b'
       name: meta.function.fs support.function.fs
       
     # - name: constant.numeric.integer.decimal.fs
