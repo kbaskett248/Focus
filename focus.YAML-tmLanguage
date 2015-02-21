@@ -26,7 +26,8 @@ repository:
       '1': {name: punctuation.definition.comment.fs}
     end: '$\n?|(?=\p{Cntrl}\|)'
     patterns:
-    - match: :Doc\s+(\w+\s?\w*)
+    - match: (?<=//):Doc(\s+.*\n)
+      # name: comment.line.double-slash.header.fs
       captures:
         '1': {name: comment.line.double-slash.header.fs}
       # - match: '(?i:(in(put)?s?|out(put)?s?|(local )?var(iable)?s?|(side )?effects?|actions?|desc(r(iption)?)?|assumes?|pre|(upper|lower)? ?sets?|bugs?|arg(ument)?s?|val(ues)?|s/e|locals?|returns?|warning|results?)):'
@@ -181,8 +182,17 @@ repository:
       captures:
         '1': {name: meta.function.listset.number.lower.fs}
     - comment: Magic Function
-      match: '@\p{Alpha}{2}'
+      match: '@[A-Z][A-Za-z]'
       name: meta.function.fs
+    - comment: Tool call
+      match: '@[a-wz][a-z]'
+      name: meta.tool.fs
+    - comment: DLL call
+      match: '@[a-z][A-Z]'
+      name: meta.dll.fs
+    - comment: Member call
+      match: '@\d+'
+      name: meta.member.fs
       
     # - name: constant.numeric.integer.decimal.fs
     #   match: \b([1-9]+[0-9]*|0) 
@@ -199,7 +209,7 @@ repository:
       match: '@?~?(\+|\-|\/|\*|\\)'
     - comment: Other operators
       name: keyword.operator.other.fs
-      match: '@?~?(\#|\$|\%|\:|\|)'
+      match: '@?~?(\#|\$|\%|\:|\||\?)'
     - comment: Assignment operators
       name: keyword.operator.assignment.fs
       match: \^(?=[\{A-Za-z])

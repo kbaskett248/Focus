@@ -376,9 +376,33 @@
 					<key>comment</key>
 					<string>Magic Function</string>
 					<key>match</key>
-					<string>@\p{Alpha}{2}</string>
+					<string>@[A-Z][A-Za-z]</string>
 					<key>name</key>
 					<string>meta.function.fs</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>Tool call</string>
+					<key>match</key>
+					<string>@[a-wz][a-z]</string>
+					<key>name</key>
+					<string>meta.tool.fs</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>DLL call</string>
+					<key>match</key>
+					<string>@[a-z][A-Z]</string>
+					<key>name</key>
+					<string>meta.dll.fs</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>Member call</string>
+					<key>match</key>
+					<string>@\d+</string>
+					<key>name</key>
+					<string>meta.member.fs</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -404,7 +428,7 @@
 					<key>comment</key>
 					<string>Other operators</string>
 					<key>match</key>
-					<string>@?~?(\#|\$|\%|\:|\|)</string>
+					<string>@?~?(\#|\$|\%|\:|\||\?)</string>
 					<key>name</key>
 					<string>keyword.operator.other.fs</string>
 				</dict>
@@ -462,7 +486,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>:Doc\s+(\w+\s?\w*)</string>
+					<string>(?&lt;=//):Doc(\s+.*\n)</string>
 				</dict>
 				<dict>
 					<key>comment</key>

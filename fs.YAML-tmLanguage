@@ -18,11 +18,27 @@ patterns:
   end: (;|(?=:Code))
   patterns:
   - include: '#code-region'
+  - include: '#blank-line-error'
+  - include: '#errant-bracket'
 
 
 - comment: List Member Keyword
   name: meta.list.fs
   begin: '^ *((:List) +([^\n\t]+?)) *$'
+  beginCaptures:
+    '1': {name: meta.list.header.fs}
+    '2': {name: keyword.other.fs}
+    '3': {name: entity.name.list.fs}
+  end: (?=^$|^\s*:)
+  patterns:
+  - include: '#comment'
+
+  - include: '#keyword-string-list'
+
+
+- comment: Icon Member Keyword
+  name: meta.icon.fs
+  begin: '^ *((:Icon) +([^\n\t]+?)) *$'
   beginCaptures:
     '1': {name: meta.list.header.fs}
     '2': {name: keyword.other.fs}
@@ -43,6 +59,9 @@ patterns:
     '3': {name: entity.name.toolset.fs}
 
 
+- include: '#code-region'
+
+
 repository:
   code-region:
     patterns:
@@ -55,19 +74,6 @@ repository:
     - include: '#string'
 
     - include: '#string-list'
-
-    - comment: Magic Upper Listset Function
-      name: meta.function.listset.upper.fs support.function.fs
-      begin: '@[A-Z]\('
-      end: '\)\B'
-      patterns:
-      - include: '#code-region'
-    - comment: Magic Lower Listset Function
-      name: meta.function.listset.lower.fs support.function.fs
-      begin: '@[a-z]\('
-      end: '\)\B'
-      patterns:
-      - include: '#code-region'
 
     - comment: FS Local Variable
       match: (?<!@|\.)\b([A-Z])\b
@@ -93,8 +99,17 @@ repository:
       captures:
         '1': {name: meta.function.listset.number.lower.fs}
     - comment: Magic Function
-      match: '@\p{Alpha}{2}\b'
+      match: '@[A-Z][A-Za-z]'
       name: meta.function.fs support.function.fs
+    - comment: Tool call
+      match: '@[a-wz][a-z]'
+      name: meta.tool.fs entity.name.tool.fs
+    - comment: DLL call
+      match: '@[a-z][A-Z]'
+      name: meta.dll.fs constant.other.dll.fs
+    - comment: Member call
+      match: '@\d+'
+      name: meta.member.fs entity.name.member.fs
       
     # - name: constant.numeric.integer.decimal.fs
     #   match: \b([1-9]+[0-9]*|0) 
@@ -111,17 +126,13 @@ repository:
       match: '@?~?(\+|\-|\/|\*|\\)'
     - comment: Other operators
       name: keyword.operator.other.fs
-      match: '@?~?(\#|\$|\%|\:|\|)'
+      match: '@?~?(\#|\$|\%|\:|\||\?)'
     - comment: Assignment operators
       name: keyword.operator.assignment.fs
       match: \^(?=[\{A-Za-z])
     - comment: Illegal assignment
       name: invalid.illegal.assignment.fs
       match: \^(?=[^\{A-Za-z])
-
-    - include: '#blank-line-error'
-
-    - include: '#errant-bracket'
 
 
   comment:
@@ -131,7 +142,8 @@ repository:
       '1': {name: punctuation.definition.comment.fs}
     end: $\n?
     patterns:
-    - match: :Doc\s+(\w+\s?\w*)
+    - match: (?<=//):Doc(\s+.*\n)
+      # name: comment.line.double-slash.header.fs
       captures:
         '1': {name: comment.line.double-slash.header.fs}
       # - match: '(?i:(in(put)?s?|out(put)?s?|(local )?var(iable)?s?|(side )?effects?|actions?|desc(r(iption)?)?|assumes?|pre|(upper|lower)? ?sets?|bugs?|arg(ument)?s?|val(ues)?|s/e|locals?|returns?|warning|results?)):'
@@ -193,6 +205,8 @@ repository:
         '0': {name: punctuation.definition.loop.end.fs}
       patterns:
       - include: '#code-region'
+      - include: '#blank-line-error'
+      - include: '#errant-bracket'
 
     - comment: "Pass-through: []"
       name: meta.control.flow.pass-through.fs
@@ -204,6 +218,8 @@ repository:
         '0': {name: punctuation.definition.pass-through.end.fs}
       patterns:
       - include: '#code-region'
+      - include: '#blank-line-error'
+      - include: '#errant-bracket'
 
     - comment: "Concatenation: (),@()"
       name: meta.control.flow.concatenate.fs
@@ -217,6 +233,8 @@ repository:
       - name: punctuation.definition.separator.comma.fs 
         match: ","
       - include: '#code-region'
+      - include: '#blank-line-error'
+      - include: '#errant-bracket'
 
     - comment: "Build List: {},@{}"
       name: meta.control.flow.list.fs
@@ -233,6 +251,8 @@ repository:
       - name: punctuation.definition.separator.comma.fs
         match: ","
       - include: '#code-region'
+      - include: '#blank-line-error'
+      - include: '#errant-bracket'
 
 
   conditional-line:
@@ -261,6 +281,8 @@ repository:
     - comment: legal space
       match: (?<=\S)\ (?=[^\s/])
     - include: '#code-region'
+    - include: '#blank-line-error'
+    - include: '#errant-bracket'
 
 
   string-list:

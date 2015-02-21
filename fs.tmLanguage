@@ -47,6 +47,14 @@
 					<key>include</key>
 					<string>#code-region</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#blank-line-error</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#errant-bracket</string>
+				</dict>
 			</array>
 		</dict>
 		<dict>
@@ -89,6 +97,45 @@
 			</array>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>^ *((:Icon) +([^\n\t]+?)) *$</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.list.header.fs</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.fs</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.list.fs</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Icon Member Keyword</string>
+			<key>end</key>
+			<string>(?=^$|^\s*:)</string>
+			<key>name</key>
+			<string>meta.icon.fs</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#keyword-string-list</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -113,6 +160,10 @@
 			<string>^ *((:Toolset) +([^\n()\t]+?)) *$</string>
 			<key>name</key>
 			<string>meta.toolset.fs</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#code-region</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -147,40 +198,6 @@
 				<dict>
 					<key>include</key>
 					<string>#string-list</string>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>@[A-Z]\(</string>
-					<key>comment</key>
-					<string>Magic Upper Listset Function</string>
-					<key>end</key>
-					<string>\)\B</string>
-					<key>name</key>
-					<string>meta.function.listset.upper.fs support.function.fs</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#code-region</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>@[a-z]\(</string>
-					<key>comment</key>
-					<string>Magic Lower Listset Function</string>
-					<key>end</key>
-					<string>\)\B</string>
-					<key>name</key>
-					<string>meta.function.listset.lower.fs support.function.fs</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#code-region</string>
-						</dict>
-					</array>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -254,9 +271,33 @@
 					<key>comment</key>
 					<string>Magic Function</string>
 					<key>match</key>
-					<string>@\p{Alpha}{2}\b</string>
+					<string>@[A-Z][A-Za-z]</string>
 					<key>name</key>
 					<string>meta.function.fs support.function.fs</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>Tool call</string>
+					<key>match</key>
+					<string>@[a-wz][a-z]</string>
+					<key>name</key>
+					<string>meta.tool.fs entity.name.tool.fs</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>DLL call</string>
+					<key>match</key>
+					<string>@[a-z][A-Z]</string>
+					<key>name</key>
+					<string>meta.dll.fs constant.other.dll.fs</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>Member call</string>
+					<key>match</key>
+					<string>@\d+</string>
+					<key>name</key>
+					<string>meta.member.fs entity.name.member.fs</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -282,7 +323,7 @@
 					<key>comment</key>
 					<string>Other operators</string>
 					<key>match</key>
-					<string>@?~?(\#|\$|\%|\:|\|)</string>
+					<string>@?~?(\#|\$|\%|\:|\||\?)</string>
 					<key>name</key>
 					<string>keyword.operator.other.fs</string>
 				</dict>
@@ -301,14 +342,6 @@
 					<string>\^(?=[^\{A-Za-z])</string>
 					<key>name</key>
 					<string>invalid.illegal.assignment.fs</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#blank-line-error</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#errant-bracket</string>
 				</dict>
 			</array>
 		</dict>
@@ -340,7 +373,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>:Doc\s+(\w+\s?\w*)</string>
+					<string>(?&lt;=//):Doc(\s+.*\n)</string>
 				</dict>
 				<dict>
 					<key>comment</key>
@@ -421,6 +454,14 @@
 				<dict>
 					<key>include</key>
 					<string>#code-region</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#blank-line-error</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#errant-bracket</string>
 				</dict>
 			</array>
 		</dict>
@@ -549,6 +590,14 @@
 							<key>include</key>
 							<string>#code-region</string>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>#blank-line-error</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#errant-bracket</string>
+						</dict>
 					</array>
 				</dict>
 				<dict>
@@ -581,6 +630,14 @@
 						<dict>
 							<key>include</key>
 							<string>#code-region</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#blank-line-error</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#errant-bracket</string>
 						</dict>
 					</array>
 				</dict>
@@ -620,6 +677,14 @@
 						<dict>
 							<key>include</key>
 							<string>#code-region</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#blank-line-error</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#errant-bracket</string>
 						</dict>
 					</array>
 				</dict>
@@ -674,6 +739,14 @@
 						<dict>
 							<key>include</key>
 							<string>#code-region</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#blank-line-error</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#errant-bracket</string>
 						</dict>
 					</array>
 				</dict>
