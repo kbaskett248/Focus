@@ -1,9 +1,0 @@
-<snippet>
-    <content><![CDATA[
-<!-- Req  --><span style="color:#354863;font-size:1.1em">'''Satisfies SR #${1:1}'''</span>
-]]></content>
-    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-    <tabTrigger>sr</tabTrigger>
-    <!-- Optional: Set a scope to limit where the snippet will trigger -->
-    <scope>source.wiki</scope>
-</snippet>

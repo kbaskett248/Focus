@@ -1,0 +1,4 @@
+{
+    "target": "build_translate_ring_file",
+    "selector": "source.xml",
+}

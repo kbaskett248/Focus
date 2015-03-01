@@ -1,9 +1,0 @@
-<snippet>
-    <content><![CDATA[
-<!-- Goal --><span style="color:#457725;font-size:1.1em">'''Tests Goal #${1:1}'''</span>
-]]></content>
-    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-    <tabTrigger>goal</tabTrigger>
-    <!-- Optional: Set a scope to limit where the snippet will trigger -->
-    <scope>source.wiki</scope>
-</snippet>

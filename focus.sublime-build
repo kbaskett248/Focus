@@ -1,4 +1,16 @@
 {
-    "target": "build_translate",
-    "selector": "source.m-at, text.xml, source.focus, source.fs"
+    "target": "build_translate_ring_file",
+    "selector": "source.focus",
+    "encoding": "ascii",
+    "startup_info": false,
+
+    "variants": [
+        { "name": "Format",
+          "target": "build_format_ring_file",
+        },
+
+        { "name": "Run",
+          "target": "build_run_ring_file",
+        },
+    ]
 }

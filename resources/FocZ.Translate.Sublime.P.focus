@@ -1,0 +1,170 @@
+//:Doc Purpose
+//  Translate the specified file
+//
+
+
+//------------------------------------------------------------------------------
+#Translation
+  :Options
+    Result                        MSFile
+  :Product
+    Type                          Unstructured
+
+
+//------------------------------------------------------------------------------
+#Preamble
+  :Options
+    Type                          Process
+
+
+//------------------------------------------------------------------------------
+#Locals
+  :Name                           DoNotFormat
+  // If Non-Nil, a format will not be done.
+
+  :Name                           DoNotTranslate
+  // If Non-Nil, files will not be translated.
+
+
+//------------------------------------------------------------------------------
+#Magic
+:Code Main
+//:Doc Purpose
+//     Translates the passed in source file
+//:Doc Arguments
+//     {F - Path to Focus File or list of paths
+//     |E - Message Path
+//     |T - Non-Nil to only translate
+//     |A - Non-Nil to only format}
+//:Doc Local Variables
+//     A : See arguments
+//     E : See arguments
+//     F : See arguments
+//     T : See arguments
+//:Doc Returns
+//     None
+@IF{@QV@NV @LI}
+^{F,E,T,A},
+IF{T 1@PutLocal(DoNotFormat)},
+IF{A 1@PutLocal(DoNotTranslate)},
+IF{{"Foc","FocZ.Startup.Init.P"}@CallProgram() @{"Translation",}@CallSub(FormatResults);
+   @CallExternalSub(Mis,MisZ.Signon.C,GetSignonUser) @{"Translation",}@CallSub(FormatResults);
+   F@IF{@QV@NV @{}}@[@{,E}@CallSub(ProcessFile)]},
+;
+
+:Code ProcessFile
+//:Doc Purpose
+//     Formats and translates a file.
+//:Doc Arguments
+//     {F - Path to Focus File
+//     |E - Error Path
+//:Doc Local Variables
+//     C : Codebase
+//     E : See arguments
+//     F : See arguments
+//     I : Include Flag
+//:Doc Returns
+//     None
+^{F,E},
+IF{F@LA@IF{@{,""@RootServer(FocPgmSource)@LA}@#=0 1^I,"";
+           @{,""@RootClient(FocPgmSource)@LA}@#=0 "local"^C,"";
+           @{,""@Root(Icons)@LA}@#=0 "";
+           @{,""@RootClient(Icons)@LA}@#=0 "";
+           @{,""@Root(Toolsets)@LA}@#=0 "";
+           @{,""@RootClient(Toolsets)@LA}@#=0 "";
+           1 ""} ("File: ",F," not associated with ring ",@GetStateVariable(Ring),".")@{"Translation",}@CallSub(FormatResults);
+   {F,E}@CallSub(FormatFile) @{"Formatting",}@CallSub(FormatResults);
+   {F,E,I,C}@CallSub(TranslateFile)}
+IF{[] @{,E}@CallSub(WriteMessageToResults)},
+"";
+
+:Code FormatFile
+//:Doc Purpose
+//     Formats the specified file.
+//:Doc Arguments
+//     {F - Path to Focus File
+//     |E - Error Path
+//:Doc Local Variables
+//     E : See arguments
+//     F : See arguments
+//:Doc Returns
+//     Nil if no errors; otherwise list of errors.
+^{F,E}
+IF{@GetLocal(DoNotFormat) "";
+   {("Formatting file: ",F,"..."),E}@CallSub(WriteMessageToResults),
+   {"Foc","FocZ.Format.P",{F,1}}@CallProgram()@CallSub(UnformatValue) @{"Formatting",}@CallSub(FormatResults);
+   {{"Done",""},E}@CallSub(WriteMessageToResults),""}
+;
+
+:Code TranslateFile
+//:Doc Purpose
+//     Translates the specified file.
+//:Doc Arguments
+//     {F - Path to Focus File
+//     |E - Error Path
+//:Doc Local Variables
+//     C : Codebase
+//     E : See arguments
+//     F : See arguments
+//     I : Include Flag
+//:Doc Returns
+//     Nil if no errors; otherwise list of error text.
+^{F,E,I,C}
+IF{@GetLocal(DoNotTranslate) "";
+   {("Translating file: ",F,"..."),E}@CallSub(WriteMessageToResults),
+   {"Foc","FocZ.Translate.P",{F,I,C,E,,,,"Suppress Delete Error Path"}}@CallProgram(),
+   {{"Done",""},E}@CallSub(WriteMessageToResults),
+   F@LA@IF{%21=".processlocks.i.focus" "";
+           @{,""@RootServer(DataDefs)@LA}@#=0;
+           @{,""@RootClient(DataDefs)@LA}@#=0;
+           1 ""}@NV "";
+   {("Refiling DataDef: ",F,"..."),E}@CallSub(WriteMessageToResults),
+   F~%6@{,~#"\"}@%@{}
+   @{"Foc","FocObj.Refile.P",}@CallProgram(),
+   {{"Done",""},E}@CallSub(WriteMessageToResults),""}
+;
+
+:Code FormatResults
+//:Doc Purpose
+//     Adds additional text to the error to be written to the log.
+//:Doc Arguments
+//     {T - Error Type
+//     |M - Error message or list of error messages}
+//:Doc Local Variables
+//     M - See arguments
+//     T - See arguments
+//:Doc Returns
+//     List of messages
+^{T,M},
+M@IF{@QV@NV @{}}
+@{@{@CV@(," ",T," ",IF{>1 "Errors";1 "Error"}),""},}@MV
+;
+
+:Code UnformatValue
+//:Doc Purpose
+//     Recursively removes display markers and list formatting from a value.
+//:Doc Arguments
+//     Value
+//:Doc Local Variables
+//     None
+//:Doc Returns
+//     None
+@VA@IF{@QV @[@CallSub(UnformatValue)@SA]@{," "}@@Join()}
+;
+
+:Code WriteMessageToResults
+//:Doc Purpose
+//     Writes the given message to the results file.
+//:Doc Arguments
+//     {M - Message or list of messages
+//     |R - Error file path}
+//:Doc Local Variables
+//     M - See arguments
+//     R - See arguments
+//:Doc Returns
+//     Non-Nil if Error; Nil otherwise.
+^{M,R},
+IF{R@OpenFileForWritingAppend()@NV "Failed to open file";
+   M@IF{@QV@NV @{}}@[@Pc],
+   @BeginTxn(),@CloseFileForWriting(),@CommitTxnNotify()@NV "Failed to write file"}
+;
