@@ -5,7 +5,7 @@
 	<key>name</key>
 	<string>Symbol List: Subroutine</string>
 	<key>scope</key>
-	<string>list.header.source.m-at, subroutine.header.source.m-at, translator.source.m-at, object.keyword.source.m-at, keyword.other.translator.focus, meta.subroutine.header.fs, meta.list.header.fs, meta.translator.datadef.focus meta.keyword.object.focus, meta.keyword.alias.focus, meta.keyword.elementset.focus</string>
+	<string>keyword.other.translator.focus, meta.subroutine.header.fs, meta.list.header.fs, meta.translator.datadef.focus meta.keyword.object.focus, meta.keyword.alias.focus, meta.keyword.elementset.focus</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>

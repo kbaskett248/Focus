@@ -1,5 +1,5 @@
 {
-        "scope": "source.m-at - codeblock.source.m-at - comment - string, source.focus - meta.subroutine.fs - comment - string",
+        "scope": "source.focus - meta.subroutine.fs - comment - string",
         "completions":
         [
                 "#Alias",

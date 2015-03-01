@@ -5,14 +5,14 @@
     <key>name</key>
     <string>Indentation Rules</string>
     <key>scope</key>
-    <string>source.m-at, source.focus - meta.subroutine.fs</string>
+    <string>source.focus - meta.subroutine.fs</string>
     <key>settings</key>
     <dict>
         <key>increaseIndentPattern</key>
-        <string>^\s*[#:](?!Code)\w+\b.*$</string>
+        <string>^\s*[#:](?!Code|List|Magic)\w+\b.*$</string>
 
     </dict>
     <key>uuid</key>
-    <string>8665e864-752b-4754-a1c5-24f5875342e0</string>
+    <string>0d585dca-c2ab-4eb2-82c8-85373d0377c1</string>
 </dict>
 </plist>

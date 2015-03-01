@@ -1,5 +1,5 @@
 {
-        "scope": "source.m-at - comment - string, meta.keyword.code.focus meta.subroutine.fs - comment - string, source.focus meta.value - comment - string",
+        "scope": "meta.keyword.code.focus meta.subroutine.fs - comment - string - meta.subroutine.header, source.focus meta.value - comment - string - meta.translator.magic",
         "completions":
         [
                 { "trigger": "@AfterRID", "contents": "@AfterRID(${1:Object.Record})" },
@@ -203,7 +203,7 @@
                 { "trigger": "@GetNextFile", "contents": "@GetNextFile()" },
                 { "trigger": "@GetNextLogEvents", "contents": "@GetNextLogEvents()" },
                 { "trigger": "@GetNextLogEventsRT", "contents": "@GetNextLogEventsRT()" },
-                { "trigger": "@GetObjectLongLockParmas", "contents": "@GetObjectLongLockParmas(${1:Object.Lock})" },
+                { "trigger": "@GetObjectLongLockParams", "contents": "@GetObjectLongLockParams(${1:Object.Lock})" },
                 { "trigger": "@GetObjectLongLockSystemInfo", "contents": "@GetObjectLongLockSystemInfo(${1:Object.Lock})" },
                 { "trigger": "@GetObjectLongLockValue", "contents": "@GetObjectLongLockValue(${1:Object.Lock})" },
                 { "trigger": "@GetOID", "contents": "@GetOID()" },
@@ -329,6 +329,7 @@
                 { "trigger": "@LongLockStillOwnedRT", "contents": "@LongLockStillOwnedRT()" },
                 { "trigger": "@ManageIconsRT", "contents": "@ManageIconsRT()" },
                 { "trigger": "@MarkFileForAbolishment", "contents": "@MarkFileForAbolishment()" },
+                { "trigger": "@MarkObjectAsMemoryOnly", "contents": "@MarkObjectAsMemoryOnly(${1:Object})" },
                 { "trigger": "@MaxClientKey", "contents": "@MaxClientKey(${1:Object.Key})" },
                 { "trigger": "@MaxClientKeyRT", "contents": "@MaxClientKeyRT()" },
                 { "trigger": "@Message", "contents": "@Message()" },

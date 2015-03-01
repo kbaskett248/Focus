@@ -5,7 +5,7 @@
 	<key>name</key>
 	<string>Comments</string>
 	<key>scope</key>
-	<string>source.m-at, source.focus, source.fs</string>
+	<string>source.focus, source.fs</string>
 	<key>settings</key>
 	<dict>
 		<key>shellVariables</key>

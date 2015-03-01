@@ -1,0 +1,15 @@
+{
+	"scope": "comment.line.double-slash",
+	"completions":
+	[
+		{ "trigger": ":Doc Purpose", "contents": ":Doc Purpose\n//     "},
+		{ "trigger": ":Doc Arguments", "contents": ":Doc Arguments\n//     "},
+		{ "trigger": ":Doc Preconditions", "contents": ":Doc Preconditions\n//     "},
+		{ "trigger": ":Doc Local Variables", "contents": "Local Variables\n//     "},
+		{ "trigger": ":Doc Data Structures", "contents": "Data Structures\n//     "},
+		{ "trigger": ":Doc Side Effects", "contents": "Side Effects\n//     "},
+		{ "trigger": ":Doc Returns", "contents": ":Doc Returns\n//     "},
+		{ "trigger": ":Doc Additional Notes", "contents": "Additional Notes\n//     "},
+		{ "trigger": ":Doc Unit Test", "contents": "Unit Test\n//     :Test ${0:Do Something}"},
+	]
+}
