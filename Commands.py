@@ -32,6 +32,7 @@ INDENTATION_PATTERN = re.compile(r"(^.+//(( *$)| *))|"
                                  r"( +$)|([\[\{\( ])|([\]\}\);])")
 APPLICATION_PATTERN = re.compile(r"[A-Z][a-z]{1,2}")
 IN_METHOD_DOC_KEY = 'in_method_doc'
+ENABLE_TRANSLATOR_INDENT_KEY = 'enable_translator_indent'
 
 
 class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
@@ -347,81 +348,29 @@ def boolean_query_context_per_selection(view, operator, operand, match_all,
     return (direction == (result == 1))
 
 
-class TranslatorIndentCommand(sublime_plugin.TextCommand):
-    """
-    Command to indent the right side of translator sections to the correct
-    point.
-    """
-
-    def run(self, edit):
-        """Indents the right side of translator sections to 34 spaces."""
-        for r in self.view.sel():
-            point = r.begin()
-            line = self.view.line(point)
-            pre_line = sublime.Region(line.begin(), point)
-            post_line = sublime.Region(point, line.end())
-            line_string = self.view.substr(line)
-
-            match = ATTRIBUTE_PATTERN.match(line_string)
-
-            if match is not None:
-                self.view.replace(edit, post_line, match.group(3))
-                s = match.group(1)
-                l = len(s)
-                if l <= 33:
-                    s += (34 - l) * ' '
-                else:
-                    s += (2 - (l % 2)) * ' '
-                self.view.replace(edit, pre_line, s)
-
-
-class EnableTranslatorIndentCommand(sublime_plugin.EventListener):
-    """
-    on_query_context command for the enable_translator_indent context.
-    """
+class QueryContextCommand(sublime_plugin.EventListener):
 
     def on_query_context(self, view, key, operator, operand, match_all):
-        # Wrong key
-        if key != 'enable_translator_indent':
+        logger.debug("key: %s", key)
+        if key == ENABLE_TRANSLATOR_INDENT_KEY:
+            return self.on_query_context_translator_indent(
+                view, operator, operand, match_all)
+        elif key == IN_METHOD_DOC_KEY:
+            return self.on_query_context_in_method_doc(
+                view, operator, operand, match_all)
+        else:
             return None
 
+    def on_query_context_translator_indent(self, view, *args):
         # Wrong syntax
         if view.score_selector(view.sel()[0].begin(), 'source.focus') <= 0:
             return False
 
-        # Wrong operator
-        if operator == sublime.OP_EQUAL:
-            direction = (True == operand)
-        elif operator == sublime.OP_NOT_EQUAL:
-            direction = (False == operand)
-        else:
-            return None
-
-        # Loop through the selections and store 1 for a match or 0 for
-        # non-matches.
-        match_list = []
         self.compute_disable_string()
-        for r in view.sel():
-            if self.check_selection(view, r):
-                if (not match_all) and direction:
-                    return True
-                elif match_all and (not direction):
-                    return False
-                else:
-                    match_list.append(1)
-            else:
-                if (not match_all) and (not direction):
-                    return True
-                elif match_all and direction:
-                    return False
-                else:
-                    match_list.append(0)
-
-        if match_all:
-            result = min(match_list)
-        else:
-            result = max(match_list)
-        return (direction == (result == 1))
+        print('querying context for EnableTranslatorIndent')
+        args = list(args)
+        args.append(self.check_selection_translator_indent)
+        return boolean_query_context_per_selection(view, *args)
 
     def compute_disable_string(self):
         settings = sublime.load_settings('MT-Focus.sublime-settings')
@@ -447,7 +396,7 @@ class EnableTranslatorIndentCommand(sublime_plugin.EventListener):
             # print(st)
             self.disable_pattern = re.compile(st)
 
-    def check_selection(self, view, selection):
+    def check_selection_translator_indent(self, view, selection):
         """
         Check individual regions. Return True to enable translator indent for
         the specified region or False to disable it.
@@ -484,6 +433,75 @@ class EnableTranslatorIndentCommand(sublime_plugin.EventListener):
             return False
         else:
             return True
+
+    def on_query_context_in_method_doc(self, view, *args):
+        # Wrong syntax
+        if view.score_selector(view.sel()[0].begin(),
+                               'source.focus, source.fs') <= 0:
+            return None
+
+        print('querying context for InMethodDoc')
+        args = list(args)
+        args.append(self.check_selection_in_method_doc)
+        return boolean_query_context_per_selection(view, *args)
+
+    def check_selection_in_method_doc(self, view, selection):
+        """
+        Check individual regions. Return True if the given selection is in
+        the documentation for a subroutine. Documentation must be below the
+        subroutine header to be correctly detected.
+
+        """
+        points = [selection.begin()]
+        if not selection.empty():
+            points.append(selection.end()-1)
+
+        for p in points:
+            if view.score_selector(p, 'comment') <= 0:
+                return False
+
+        print('still checking 1')
+
+        mt_view = get_mt_view(view)
+        if mt_view is None:
+            return False
+
+        print('still checking 2')
+
+        cb = mt_view.get_codeblock(points[0])
+        print(cb.documentation_region)
+        if cb.documentation_region.contains(selection):
+            return True
+        else:
+            return False
+
+
+class TranslatorIndentCommand(sublime_plugin.TextCommand):
+    """
+    Command to indent the right side of translator sections to the correct
+    point.
+    """
+
+    def run(self, edit):
+        """Indents the right side of translator sections to 34 spaces."""
+        for r in self.view.sel():
+            point = r.begin()
+            line = self.view.line(point)
+            pre_line = sublime.Region(line.begin(), point)
+            post_line = sublime.Region(point, line.end())
+            line_string = self.view.substr(line)
+
+            match = ATTRIBUTE_PATTERN.match(line_string)
+
+            if match is not None:
+                self.view.replace(edit, post_line, match.group(3))
+                s = match.group(1)
+                l = len(s)
+                if l <= 33:
+                    s += (34 - l) * ' '
+                else:
+                    s += (2 - (l % 2)) * ' '
+                self.view.replace(edit, pre_line, s)
 
 
 class IndentNewLineCommand(sublime_plugin.TextCommand):
@@ -598,57 +616,6 @@ class IndentNewLineCommand(sublime_plugin.TextCommand):
             return self.operation_stack.pop()
         except IndexError:
             return ''
-
-
-class InMethodDocCommand(sublime_plugin.EventListener):
-    """
-    on_query_context command for the in_method_doc context for focus and fs
-    syntaxes.
-    """
-
-    def on_query_context(self, view, key, operator, operand, match_all):
-        # Wrong key
-        if key != IN_METHOD_DOC_KEY:
-            return None
-
-        # Wrong syntax
-        if view.score_selector(view.sel()[0].begin(),
-                               'source.focus, source.fs') <= 0:
-            return None
-
-        print('querying context for InMethodDoc')
-        return boolean_query_context_per_selection(
-            view, operator, operand, match_all, self.check_selection)
-
-    def check_selection(self, view, selection):
-        """
-        Check individual regions. Return True if the given selection is in
-        the documentation for a subroutine. Documentation must be below the
-        subroutine header to be correctly detected.
-
-        """
-        points = [selection.begin()]
-        if not selection.empty():
-            points.append(selection.end()-1)
-
-        for p in points:
-            if view.score_selector(p, 'comment') <= 0:
-                return False
-
-        print('still checking 1')
-
-        mt_view = get_mt_view(view)
-        if mt_view is None:
-            return False
-
-        print('still checking 2')
-
-        cb = mt_view.get_codeblock(points[0])
-        print(cb.documentation_region)
-        if cb.documentation_region.contains(selection):
-            return True
-        else:
-            return False
 
 
 class TranslateRingFileCommand(RingExecCommand):
@@ -812,273 +779,6 @@ class RunRingFileCommand(RingRunCommand):
             return self.ring_file.is_runnable()
         logger.debug("is_enabled returning False", )
         return False
-
-
-class FocusExecWrapperCommand(sublime_plugin.WindowCommand):
-
-    @property
-    def view(self):
-        return self.window.active_view()
-
-    @property
-    def file_name(self):
-        return self.view.file_name()
-
-    @property
-    def ring_file(self):
-        return get_mt_ring_file(self.file_name)
-
-    def run(self, command, exec_cmd='exec', ring='file', condition=None, **kwargs):
-        _ring = None
-        _default_flag = False
-        if ring == 'file':
-            # Determine the ring object based on the active view
-            _ring = self.ring_file.ring
-        elif ring == 'choose':
-            # Determine the ring by picking one from a quick panel
-            logger.warning('ring option (%s) not yet supported', ring)
-        elif ring == 'default':
-            # Get the default ring from the settings
-            # _ring = get_mt_ring(get_default_ring())
-            # _default_flag = True
-            logger.warning('ring option (%s) not yet supported', ring)
-        else:
-            logger.warning('ring option (%s) not supported', ring)
-            return
-
-        if not _ring:
-            logger.warning('no ring could be determined for option: %s', ring)
-            return
-
-        if condition:
-            if not self.ring_file_check_helper(condition):
-                logger.info('failed condition check: %s', condition)
-                return
-
-        try:
-            method_to_call = getattr(self, command)
-            method_to_call(exec_cmd, _ring, _default_flag, kwargs)
-        except AttributeError:
-            logger.warning('command (%s) not supported', command)
-
-    def replace_variables_and_run(self, exec_cmd, ring, kwargs):
-        new_kwargs = dict()
-        logger.debug("ring: %s", ring)
-        logger.debug("ring.path: %s", ring.path)
-        for k, v in kwargs.items():
-            if isinstance(v, str):
-                v = v.replace('<ring_path>', ring.path)
-            new_kwargs[k] = v
-
-        try:
-            path = new_kwargs['path']
-            path += ';' + ring.system_path
-        except KeyError:
-            path = ring.system_path
-        finally:
-            new_kwargs['path'] = path
-
-        self.window.run_command(exec_cmd, new_kwargs)
-
-    def ring_file_check_helper(self, command):
-        ring_file = self.ring_file
-        if not isinstance(command, str):
-            return False
-        if ring_file is None:
-            return False
-        else:
-            method_to_call = getattr(ring_file, command,
-                                     lambda: False)
-            return method_to_call()
-
-    def translate(self, exec_cmd, ring, default_flag, kwargs):
-        translate_cmd = get_translate_command()
-        logger.debug('translate_cmd = %s', translate_cmd)
-
-        if default_flag:
-            self.translate_other(exec_cmd, ring, default_flag, kwargs)
-        if 'focz.translate.sublime.p.mps' in translate_cmd.lower():
-            self.translate_sublime(exec_cmd, ring, default_flag, kwargs)
-        else:
-            self.translate_other(exec_cmd, ring, default_flag, kwargs,
-                                 translate_cmd)
-
-    def translate_sublime(self, exec_cmd, ring, default_flag, kwargs):
-        translate_cmd = os.path.join('PgmObject', 'Foc',
-                                     'FocZ.Translate.Sublime.P.mps')
-        translate_path = ring.get_file_path(translate_cmd)
-        logger.debug('translate_path = %s', translate_path)
-
-        if not translate_path:
-            if not self.create_sublime_translate_file(ring):
-                self.translate_default(exec_cmd, ring, default_flag, kwargs)
-                return
-            else:
-                translate_path = ring.get_file_path(translate_cmd)
-
-        parameters = convert_to_focus_lists([self.file_name,
-                                             '<result_file>'])
-        shell_cmd = 'magic.exe "{0}" {1}'.format(translate_path, parameters)
-
-        kwargs['shell_cmd'] = shell_cmd
-
-        self.replace_variables_and_run(exec_cmd, ring, kwargs)
-
-    def translate_other(self, exec_cmd, ring, default_flag, kwargs,
-                        translate_cmd='Foc\\FocZ.Textpad.Translate.P.mps'):
-        translate_cmd = os.path.join('PgmObject', translate_cmd)
-        translate_path = ring.get_file_path(translate_cmd)
-        logger.debug('translate_path = %s', translate_path)
-
-        if not translate_path:
-            self.translate_default(exec_cmd, ring, default_flag, kwargs)
-            return
-
-        if default_flag:
-            shell_cmd = '{0} "{1}" RUNRINGTOOL "{2}" "{3}"'.format(
-                'magic.exe', self.get_tools_path(ring),
-                translate_path, self.file_name)
-        else:
-            shell_cmd = '{0} "{1}" "{2}"'.format('magic.exe', translate_path,
-                                                 self.file_name)
-
-        kwargs['shell_cmd'] = shell_cmd
-        kwargs['quiet'] = True
-
-        self.replace_variables_and_run(exec_cmd, ring, kwargs)
-
-    def translate_all(self, exec_cmd, ring, default_flag, kwargs):
-        translate_cmd = get_translate_command()
-        logger.debug('translate_cmd = %s', translate_cmd)
-
-        current_file_ring = self.ring_file.ring
-        if current_file_ring is None:
-            logger.error('current file (%s) has no associated ring')
-            return
-
-        file_list = set()
-        for v in self.window.views():
-            f = get_mt_ring_file(v.file_name())
-            if ((f is not None) and f.is_translatable() and (f.ring == current_file_ring)):
-                file_list.add(v.file_name())
-
-        if not file_list:
-            logger.error('no translatable files in ring %s',
-                         current_file_ring.name)
-            return
-
-        file_list = list(file_list)
-
-        if default_flag:
-            self.translate_other(exec_cmd, ring, file_list, default_flag,
-                                 kwargs)
-        if 'focz.translate.sublime.p.mps' in translate_cmd.lower():
-            self.translate_sublime(exec_cmd, ring, file_list, default_flag,
-                                   kwargs)
-        else:
-            self.translate_other(exec_cmd, ring, file_list, default_flag,
-                                 kwargs, translate_cmd)
-
-    def translate_all_sublime(self, exec_cmd, ring, file_list, default_flag,
-                              kwargs):
-        translate_cmd = os.path.join('PgmObject', 'Foc',
-                                     'FocZ.Translate.Sublime.P.mps')
-        translate_path = ring.get_file_path(translate_cmd)
-        logger.debug('translate_path = %s', translate_path)
-
-        if not translate_path:
-            if not self.create_sublime_translate_file(ring):
-                self.translate_default(exec_cmd, ring, default_flag, kwargs)
-                return
-            else:
-                translate_path = ring.get_file_path(translate_cmd)
-
-        parameters = convert_to_focus_lists([file_list, '<result_file>'])
-        shell_cmd = '{0} "{1}" {2}'.format('magic.exe', translate_path,
-                                           parameters)
-
-        kwargs['shell_cmd'] = shell_cmd
-
-        self.replace_variables_and_run(exec_cmd, ring, kwargs)
-
-    def translate_all_other(self, exec_cmd, ring, file_list, default_flag,
-                            kwargs,
-                            translate_cmd='Foc\\FocZ.Textpad.Translate.P.mps'):
-        translate_cmd = os.path.join('PgmObject', translate_cmd)
-        translate_path = ring.get_file_path(translate_cmd)
-        logger.debug('translate_path = %s', translate_path)
-
-        if not translate_path:
-            self.translate_all_default(exec_cmd, ring, file_list,
-                                       default_flag, kwargs)
-            return
-
-        kwargs['quiet'] = True
-
-        for file_name in file_list:
-            tools_path = self.get_tools_path(ring)
-            if default_flag:
-                shell_cmd = '{0} "{1}" RUNRINGTOOL "{2}" "{3}"'.format(
-                    'magic.exe', tools_path, translate_path, file_name)
-            else:
-                shell_cmd = '{0} "{1}" "{2}"'.format(
-                    'magic.exe', translate_path, file_name)
-
-            kwargs['shell_cmd'] = shell_cmd
-
-            self.replace_variables_and_run(exec_cmd, ring, kwargs)
-
-    def format(self, exec_cmd, ring, default_flag, kwargs):
-        translate_cmd = get_translate_command()
-        logger.debug('translate_cmd = %s', translate_cmd)
-
-        if default_flag:
-            self.format_other(exec_cmd, ring, default_flag, kwargs)
-        if 'focz.translate.sublime.p.mps' in translate_cmd.lower():
-            self.format_sublime(exec_cmd, ring, default_flag, kwargs)
-        else:
-            self.format_other(exec_cmd, ring, default_flag, kwargs)
-
-    def format_sublime(self, exec_cmd, ring, default_flag, kwargs):
-        format_cmd = os.path.join('PgmObject', 'Foc',
-                                  'FocZ.Translate.Sublime.P.mps')
-        format_path = ring.get_file_path(format_cmd)
-        logger.debug('format_path = %s', format_path)
-
-        if not format_path:
-            if not self.create_sublime_translate_file(ring):
-                self.format_default(exec_cmd, ring, default_flag, kwargs)
-                return
-            else:
-                format_path = ring.get_file_path(format_cmd)
-
-        parameters = convert_to_focus_lists([self.file_name, '<result_file>',
-                                             '', 'Format Only'])
-        shell_cmd = '{0} "{1}" {2}'.format('magic.exe', format_path,
-                                           parameters)
-
-        kwargs['shell_cmd'] = shell_cmd
-
-        self.replace_variables_and_run(exec_cmd, ring, kwargs)
-
-    def format_other(self, exec_cmd, ring, default_flag, kwargs):
-        format_cmd = os.path.join('PgmObject', 'Foc',
-                                  'FocZ.TextPad.Format.P.mps')
-        format_path = ring.get_file_path(format_cmd)
-        logger.debug('format_path = %s', format_path)
-
-        if default_flag:
-            shell_cmd = '{0} "{1}" RUNRINGTOOL "{2}" "{3}"'.format(
-                'magic.exe', self.get_tools_path(ring),
-                format_path, self.file_name)
-        else:
-            shell_cmd = '{0} "{1}" "{2}"'.format('magic.exe', format_path,
-                                                 self.file_name)
-
-        kwargs['shell_cmd'] = shell_cmd
-        kwargs['quiet'] = True
-
-        self.replace_variables_and_run(exec_cmd, ring, kwargs)
 
 
 class CreateFileInRingCommand(sublime_plugin.ApplicationCommand):
