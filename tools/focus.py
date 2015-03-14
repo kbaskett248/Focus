@@ -63,15 +63,16 @@ def convert_to_focus_lists(args):
         else:
             return '""'
     else:
-        return args
+        return str(args)
 
 
 def get_translated_path(file_path):
+    extension_list = ('.mps', '.mcs', '.mts')
     name, ext = os.path.splitext(file_path)
     ext = ext.lower()
 
     if ext == '.fs':
-        for e in ('.mps', '.mcs', '.mts'):
+        for e in extension_list:
             path = name + e
             if os.path.isfile(path):
                 return path
@@ -79,9 +80,19 @@ def get_translated_path(file_path):
         name = name.replace('PgmSource', 'PgmObject')
         return name + ext
     elif ext == '.focus':
-        for n, e in itertools.product(
-                (name.replace('PgmSource', 'PgmObject'), name),
-                ('.mps', '.mcs', '.mts')):
+        print('name = ' + name)
+        file_name_list = [name.replace('PgmSource', 'PgmObject'), name]
+        if '.ring.local' in name.lower():
+            unused, unused, r, u = parse_ring_path(name)
+            print("u, r = %s, %s" % (u, r))
+            a, n = os.path.split(name)
+            unused, a = os.path.split(a)
+            file_name_list.append(
+                ('C:\Program Files (x86)\PTCT-AP\SoloFocus\%s.Universe\\'
+                 '%s.Ring\PgmObject\%s\%s') %
+                (u, r, a, n))
+            print(file_name_list)
+        for n, e in itertools.product(file_name_list, extension_list):
             path = n + e
             print(path)
             if os.path.exists(path):

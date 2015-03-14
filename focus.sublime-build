@@ -1,16 +1,32 @@
 {
-    "target": "build_translate_ring_file",
-    "selector": "source.focus",
+    "target": "window_translate_ring_file",
     "encoding": "ascii",
+    "exec_cmd": "enhanced_exec",
     "startup_info": false,
 
     "variants": [
         { "name": "Format",
-          "target": "build_format_ring_file",
+          "target": "window_format_ring_file",
+          "exec_cmd": "enhanced_exec",
+          "encoding": "ascii",
+          "startup_info": false
         },
 
         { "name": "Run",
-          "target": "build_run_ring_file",
+          "target": "window_run_ring_file",
+          // "exec_cmd": "enhanced_exec",
+          // "encoding": "ascii",
+          "startup_info": false,
+          // "quiet": true
         },
+
+        { "name": "Translate All",
+          "target": "focus_exec_wrapper",
+          "encoding": "ascii",
+          "command": "translate_all",
+          "condition": "is_translatable",
+          "exec_cmd": "enhanced_exec",
+          "startup_info": false
+        }
     ]
 }

@@ -1,4 +1,5 @@
 from abc import abstractmethod
+import itertools
 import logging
 import os
 import re
@@ -23,8 +24,15 @@ from ..tools import (
 )
 
 
+focus_extension_list = ('.mcs', '.mps', '.mts')
+
+
 def get_mt_ring(path):
     return MTRing.get_mt_ring(path)
+
+
+def is_local_ring(ring):
+    return isinstance(ring, LocalRing)
 
 
 class MTRing(object, metaclass=MiniPluginMeta):
@@ -273,6 +281,41 @@ class MTRing(object, metaclass=MiniPluginMeta):
         if possible_paths:
             result = possible_paths[1]
         return result
+
+    def get_translated_path(self, file_path):
+        name, ext = os.path.splitext(file_path)
+        ext = ext.lower()
+
+        if ext == '.xml':
+            path = file_path.replace('PgmSource', 'PgmObject')
+            if os.path.isfile(path):
+                return path
+            return None
+
+        if ext == '.fs':
+            for e in focus_extension_list:
+                path = name + e
+                if os.path.isfile(path):
+                    return path
+            return None
+
+        app, name = self.get_app_and_filename(file_path)
+        name, unused = os.path.splitext(name)
+
+        if ext == '.focus':
+            for f, e in itertools.product(('PgmSource', 'PgmObject'),
+                                          focus_extension_list):
+                partial_path = os.path.join(f, app, name + e)
+                logger.debug('partial_path = %s', partial_path)
+                path = self.get_file_path(partial_path)
+                if path:
+                    return path
+            return None
+
+    def get_app_and_filename(self, file_path):
+        a, n = os.path.split(file_path)
+        unused, a = os.path.split(a)
+        return (a, n)
 
     def partial_path(self, path):
         partial_path = None

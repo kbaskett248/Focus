@@ -284,64 +284,64 @@ class MTFocusFile(MTRingFile, FocusCompatibility):
 
         logger.info('Translating file: %s', self.file_name)
 
-        if gui:
-            partial_path = os.path.join(
-                'PgmObject', get_translate_command()[0])
-            if not self.ring.check_file_existence(partial_path):
-                sublime.status_message(
-                    'Invalid translate command: %s' % partial_path)
-                return False
+        # if gui:
+        partial_path = os.path.join(
+            'PgmObject', 'Foc', 'FocZ.Textpad.Translate.P.mps')
+        if not self.ring.check_file_existence(partial_path):
+            sublime.status_message(
+                'Invalid translate command: %s' % partial_path)
+            return False
 
-            logger.info('Using %s for Translate command', partial_path)
+        # logger.info('Using %s for Translate command', partial_path)
 
-            return self.ring.run_file(partial_path=partial_path,
-                                      parameters=self.file_name,
-                                      separate_process=separate_process)
+        return self.ring.run_file(partial_path=partial_path,
+                                  parameters=self.file_name,
+                                  separate_process=separate_process)
 
-        else:
-            partial_path = os.path.join(
-                'PgmObject', 'Hha', 'HhaZt.Translate.P.mps')
-            if results_file is None:
-                results_file_name = tempfile.NamedTemporaryFile(
-                    suffix='.txt', delete=False).name
-            else:
-                results_file_name = results_file
+        # else:
+        #     partial_path = os.path.join(
+        #         'PgmObject', 'Hha', 'HhaZt.Translate.P.mps')
+        #     if results_file is None:
+        #         results_file_name = tempfile.NamedTemporaryFile(
+        #             suffix='.txt', delete=False).name
+        #     else:
+        #         results_file_name = results_file
 
-            with open(results_file_name, 'a') as f:
-                f.write('Translating file: {0}\n\n'.format(self.file_name))
+        #     with open(results_file_name, 'a') as f:
+        #         f.write('Translating file: {0}\n\n'.format(self.file_name))
 
-            parameters = [self.file_name, results_file_name]
-            parameters = chr(1) + chr(3).join(parameters) + chr(2)
-            if not self.ring.run_file(partial_path=partial_path,
-                                      parameters=parameters,
-                                      separate_process=separate_process):
-                logger.warning('Failed to launch translation')
-                if results_file is not None:
-                    with open(results_file_name, 'a') as f:
-                        f.write('Failed to launch translation\n\n')
-                else:
-                    os.remove(results_file_name)
+        #     parameters = [self.file_name, results_file_name]
+        #     parameters = chr(1) + chr(3).join(parameters) + chr(2)
+        #     if not self.ring.run_file(partial_path=partial_path,
+        #                               parameters=parameters,
+        #                               separate_process=separate_process):
+        #         logger.warning('Failed to launch translation')
+        #         if results_file is not None:
+        #             with open(results_file_name, 'a') as f:
+        #                 f.write('Failed to launch translation\n\n')
+        #         else:
+        #             os.remove(results_file_name)
 
-                return False
+        #         return False
 
-            if separate_process:
-                return True
+        #     if separate_process:
+        #         return True
 
-            error_found = False
-            for l in read_file(results_file_name):
-                match = self.TranslationErrorMatcher.match(l)
-                if match is not None:
-                    error_found = True
-                    logger.error('Translation error encountered')
-                    break
-            else:
-                with open(results_file_name, 'a') as f:
-                    f.write('No errors\n\n')
+        #     error_found = False
+        #     for l in read_file(results_file_name):
+        #         match = self.TranslationErrorMatcher.match(l)
+        #         if match is not None:
+        #             error_found = True
+        #             logger.error('Translation error encountered')
+        #             break
+        #     else:
+        #         with open(results_file_name, 'a') as f:
+        #             f.write('No errors\n\n')
 
-            if results_file is None:
-                os.remove(results_file_name)
+        #     if results_file is None:
+        #         os.remove(results_file_name)
 
-            return not error_found
+        #     return not error_found
 
     def is_runnable(self):
         match = MTFocusFile.PRODUCT_TYPE_MATCHER.search(self.file_name.lower())

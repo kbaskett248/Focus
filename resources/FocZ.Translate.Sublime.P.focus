@@ -35,7 +35,9 @@
 //     {F - Path to Focus File or list of paths
 //     |E - Message Path
 //     |T - Non-Nil to only translate
-//     |A - Non-Nil to only format}
+//     |A - Non-Nil to only format
+//     |I - Non-Nil to translate including files
+//     |L - File count limit}
 //:Doc Local Variables
 //     A : See arguments
 //     E : See arguments
@@ -44,12 +46,56 @@
 //:Doc Returns
 //     None
 @IF{@QV@NV @LI}
-^{F,E,T,A},
+^{F,E,T,A,I,L},
+F@IF{@QV@NV @{}^F},
 IF{T 1@PutLocal(DoNotFormat)},
 IF{A 1@PutLocal(DoNotTranslate)},
+IF{L@NV 20^L},
 IF{{"Foc","FocZ.Startup.Init.P"}@CallProgram() @{"Translation",}@CallSub(FormatResults);
    @CallExternalSub(Mis,MisZ.Signon.C,GetSignonUser) @{"Translation",}@CallSub(FormatResults);
-   F@IF{@QV@NV @{}}@[@{,E}@CallSub(ProcessFile)]},
+   IF{I {F,L}@CallSub(BuildFileList);
+      1 F}
+   @[@{,E}@CallSub(ProcessFile)]},
+"";
+
+:Code BuildFileList
+//:Doc Purpose
+//     Adds all specified files to the file list. Then checks each include file
+//     and adds all files that include that file to the file list. Files are
+//     added by include file, so if the number of including files surpass the
+//     limit, the including files won't be added.
+//:Doc Arguments
+//     {F - List of files
+//     |L - Maximum number of files to translate}
+//:Doc Local Variables
+//     A - Application folder
+//     B - List of including file names without extension
+//     C - Counts current number of files
+//     F - See arguments
+//     L - See arguments
+//     N - Name of file
+//:Doc Data Structures
+//     U(0) - List of files to translate
+//:Doc Returns
+//     List of files to translate
+^{F,L},
+@IU,
+F@U0@CV^C,
+F@[@IF{C>L;
+       @LA%8@{=".i.focus",=".d.focus"}@!@NV;
+       @@PathSplit()%2^{A,N},A@(|0@UA,~|0@LA)^A,
+       {{N,"equals"}}@IndexLookup(FocSource.IncludedByX)
+       @[@IndexKey(FocSource.IncludedByX.Mnemonic)]^B|0@NV;
+       B@[@(,".focus")
+          @{@{""@RootClient(FocPgmSource),A,}@@PathJoin(),
+            @{""@RootServer(FocPgmSource),A,}@@PathJoin()}@QueryFiles()
+          @IF{|0 |0@IF{@Y0;@Y1;@J1};
+              |1 |1@IF{@Y0;@Y1;@J1}},
+          ""],
+       @H1+C>L;
+       @V1@[@J0,C+1^C],@NL@U1},
+   ""],
+@V0@DU
 ;
 
 :Code ProcessFile

@@ -8,7 +8,7 @@
     // MT-Focus-FileTools
     // If Ring Integration is not enabled, this ring will be used for running commands through
     // Omnilaunch.
-    "default_ring": "$ProgramFiles\\PTCT-AP\\SoloFocus\\PTCTDEV.Universe\\DEV25.Ring",
+    // "default_ring": "$ProgramFiles\\PTCT-AP\\SoloFocus\\PTCTDEV.Universe\\DEV26.Ring",
 
     // List the servers to which you have access to enable server file integration. 
     "server_access": [],
@@ -17,11 +17,15 @@
     // For example, Mark's Translate then Backup command.
     // Command paths should be relative to the ring's PgmObject directory.
     // Note that the command will not be used for .fs files.
-    // "translate_command": "Foc\\FocZ.Textpad.Translate.P.mps",
-
-    // This preference is used to run translations without a GUI and output
-    // results to an output panel.
-    "translate_no_gui": true,
+    // Setting the path to "Foc\\FocZ.Translate.Sublime.P.mps" enables advanced
+    // translate functionality.
+    "translate_command": "Foc\\FocZ.Translate.Sublime.P.mps",
+    // If true, whenever you translate an include file, including files will
+    // be translated as well.
+    "translate_including_files": true,
+    // If the previous setting is true, translate_max_file_count controls the
+    // maximum number of files that will be translated simultaneously.
+    "translate_max_file_count": 20,
 
     // This preference enables translation of files on save. 
     // The preference can be specified as a boolean or a dictionary. If boolean, all ring files
