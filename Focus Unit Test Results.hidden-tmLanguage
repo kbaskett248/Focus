@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array/>
+	<key>name</key>
+	<string>Focus Unit Test Results</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>comment</key>
+			<string>All Tests Passed</string>
+			<key>match</key>
+			<string>\*\*All Tests Passed\*\*</string>
+			<key>name</key>
+			<string>constant.numeric.unit-test</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>string.filename.unit-test</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Filename</string>
+			<key>match</key>
+			<string>^Unit Test Results: (.+)</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.name.unit-test</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.passed.unit-test</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Passed</string>
+			<key>match</key>
+			<string>Unit Test: (.+?) - (Passed)</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.name.unit-test</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.failed.unit-test</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Failed</string>
+			<key>match</key>
+			<string>Unit Test: (.+?) - (Failed)</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.name.unit-test</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.failed.unit-test</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Incomplete</string>
+			<key>match</key>
+			<string>Unit Test: (.+?) - (Incomplete)</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.subroutine.unit-test</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Subroutine</string>
+			<key>match</key>
+			<string>^:Code (.+)</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>text.unit-test</string>
+	<key>uuid</key>
+	<string>8799c6a1-1e0c-4183-bbcc-37ecbca7cfbb</string>
+</dict>
+</plist>
