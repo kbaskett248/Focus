@@ -1,0 +1,12 @@
+<snippet>
+    <content><![CDATA[
+:ElementSet                     ${1:Name}
+  Record                        ${2:Object.Record}
+  Arrange                       ${3:Vertical}
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>:ElementSet</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>meta.translator.screencomponent.focus - comment - string</scope>
+    <description>#ScreenComponent | :ElementSet</description>
+</snippet>

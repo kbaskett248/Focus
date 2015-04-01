@@ -1,0 +1,11 @@
+<snippet>
+    <content><![CDATA[
+:Name                           ${1:Name}
+// 
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>:Name</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>meta.translator.local - comment - meta.keyword.local-name</scope>
+    <description>#Local | :Name</description>
+</snippet>

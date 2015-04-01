@@ -1,0 +1,14 @@
+<snippet>
+    <content><![CDATA[
+//------------------------------------------------------------------------------
+#Alias
+  :Alias                          $1
+    Value                         $2
+    Scope                         ${3:Global}
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>#Alias</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>meta.translator.header.focus</scope>
+    <description>#Alias</description>
+</snippet>

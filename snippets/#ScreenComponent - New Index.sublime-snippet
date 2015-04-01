@@ -1,0 +1,12 @@
+<snippet>
+    <content><![CDATA[
+:Index                          ${1:IndexName}
+  Record                        ${2:Object.Record}
+  Rows                          ${3:10}
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>:Index</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>meta.translator.screencomponent.focus - comment - string</scope>
+    <description>#ScreenComponent | :Index</description>
+</snippet>

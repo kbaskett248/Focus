@@ -1,0 +1,11 @@
+<snippet>
+    <content><![CDATA[
+:EntryPoint                       ${1:Subroutine}
+  Alias                           ${2:${3:${TM_FILENAME/.+?\.(.+?)\.C.focus/$1/}}.${4:$1}}
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>:EntryPoint</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>meta.translator.magic.focus - meta.subroutine.fs - comment - string</scope>
+    <description>#Magic | :EntryPoint</description>
+</snippet>

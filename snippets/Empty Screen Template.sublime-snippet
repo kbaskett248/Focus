@@ -1,0 +1,65 @@
+<snippet>
+    <content><![CDATA[
+//:Doc Purpose
+//     $1
+//:Doc Additional Notes
+//     
+
+
+//-----------------------------------------------------------------------------
+#Translation
+  :Options
+    Result                        MSFile
+  :Product
+    Type                          Screen
+
+
+//-----------------------------------------------------------------------------
+#Preamble
+  :Options
+    Type                          Process
+  :Window
+    Title                         $2
+    Size                          ${3:Large}
+
+
+//-----------------------------------------------------------------------------
+#Screen
+  :Object
+    Class                         ${4:Object Class}
+  :Session
+    OnEntry                       []
+    OnExit                        []
+
+
+//-----------------------------------------------------------------------------
+#ScreenRecord
+  :Record                         ${5:Object.Record}
+
+
+//-----------------------------------------------------------------------------
+#ScreenComponent
+
+
+//-----------------------------------------------------------------------------
+#ScreenPage
+
+
+//-----------------------------------------------------------------------------
+#Alias
+
+
+//------------------------------------------------------------------------------
+#Locals
+
+
+//-----------------------------------------------------------------------------
+#Magic
+
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <!-- <tabTrigger>hello</tabTrigger> -->
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.focus</scope>
+    <description>Focus Tools: Empty Screen Template</description>
+</snippet>

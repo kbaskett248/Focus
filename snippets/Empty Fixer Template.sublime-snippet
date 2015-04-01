@@ -1,0 +1,111 @@
+<snippet>
+    <content><![CDATA[
+//:Doc Purpose
+//     Describe the purpose of the fixer here, a good overview goes a long way 
+//     in helping someone troubleshoot if something does go wrong.
+//:Doc Additional Notes
+//     - Can the fixer be stopped and restarted?
+//         <Answer here>
+//     - Can the fixer be re-run if it has run to completion?
+//         <Answer here>
+//     - Can the clients be in the system if the fixer has been stopped/not 
+//       completed?
+//         <Answer here>
+//       - If yes, should this be a utility instead?
+//           <Answer here>
+//       - If not, why not?
+//           <Answer here>
+//       - Will data appear to be missing?
+//           <Answer here>
+//         - If so, what type of data? Will that missing data potentially lead 
+//           to poor clinical decisions?
+//             <Answer here>
+//       - Will accessing unconverted data objects with new code cause a crash?
+//           <Answer here>
+//       - Will accessing unconverted data with new code logically fault the existing data objects?
+//           <Answer here>
+
+
+//------------------------------------------------------------------------------
+#Translation
+  :Options
+    Result                        MSFile
+  :Product
+    Type                          Unstructured
+
+
+//------------------------------------------------------------------------------
+#Preamble
+  :Options
+    Type                          Process
+
+
+//------------------------------------------------------------------------------
+#Magic
+:Code Main
+//:Doc Purpose
+//     None
+//:Doc Arguments
+//     A - Arguments to @@HhaZtMaintUtilities.Start()
+//:Doc Local Variables
+//     A - See arguments
+//:Doc Data Structures
+//     None
+//:Doc Returns
+//     None
+//:Doc Additional Notes
+//     None
+^A,$0
+IF{A@@HhaZtMaintUtilities.Start()@NV;
+   @CallSub(BuildObjectList),
+   DO{@@HhaZtMaintUtilities.GetNextObject() @CallSub(FixObject)},
+   @@HhaZtMaintUtilities.FlushObjectList(),
+   @@HhaZtMaintUtilities.End()},
+"";
+
+:Code BuildObjectList
+//:Doc Purpose
+//     None
+//:Doc Arguments
+//     None
+//:Doc Preconditions
+//     None
+//:Doc Local Variables
+//     None
+//:Doc Data Structures
+//     None
+//:Doc Side Effects
+//     None
+//:Doc Returns
+//     None
+//:Doc Additional Notes
+//     None
+;
+
+:Code FixObject
+//:Doc Purpose
+//     None
+//:Doc Arguments
+//     {O - }
+//:Doc Preconditions
+//     None
+//:Doc Local Variables
+//     O - See arguments
+//:Doc Data Structures
+//     None
+//:Doc Side Effects
+//     None
+//:Doc Returns
+//     None
+//:Doc Additional Notes
+//     None
+^{O}
+;
+
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <!-- <tabTrigger>hello</tabTrigger> -->
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.focus</scope>
+    <description>Focus Tools: Empty Fixer Template</description>
+</snippet>
