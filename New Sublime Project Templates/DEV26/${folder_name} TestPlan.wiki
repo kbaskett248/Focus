@@ -1,0 +1,115 @@
+=${project_name} Overview=
+==Software Requirements==
+# 
+
+
+==Test Plan Goals==
+# 
+
+
+==Design Documents==
+#[[${project_name}]]
+
+
+==Important Information==
+'''FIL WebPage:''' [http://support.homecare.meditech.com/fil/fil.php?id=${project_name:_L} ${project_name}]
+
+* 
+
+
+==Public Test Plan==
+[[${project_name} PublicTestPlan]]
+
+
+=Pre-push Setup=
+
+'''Pre-push Setup must be completed in both QA and BATCH rings'''
+
+
+
+=Test Plan=
+==Convert File Structure Analysis==
+===CFS Setup===
+None
+
+
+===CFS Testing===
+None
+
+
+==Interface Setup==
+None
+
+
+==Dictionary Testing==
+None
+
+
+==Dictionary Setup==
+None
+
+
+==Well@Home Setup==
+None
+
+
+==Stasis Setup==
+None
+
+
+==Testing==
+#
+
+
+===Additional Solo Testing===
+None
+
+
+==<Section Header> [Include as many as necessary]==
+===Convert File Structure Analysis===
+====CFS Setup====
+None
+
+
+====CFS Testing====
+None
+
+
+===Interface Setup===
+None
+
+
+===Dictionary Testing===
+None
+
+
+===Dictionary Setup===
+None
+
+
+===Well@Home Setup===
+None
+
+
+===Stasis Setup===
+None
+
+
+===Testing===
+# 
+
+
+==Post-Testing Cleanup==
+None
+
+
+==Additional Scenario Testing==
+*QC Scenarios are being written to the Wiki.  They can be found at the following links:
+*#[[QC_HH_Clinical_Scenarios|Home Health Clinical]]
+*#[[QC_Hospice_Clinical_Scenarios|Hospice Clinical]]
+*#[[QC_HH_Financial_Scenarios|Home Health Financial]]
+*#[[QC_Hospice_Financial_Scenarios|Hospice Financial]]
+*#[[QC-INTERFACE|Interface Scenarios]]
+*#[[QC_Report_Scenarios|Report Scenarios]]
+*#[[SystemsValidationTests|Systems Scenarios]]
+*#[[User:Kesha_Page#Scenarios|well@home Scenarios]]

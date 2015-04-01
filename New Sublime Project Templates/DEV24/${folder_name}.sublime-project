@@ -1,0 +1,48 @@
+{
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				"*.mcs",
+				"*.mps"
+			],
+			"folder_exclude_patterns":
+			[
+				"!DictionarySource",
+				"!Errors",
+				"!History",
+				"!SynchLog",
+				"!UpdateLog",
+				"!Zips",
+				"AntiVirusTest",
+				"Cookies",
+				"DataDefs/Custom",
+				"DataDefs/Object",
+				"Formatter",
+				"PgmObject",
+				"Services",
+				"System.Solo",
+				"Temp",
+				"View",
+				"${program_files_x86}/PtCT-AP/SoloFocus/PTCTDEV.Universe/DEV24.Ring/Hha",
+				"${program_files_x86}/PtCT-AP/SoloFocus/PTCTDEV.Universe/DEV24.Ring/Hhp",
+				"${program_files_x86}/PtCT-AP/SoloFocus/PTCTDEV.Universe/DEV24.Ring/Foc",
+			],
+			"path": "${program_files_x86}/PtCT-AP/SoloFocus/PTCTDEV.Universe/DEV24.Ring"
+		},
+		{
+			"path": "${project_folder}",
+			"folder_exclude_patterns":
+			[
+				"Backups"
+			]
+		}
+	],
+	"settings":
+	{
+		// The directory where we'll keep our backups.
+	    "backup_dir": "${project_folder}/Backups",
+	    "batch_backup_dir": "${project_folder}/Backups/Batches"
+	}
+}

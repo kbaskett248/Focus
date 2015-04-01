@@ -1,0 +1,57 @@
+{
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				"*.mcs",
+				"*.mps"
+			],
+			"folder_exclude_patterns":
+			[
+				"!DictionarySource",
+				"!Errors",
+				"!Focus",
+				"!History",
+				"!SynchLog",
+				"!UpdateLog",
+				"!Zips",
+				"AntiVirusTest",
+				"Cookies",
+				"Common",
+				"DataDefs/Custom",
+				"DataDefs/Object",
+				"Formatter",
+				"Graphics",
+				"Help",
+				"Icons",
+				"PgmObject",
+				"Services",
+				"System",
+				"System.Solo",
+				"Temp",
+				"View",
+				"${program_files_x86}/PtCT-AP/SoloFocus/PTCTDEV.Universe/DEV.Ring/Foc",
+				"${program_files_x86}/PtCT-AP/SoloFocus/PTCTDEV.Universe/DEV.Ring/Hha",
+				"${program_files_x86}/PtCT-AP/SoloFocus/PTCTDEV.Universe/DEV.Ring/Hhp",
+				"${program_files_x86}/PtCT-AP/SoloFocus/PTCTDEV.Universe/DEV.Ring/Hhs",
+				"${program_files_x86}/PtCT-AP/SoloFocus/PTCTDEV.Universe/DEV.Ring/Hht",
+				"${program_files_x86}/PtCT-AP/SoloFocus/PTCTDEV.Universe/DEV.Ring/Hhw"
+			],
+			"path": "${program_files_x86}/PtCT-AP/SoloFocus/PTCTDEV.Universe/DEV.Ring"
+		},
+		{
+			"path": "${project_folder}",
+			"folder_exclude_patterns":
+			[
+				"Backups"
+			]
+		}
+	],
+	"settings":
+	{
+		// The directory where we'll keep our backups.
+	    "backup_dir": "${project_folder}/Backups",
+	    "batch_backup_dir": "${project_folder}/Backups/Batches"
+	}
+}
