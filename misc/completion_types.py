@@ -1,0 +1,20 @@
+CT_ALIAS = 'Alias'
+CT_FOCUS_LOCAL = 'Local'
+CT_SUBROUTINE = 'Subroutine'
+CT_LIST = 'List'
+CT_TRANSLATOR = 'Translator'
+CT_INCLUDE_FILE = 'Include'
+CT_EXTERNAL_PAGESET = 'ExternalPageSet'
+CT_STATE = 'State'
+CT_SYSTEM = 'System'
+
+CT_OBJECT = "Object"
+CT_RECORD = "Record"
+CT_FILE = "File"
+CT_KEY = "Key"
+CT_FIELD = "Field"
+CT_ELEMENT = 'Element'
+CT_INDEX = "Index"
+CT_INDEXKEY = "IndexKey"
+CT_LONGLOCK = "LongLock"
+CT_MUTEX = "Mutex"

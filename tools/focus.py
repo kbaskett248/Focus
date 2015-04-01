@@ -1,4 +1,5 @@
 import itertools
+import logging
 import re
 import os
 import platform
@@ -6,8 +7,13 @@ import platform
 from .general import get_env
 
 
+logger = logging.getLogger(__name__)
+logger.setLevel('DEBUG')
+
+
 RING_MATCHER = re.compile(
-    r"((.*?\\([^:\\\/\n]+?)\.Universe)\\([^:\\\/\n]+?)\.Ring(.Local)?)(?![^\\])",
+    r".*?(Ptct-AP\\SoloFocus)?\\([^:\\\/\n]+?)\.Universe" +
+    r"\\([^:\\\/\n]+?)\.Ring(.Local)?(\\|$)",
     re.IGNORECASE)
 TRANSLATOR_SEPARATOR = '//' + ('-' * 77)
 TRANSLATOR_LINE_SPLITTER = re.compile(
@@ -16,24 +22,17 @@ TRANSLATOR_LINE_SPLITTER = re.compile(
 
 
 def parse_ring_path(file_path):
+    is_local = False
     try:
         match = RING_MATCHER.match(file_path)
-        yield match.group(1)
-        yield match.group(2)
-        yield match.group(4)
-        yield match.group(3)
-
+        if match.group(1) or match.group(4):
+            is_local = True
+        return (match.group(2), match.group(3), is_local)
     except TypeError:
-        yield None
-        yield None
-        yield None
-        yield None
-
+        pass
     except AttributeError:
-        yield None
-        yield None
-        yield None
-        yield None
+        pass
+    return (None, None, False)
 
 
 def get_cache_root():
@@ -59,11 +58,30 @@ def convert_to_focus_lists(args):
                 chr(2))
     elif isinstance(args, bool):
         if args:
-            return '"True"'
+            return 'True'
         else:
-            return '""'
+            return ''
     else:
         return str(args)
+
+
+def get_ring_locations(universe_name, ring_name, is_local):
+    ring_locations = []
+    universe = universe_name + '.Universe'
+    ring = ring_name + '.Ring'
+
+    if is_local:
+        ring_locations.append(os.path.join(
+            get_env('ProgramFiles'), 'Ptct-AP', 'SoloFocus', universe, ring))
+        ring += '.Local'
+        ring_locations.append(os.path.join(CACHE_ROOT, universe, ring))
+
+    else:
+        ring_locations.append(os.path.join(
+            get_env('ProgramFiles'), 'Meditech', universe, ring))
+        ring_locations.append(os.path.join(CACHE_ROOT, universe, ring))
+
+    return tuple(ring_locations)
 
 
 def get_translated_path(file_path):
@@ -80,22 +98,24 @@ def get_translated_path(file_path):
         name = name.replace('PgmSource', 'PgmObject')
         return name + ext
     elif ext == '.focus':
-        print('name = ' + name)
+        logger.debug('name = %s', name)
         file_name_list = [name.replace('PgmSource', 'PgmObject'), name]
         if '.ring.local' in name.lower():
-            unused, unused, r, u = parse_ring_path(name)
-            print("u, r = %s, %s" % (u, r))
-            a, n = os.path.split(name)
-            unused, a = os.path.split(a)
-            file_name_list.append(
-                ('C:\Program Files (x86)\PTCT-AP\SoloFocus\%s.Universe\\'
-                 '%s.Ring\PgmObject\%s\%s') %
-                (u, r, a, n))
-            print(file_name_list)
-        for n, e in itertools.product(file_name_list, extension_list):
-            path = n + e
-            print(path)
-            if os.path.exists(path):
+            universe_name, ring_name, is_local = parse_ring_path(name)
+            logger.debug("universe_name, ring_name = %s, %s", universe_name,
+                         ring_name)
+            app_name, file_name = os.path.split(name)
+            unused, app_name = os.path.split(app_name)
+            local_ring_path = get_ring_locations(
+                ring_name, universe_name, True)[0]
+            file_name_list.append(os.path.join(
+                local_ring_path, 'PgmObject', app_name, file_name))
+
+        for path, extension in itertools.product(file_name_list,
+                                                 extension_list):
+            path += extension
+            logger.debug(path)
+            if os.path.isfile(path):
                 return path
 
     return None

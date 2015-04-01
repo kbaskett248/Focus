@@ -7,7 +7,7 @@ import sublime
 
 _TRANSLATOR_COMPLETIONS = dict()
 _FILE_NAME = 'Translator Completions.json'
-_DEFAULT_PATH = 'Packages/MTFocusCommon/misc/' + _FILE_NAME
+_DEFAULT_PATH = 'Packages/Focus/misc/' + _FILE_NAME
 _USER_PATH = 'Packages/User' + _FILE_NAME
 
 

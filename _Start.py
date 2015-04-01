@@ -6,11 +6,11 @@ except ImportError:
     pass
 else:
     NewSublimeProject.register_template_folder_to_install(
-        'Packages/MTFocus/New Sublime Project Templates',
-        'MT-Focus.sublime-settings',
+        'Packages/Focus/New Sublime Project Templates',
+        'Focus Package.sublime-settings',
         'install_new_sublime_project_templates')
 
-from .tools import add_to_path
+from .tools.general import add_to_path
 from .tools.load_translator_completions import _load_translator_completions
 
 # Add beautiful soup 4 to the path so it works correctly

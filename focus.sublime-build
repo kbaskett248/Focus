@@ -3,6 +3,7 @@
     "encoding": "ascii",
     "exec_cmd": "enhanced_exec",
     "startup_info": false,
+    // "wait": 30,
 
     "variants": [
         { "name": "Format",

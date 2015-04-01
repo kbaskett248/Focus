@@ -3,10 +3,8 @@ import functools
 import re
 import logging
 
-from ..tools import (
-    string_match,
-    string_search,
-
+from ..tools.general import string_match, string_search
+from ..tools.sublime import (
     extract_focus_function,
     extract_fs_function,
     extract_rt_tool,
@@ -19,8 +17,7 @@ from ..tools import (
     extract_attribute,
     extract_attribute_value,
     KEYWORD_ATTRIBUTE_MATCHER,
-
-    strip_alias,
+    strip_alias
 )
 
 
@@ -143,6 +140,47 @@ class FSCompatibility(metaclass=abc.ABCMeta):
                              reg_ex,
                              match_group=2,
                              flags=re.MULTILINE)[0]
+
+    MEMBER_REGION_REGEX = re.compile(r"(#[A-Za-z]+|:[A-Za-z]+) *(.+)?$")
+
+    def get_member_region(self, point):
+        if isinstance(point, tuple):
+            point = point[0]
+        line_span = self.get_line(point)[0]
+        line_span = (line_span[1] + 1, line_span[1] + 1)
+
+        start_point = None
+        for line in self.get_lines_from_iterator(point, reverse=True):
+            line_span = (line_span[0] - len(line) - 1, line_span[0] - 1)
+            match = string_match(line, self.MEMBER_REGION_REGEX,
+                                 base_point=line_span[0])
+            if match[0] and (match[1] in MAGIC_KEYWORDS):
+                start_point = line_span[0]
+                break
+        if not start_point or (start_point > point):
+            return None
+
+        end_point = None
+        line_stack = []
+        for line in self.get_lines_from_iterator(line_span[1] + 1):
+            line_span = (line_span[1] + 1, line_span[1] + len(line) + 1)
+            if line == '':
+                continue
+
+            match = string_match(line, self.MEMBER_REGION_REGEX,
+                                 base_point=line_span[0])
+            if match[0]:
+                prev_line = line_stack.pop()
+                end_point = prev_line[0][1]
+                break
+            line_stack.append((line_span, line))
+        else:
+            end_point = line_span[1]
+
+        if end_point >= point:
+            return (start_point, end_point)
+        else:
+            return None
 
     def _extract_entity(self, extract_func, point):
         if isinstance(point, tuple):

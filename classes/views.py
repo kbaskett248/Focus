@@ -1,39 +1,44 @@
 from abc import abstractmethod
 import logging
+logger = logging.getLogger(__name__)
+logger.setLevel('DEBUG')
 
 import sublime
 
 from .metaclasses import MiniPluginMeta
-from .code_blocks import CodeBlock
+from .code_blocks import CodeBlock, InvalidCodeBlockError
 from .compatibility import FSCompatibility, FocusCompatibility
-from ..tools import scope_from_view, get_member_region
-
-logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
+from ..tools.sublime import scope_from_view
 
 
-def get_mt_view(view):
-    return MTView.get_mt_view(view)
+def get_view(view):
+    return RingView.get_view(view)
 
 
-class MTView(object, metaclass=MiniPluginMeta):
-    """docstring for MTView"""
+class RingView(object, metaclass=MiniPluginMeta):
+    """
+    Parent class for a view into a file in an M-AT Ring. The constructor
+    can throw InvalidRingErrors if the file exists outside of a valid ring.
+    This should be handled by subclasses if you want to allow files that
+    are not in a ring.
+
+    """
 
     Views = {}
 
     def __new__(cls, view):
         if cls.valid_view(view):
-            return super(MTView, cls).__new__(cls)
+            return super(RingView, cls).__new__(cls)
         else:
             raise ViewTypeException(view, cls)
 
     def __init__(self, view):
-        super(MTView, self).__init__()
-        MTView.Views[self.__class__.view_key(view)] = self
+        super(RingView, self).__init__()
+        RingView.Views[self.__class__.view_key(view)] = self
         self.view = view
 
     @classmethod
-    def get_mt_view(cls, view):
+    def get_view(cls, view):
         v = None
         try:
             v = cls.Views[cls.view_key(view)]
@@ -53,8 +58,12 @@ class MTView(object, metaclass=MiniPluginMeta):
 
     @classmethod
     @abstractmethod
-    def valid_view(cls, view):
+    def view_scopes(cls):
         pass
+
+    @classmethod
+    def valid_view(cls, view):
+        return scope_from_view(view) in cls.view_scopes()
 
     @classmethod
     def view_key(cls, view):
@@ -127,25 +136,29 @@ class MTView(object, metaclass=MiniPluginMeta):
         elif isinstance(point, sublime.Region):
             point = (point.begin(), point.end())
 
-        return super(MTView, self)._extract_entity(extract_func, point)
+        return super(RingView, self)._extract_entity(extract_func, point)
 
 
-class FocusView(MTView, FocusCompatibility):
-    """docstring for FocusView"""
+class FocusView(RingView, FocusCompatibility):
+    """
+    Class for a view into a focus file.
+
+    """
 
     @classmethod
-    def valid_view(cls, view):
-        return scope_from_view(view) == 'source.focus'
-
-    def get_member_region(self, point=None):
-        if point is None:
-            point = self.view.sel()[0].begin()
-        return get_member_region(self.view, point)
+    def view_scopes(cls):
+        return ('source.focus', )
 
     def get_codeblock(self, point=None):
         if point is None:
             point = self.view.sel()[0].begin()
-        return CodeBlock(self.view, point)
+        try:
+            return CodeBlock(self, point)
+        except InvalidCodeBlockError:
+            row, col = self.view.rowcol(point)
+            logger.warning('%s: point %s:%s not in codeblock',
+                           self.file_name, row, col)
+            return None
 
     def extract_fs_function(self, point=None):
         return super(FocusView, self).extract_fs_function(point)
@@ -188,22 +201,26 @@ class FocusView(MTView, FocusCompatibility):
         return used_locals
 
 
-class FSView(MTView, FSCompatibility):
-    """docstring for FSView"""
+class FSView(RingView, FSCompatibility):
+    """
+    Class for a view into a focus file.
+
+    """
 
     @classmethod
-    def valid_view(cls, view):
-        return scope_from_view(view) == 'source.fs'
-
-    def get_member_region(self, point=None):
-        if point is None:
-            point = self.view.sel()[0].begin()
-        return get_member_region(self.view, point)
+    def view_scopes(cls):
+        return ('source.fs', )
 
     def get_codeblock(self, point=None):
         if point is None:
             point = self.view.sel()[0].begin()
-        return CodeBlock(self.view, point)
+        try:
+            return CodeBlock(self, point)
+        except InvalidCodeBlockError:
+            row, col = self.view.rowcol(point)
+            logger.warning('%s: point %s:%s not in codeblock',
+                           self.file_name, row, col)
+            return None
 
     def extract_fs_function(self, point=None):
         return super(FSView, self).extract_fs_function(point)

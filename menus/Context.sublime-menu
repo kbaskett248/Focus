@@ -1,0 +1,10 @@
+[
+    {   "caption": "-"  },
+
+    {   "command": "fold_subroutine"    },
+    
+    {   "caption": "Fold all subroutines", 
+        "command": "fold_subroutine",
+        "args": {"all_regions": true}
+    }
+]

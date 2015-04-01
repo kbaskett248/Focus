@@ -1,50 +1,46 @@
 [
-	// Pressing Tab to indent a translator value
-  	{	"keys": ["tab"], 
-  		"command": "translator_indent", 
-  		"context": [
-       		{ "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true,           "match_all": true },
-       		{ "key": "auto_complete_visible",               "operator": "equal", "operand": false,          "match_all": true },
-       		{ "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
-       		{ "key": "setting.smart_indent",                "operator": "equal", "operand": true },
-       		{ "key": "selector",                            "operator": "equal", "operand": "source.focus", "match_all": true },
-       		{ "key": "has_next_field",                      "operator": "equal", "operand": false },
-       		{ "key": "enable_translator_indent",            "operator": "equal", "operand": true,           "match_all": true }
-    	]
-  	},
-  	{	"keys": ["tab"], 
-  		"command": "translator_indent", 
-  		"context": [
-       		{ "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false,          "match_all": true },
-       		{ "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
-       		{ "key": "setting.smart_indent",                "operator": "equal", "operand": true },
-       		{ "key": "selector",                            "operator": "equal", "operand": "source.focus", "match_all": true },
-       		{ "key": "has_next_field",                      "operator": "equal", "operand": false },
-       		{ "key": "enable_translator_indent",            "operator": "equal", "operand": true,           "match_all": true }
-    	]
-  	},
+    // Fold selected subroutine
+    {   "keys": ["ctrl+k", "ctrl+f"], 
+        "command": "fold_subroutine", 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "meta.subroutine.fs, meta.list.fs" }
+        ]
+    },
 
-  	// Pressing Enter to indent a line in a subroutine
-  	{	"keys": ["enter"], 
-  		"command": "indent_new_line", 
-  		"context": [
-       		{ "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true },
-       		{ "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
-       		{ "key": "setting.smart_indent",                "operator": "equal", "operand": true },
-       		{ "key": "selector",                            "operator": "equal", "operand": "meta.subroutine.fs", "match_all": true },
-    	]
-  	},
-  	{	"keys": ["enter"], 
-  		"command": "indent_new_line", 
-  		"context": [
-       		{ "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false },
-       		{ "key": "auto_complete_visible",               "operator": "equal", "operand": false },
-       		{ "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
-       		{ "key": "setting.smart_indent",                "operator": "equal", "operand": true },
-       		{ "key": "selector",                            "operator": "equal", "operand": "meta.subroutine.fs", "match_all": true },
-    	]
-  	},
-  	
+    // Fold all subroutines
+    {   "keys": ["ctrl+k", "ctrl+shift+f"], 
+        "command": "fold_subroutine", 
+        "args":{"all_regions": true}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "meta.subroutine.fs, meta.list.fs" }
+        ]
+    },
+
+    // Insert Break
+    {   "keys": ["alt+b"], 
+        "command": "insert_break", 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus", "match_all": true },
+            { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
+        ]
+    },
+
+    // Format Focus File
+    // {   "keys": ["ctrl+alt+b"], 
+    //     "command": "format_ring_file", 
+    //     "context": [
+    //         { "key": "selector", "operator": "equal", "operand": "source.focus" }
+    //     ]
+    // },
+
+    // // Run MTRingFile
+    // {   "keys": ["ctrl+4"], 
+    //     "command": "run_ring_file", 
+    //     "context": [
+    //         { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs", "match_all": true }
+    //     ]
+    // },
+
     // Pressing Home on a comment line
     // At the beginning of a line
     {   "keys": ["home"], 
@@ -79,6 +75,52 @@
         "context": [
             { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs" },
             { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*.+", "match_all": false }
+        ]
+    },
+
+    // Translator Indent
+    {   "keys": ["tab"], 
+        "command": "translator_indent", 
+        "context": [
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true,           "match_all": true },
+            { "key": "auto_complete_visible",               "operator": "equal", "operand": false,          "match_all": true },
+            { "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
+            { "key": "setting.smart_indent",                "operator": "equal", "operand": true },
+            { "key": "selector",                            "operator": "equal", "operand": "source.focus", "match_all": true },
+            { "key": "has_next_field",                      "operator": "equal", "operand": false },
+            { "key": "enable_translator_indent",            "operator": "equal", "operand": true,           "match_all": true }
+        ]
+    },
+    {   "keys": ["tab"], 
+        "command": "translator_indent", 
+        "context": [
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false,          "match_all": true },
+            { "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
+            { "key": "setting.smart_indent",                "operator": "equal", "operand": true },
+            { "key": "selector",                            "operator": "equal", "operand": "source.focus", "match_all": true },
+            { "key": "has_next_field",                      "operator": "equal", "operand": false },
+            { "key": "enable_translator_indent",            "operator": "equal", "operand": true,           "match_all": true }
+        ]
+    },
+
+    // Enter in a codeblock
+    {   "keys": ["enter"], 
+        "command": "indent_new_line", 
+        "context": [
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true },
+            { "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
+            { "key": "setting.smart_indent",                "operator": "equal", "operand": true },
+            { "key": "selector",                            "operator": "equal", "operand": "meta.subroutine.fs", "match_all": true },
+        ]
+    },
+    {   "keys": ["enter"], 
+        "command": "indent_new_line", 
+        "context": [
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false },
+            { "key": "auto_complete_visible",               "operator": "equal", "operand": false },
+            { "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
+            { "key": "setting.smart_indent",                "operator": "equal", "operand": true },
+            { "key": "selector",                            "operator": "equal", "operand": "meta.subroutine.fs", "match_all": true },
         ]
     },
 
@@ -129,6 +171,27 @@
             { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true },
             { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*:Doc\\s*.*", "match_all": true },
             { "key": "in_method_doc", "operator": "equal", "operand": true, "match_all": true }
+        ]
+    },
+    {   "keys": ["enter"], 
+        "command": "insert_snippet", 
+        "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*).*/$1/}"}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus meta.translator.local comment" },
+            { "key": "setting.auto_indent", "operator": "equal", "operand": true },
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false },
+            { "key": "auto_complete_visible", "operator": "equal", "operand": false },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*.*", "match_all": true },
+        ]
+    },
+    {   "keys": ["enter"], 
+        "command": "insert_snippet", 
+        "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*).*/$1/}"}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus meta.translator.local comment" },
+            { "key": "setting.auto_indent", "operator": "equal", "operand": true },
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*.*", "match_all": true },
         ]
     },
 

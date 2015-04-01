@@ -15,23 +15,23 @@ def scope_from_view(view):
     return scope.split(' ')[0]
 
 
-def get_member_region(view, point):
-    """Gets the region containing the function surrounding the current point"""
-    if view.score_selector(point, 'meta.subroutine.fs, meta.list.fs') <= 0:
-        return None
+# def get_member_region(view, point):
+#     """Gets the region containing the function surrounding the current point"""
+#     if view.score_selector(point, 'meta.subroutine.fs, meta.list.fs') <= 0:
+#         return None
 
-    line = view.line(point)
-    point = line.end()
-    if view.score_selector(point, 'meta.subroutine.fs, meta.list.fs') <= 0:
-        point = line.begin() - 1
+#     line = view.line(point)
+#     point = line.end()
+#     if view.score_selector(point, 'meta.subroutine.fs, meta.list.fs') <= 0:
+#         point = line.begin() - 1
 
-    while view.score_selector(point, 'meta.subroutine.fs, meta.list.fs') > 0:
-        region = view.extract_scope(point)
-        point = region.end()
+#     while view.score_selector(point, 'meta.subroutine.fs, meta.list.fs') > 0:
+#         region = view.extract_scope(point)
+#         point = region.end()
 
-    if view.score_selector(region.begin(), 'meta.list.fs') > 0:
-        region = sublime.Region(region.begin(), region.end()-1)
-    return region
+#     if view.score_selector(region.begin(), 'meta.list.fs') > 0:
+#         region = sublime.Region(region.begin(), region.end()-1)
+#     return region
 
 
 def split_member_region(view, codeblock_region):
@@ -324,7 +324,7 @@ def display_in_output_panel(window, panel_id, file_name=None, text=''):
     if file_name is not None:
         text = '\n'.join(read_file(file_name, False))
 
-    output_panel.run_command('focus_insert_in_view', {'text': text})
+    output_panel.run_command('append', {'characters': text, 'force': True})
     window.run_command('show_panel', {'panel': 'output.' + panel_id})
 
     return output_panel
@@ -336,6 +336,6 @@ def display_in_new_view(window, file_name=None, text=''):
         text = '\n'.join(read_file(file_name, False))
 
     view.set_scratch(True)
-    view.run_command('focus_insert_in_view', {'text': text})
+    view.run_command('append', {'characters': text, 'force': True})
 
     return view

@@ -1,25 +1,22 @@
 from abc import abstractmethod
 import os
 import re
-import tempfile
 
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel('DEBUG')
 
-import sublime
-
 from .metaclasses import MiniPluginMeta
 from .compatibility import FSCompatibility, FocusCompatibility
-from .rings import MTRing
-from ..tools import read_file, get_translate_command
+from .rings import get_ring, get_backup_ring
+from ..tools.general import read_file
 
 
-def get_mt_ring_file(file_name):
-    return MTRingFile.get_mt_ring_file(file_name)
+def get_ring_file(file_name):
+    return RingFile.get_ring_file(file_name)
 
 
-class MTRingFile(object, metaclass=MiniPluginMeta):
+class RingFile(object, metaclass=MiniPluginMeta):
     '''
     Parent class for files that can exist in an M-AT Ring. The constructor
     can throw InvalidRingErrors if the file exists outside of a valid ring.
@@ -31,46 +28,67 @@ class MTRingFile(object, metaclass=MiniPluginMeta):
     Files = {}
 
     def __new__(cls, file_name):
+        logger.debug("Running RingFile.__new__ for %s",
+                     cls.__name__)
         if cls.valid_file(file_name):
-            return super(MTRingFile, cls).__new__(cls)
+            return super(RingFile, cls).__new__(cls)
         else:
             raise InvalidFileFormat(file_name, cls, cls.extensions)
 
     def __init__(self, file_name):
-        super(MTRingFile, self).__init__()
+        logger.debug("Running RingFile.__init__ for %s",
+                     self.__class__.__name__)
+        super(RingFile, self).__init__()
 
-        MTRingFile.Files[file_name] = self
+        RingFile.Files[file_name.lower()] = self
 
         self.file_name = file_name
         self.override_read_only = False
+        logger.debug("Running RingFile.__init__ for %s",
+                     self.__class__.__name__)
 
-        self.ring = MTRing.get_mt_ring(self.file_name)
+        self.ring = get_ring(self.file_name)
+        logger.debug("self.ring=%s", self.ring)
 
-        print('New %s: %s' % (self.__class__.__name__, self.file_name))
+        logger.debug('New %s: %s', self.__class__.__name__, self.file_name)
         if self.ring is not None:
-            print(self.ring.ring_info())
+            logger.debug(self.ring.ring_info())
         else:
-            print('Ring: None')
+            logger.debug('Ring: None')
+
+    def __str__(self):
+        """Return a representation of the Ring File."""
+        return '{0}, Ring: {1}'.format(os.path.basename(self.file_name),
+                                       self.ring)
 
     @classmethod
-    def get_mt_ring_file(cls, file_name):
+    def get_ring_file(cls, file_name):
+        logger.debug("get_ring_file: running for %s", file_name)
         f = None
         try:
-            f = cls.Files[file_name]
+            f = cls.Files[file_name.lower()]
             if f is None:
                 raise InvalidFileFormat(file_name)
         except KeyError:
+            logger.debug("get_ring_file: checking classes")
             for c in cls.get_plugins():
                 try:
                     f = c(file_name)
+                    logger.debug("get_ring_file: f was set to %s", f)
                 except InvalidFileFormat:
+                    logger.exception(
+                        "get_ring_file: InvalidFileFormat exception")
                     continue
+                except Exception:
+                    logger.exception("get_ring_file: Other exception")
                 else:
                     break
             else:
-                cls.Files[file_name] = None
+                logger.debug("get_ring_file: no suitable class found")
+                cls.Files[file_name.lower()] = None
                 raise InvalidFileFormat(file_name)
         finally:
+            logger.debug("get_ring_file: ring_file = %s", f)
             return f
 
     @classmethod
@@ -81,19 +99,12 @@ class MTRingFile(object, metaclass=MiniPluginMeta):
     @abstractmethod
     def extensions(cls):
         '''
-        This should be overloaded in MTRingFile subclasses. It should be a
+        This should be overloaded in RingFile subclasses. It should be a
         tuple of valid file extension strings for this file type without the
         leading ".".
 
         '''
         return tuple()
-
-    @property
-    def partial_path(self):
-        '''Returns the path of the file relative to the ring folder that the
-           file is in, or None if it is not in a ring.'''
-        if self.ring_path is not None:
-            return os.path.relpath(self.file_name, self.ring_path)
 
     def is_read_only(self):
         """Return True if the file should be read-only."""
@@ -106,14 +117,9 @@ class MTRingFile(object, metaclass=MiniPluginMeta):
 
         return result
 
-    def __str__(self):
-        """Return a representation of the Ring File."""
-        return '{0}, Ring: {1}'.format(os.path.basename(self.file_name),
-                                       self.ring)
-
     def get_ring(self):
         if self.ring is None:
-            return MTRing.get_backup_ring()
+            return get_backup_ring()
         else:
             return self.ring
 
@@ -132,7 +138,7 @@ class MTRingFile(object, metaclass=MiniPluginMeta):
             return False
 
         try:
-            return callable(self.run)
+            return bool(callable(self.run))
         except AttributeError:
             pass
         return False
@@ -251,8 +257,8 @@ class MTRingFile(object, metaclass=MiniPluginMeta):
                 yield line
 
 
-class MTFocusFile(MTRingFile, FocusCompatibility):
-    """docstring for MTFocusFile"""
+class FocusFile(RingFile, FocusCompatibility):
+    """Class for Focus files that exist within a ring."""
 
     PRODUCT_TYPE_MATCHER = re.compile(r"(\.[A-Za-z])?\.focus$")
     INCLUDE_TRANSLATOR_MATCHER = re.compile(
@@ -266,7 +272,7 @@ class MTFocusFile(MTRingFile, FocusCompatibility):
     @classmethod
     def extensions(cls):
         '''
-        This should be overloaded in MTRingFile subclasses. It should be a
+        This should be overloaded in RingFile subclasses. It should be a
         tuple of valid file extension strings for this file type without the
         leading ".".
 
@@ -276,27 +282,32 @@ class MTFocusFile(MTRingFile, FocusCompatibility):
     TranslationErrorMatcher = re.compile(r"\d+ +[A-Za-z]+ +Errors?",
                                          re.IGNORECASE)
 
-    def translate(self, gui=True, separate_process=True,
-                  results_file=None):
+    def translate(self, separate_process=True):
         if not self.is_translatable():
-            logger.warning('File: %s cannot be translated')
+            logger.warning('File: %s cannot be translated', self.file_name)
+            return False
+
+        ring = self.get_ring()
+        if not ring:
+            logger.warning('No ring configured to translate %s',
+                           self.file_name)
+            return False
+
+        partial_path = os.path.join(
+            'PgmObject', 'Foc', 'FocZ.Textpad.Translate.P.mps')
+
+        if not ring.check_file_existence(partial_path):
+            logger.warning('Translate file (%s) not found in ring: %s',
+                           partial_path, ring)
             return False
 
         logger.info('Translating file: %s', self.file_name)
 
-        # if gui:
-        partial_path = os.path.join(
-            'PgmObject', 'Foc', 'FocZ.Textpad.Translate.P.mps')
-        if not self.ring.check_file_existence(partial_path):
-            sublime.status_message(
-                'Invalid translate command: %s' % partial_path)
-            return False
-
         # logger.info('Using %s for Translate command', partial_path)
 
-        return self.ring.run_file(partial_path=partial_path,
-                                  parameters=self.file_name,
-                                  separate_process=separate_process)
+        return ring.run_file(partial_path=partial_path,
+                             parameters=self.file_name,
+                             separate_process=separate_process)
 
         # else:
         #     partial_path = os.path.join(
@@ -344,7 +355,7 @@ class MTFocusFile(MTRingFile, FocusCompatibility):
         #     return not error_found
 
     def is_runnable(self):
-        match = MTFocusFile.PRODUCT_TYPE_MATCHER.search(self.file_name.lower())
+        match = FocusFile.PRODUCT_TYPE_MATCHER.search(self.file_name.lower())
         if match is None:
             result = False
         elif match.group(1) is None:
@@ -353,25 +364,40 @@ class MTFocusFile(MTRingFile, FocusCompatibility):
             result = True
         else:
             result = False
-        return result
+        return result and bool(self.get_ring())
 
     def run(self, separate_process=True):
         if not self.is_runnable():
+            logger.warning('File: %s cannot be translated', self.file_name)
             return False
         else:
-            return self.ring.run_file_nice(full_path=self.file_name,
-                                           separate_process=separate_process)
+            logger.info('Running file: %s', self.file_name)
+            return self.get_ring().run_file_nice(
+                full_path=self.file_name, separate_process=separate_process)
 
     def format(self):
-        r = self.get_ring()
-
-        if r is None:
+        if not self.is_formattable():
+            logger.warning('File: %s cannot be formatted', self.file_name)
             return False
 
-        return r.run_file(
-            partial_path=os.path.join('PgmObject', 'Foc',
-                                      'FocZ.Textpad.Format.P.mps'),
-            parameters=self.file_name)
+        ring = self.get_ring()
+        if not ring:
+            logger.warning('No ring configured to format %s',
+                           self.file_name)
+            return False
+
+        partial_path = os.path.join(
+            'PgmObject', 'Foc', 'FocZ.Textpad.Format.P.mps')
+
+        if not ring.check_file_existence(partial_path):
+            logger.warning('Format file (%s) not found in ring: %s',
+                           partial_path, ring)
+            return False
+
+        logger.info('Formatting file: %s', self.file_name)
+
+        return ring.run_file(partial_path=partial_path,
+                             parameters=self.file_name)
 
     def is_includable(self):
         l = self.file_name.lower()
@@ -392,9 +418,7 @@ class MTFocusFile(MTRingFile, FocusCompatibility):
 
     def get_include_files(self, current_file=True):
         """Returns a list of the include files in the file"""
-        print('Getting include files for ', self.file_name)
-
-        files = []
+        logger.debug('Getting include files for ' + self.file_name)
 
         if self.ring is None:
             return []
@@ -405,7 +429,9 @@ class MTFocusFile(MTRingFile, FocusCompatibility):
         if not include_source:
             return []
 
-        for m in MTFocusFile.INCLUDE_CONTENT_MATCHER.finditer(include_source):
+        files = []
+
+        for m in FocusFile.INCLUDE_CONTENT_MATCHER.finditer(include_source):
             if m.group('source'):
                 folder = file_ = None
             elif m.group('folder'):
@@ -423,7 +449,7 @@ class MTFocusFile(MTRingFile, FocusCompatibility):
 
         if not current_file:
             for f in files:
-                inc_file = MTRingFile.get_mt_ring_file(f)
+                inc_file = RingFile.get_ring_file(f)
                 if inc_file is None:
                     continue
 
@@ -446,7 +472,7 @@ class MTFocusFile(MTRingFile, FocusCompatibility):
         if not screenpage_source:
             return []
 
-        for m in MTFocusFile.PAGESET_CONTENT_MATCHER.finditer(
+        for m in FocusFile.PAGESET_CONTENT_MATCHER.finditer(
                 screenpage_source):
             if m.group('pageset'):
                 codebase = source = None
@@ -464,7 +490,7 @@ class MTFocusFile(MTRingFile, FocusCompatibility):
 
         if not current_file:
             for f in self.get_include_files(current_file=False):
-                inc_file = MTRingFile.get_mt_ring_file(f)
+                inc_file = RingFile.get_ring_file(f)
                 if inc_file is None:
                     continue
 
@@ -472,34 +498,38 @@ class MTFocusFile(MTRingFile, FocusCompatibility):
                     yield i
 
 
-class MTFSFile(MTRingFile, FSCompatibility):
-    """docstring for MTFocusFile"""
+class FSFile(RingFile, FSCompatibility):
+    """docstring for FocusFile"""
 
     COMPILED_EXTENSIONS = ('mps', 'mcs', 'mts')
 
     @classmethod
     def extensions(cls):
-        '''
-        This should be overloaded in MTRingFile subclasses. It should be a
-        tuple of valid file extension strings for this file type without the
-        leading ".".
-
-        '''
         return ('fs',)
 
     def translate(self):
         if not self.is_translatable():
+            logger.warning('File: %s cannot be translated', self.file_name)
             return False
 
-        r = self.get_ring()
-        if r is None:
+        ring = self.get_ring()
+        if not ring:
+            logger.warning('No ring configured to translate %s',
+                           self.file_name)
             return False
 
-        return r.run_file(full_path=r.get_file_path('magic.mas'),
-                          parameters=self.file_name)
+        full_path = ring.get_file_path('magic.mas')
+
+        if not os.path.isfile(full_path):
+            logger.warning('Magic.mas not found in ring: %s', ring)
+            return False
+
+        logger.info('Translating file: %s', self.file_name)
+
+        return ring.run_file(full_path=full_path, parameters=self.file_name)
 
     def is_runnable(self):
-        if not super(MTFSFile, self).is_runnable():
+        if not super(FSFile, self).is_runnable():
             return False
 
         return bool(self.get_compiled_path())
@@ -508,57 +538,60 @@ class MTFSFile(MTRingFile, FSCompatibility):
         if not self.is_runnable():
             return False
 
-        r = self.get_ring()
-        if r is None:
+        ring = self.get_ring()
+        if ring is None:
             return False
 
         path = self.get_compiled_path()
-        return r.run_file(full_path=path)
+        return ring.run_file(full_path=path)
 
     def get_compiled_path(self):
         leading = os.path.splitext(self.file_name)[0]
-        for ext in MTFSFile.COMPILED_EXTENSIONS:
+        for ext in FSFile.COMPILED_EXTENSIONS:
             result = leading + '.' + ext
-            if os.path.exists(result):
+            if os.path.isfile(result):
                 return result
 
         return None
 
 
-class MTXMLFile(MTRingFile):
-    """docstring for MTFocusFile"""
+class XMLFile(RingFile):
+    """docstring for FocusFile"""
 
     @classmethod
     def extensions(cls):
-        '''
-        This should be overloaded in MTRingFile subclasses. It should be a
-        tuple of valid file extension strings for this file type without the
-        leading ".".
-
-        '''
         return ('xml',)
 
     @classmethod
     def valid_file(cls, file_name):
-        if super(MTXMLFile, cls).valid_file(file_name):
-            return (MTRing.get_mt_ring(file_name) is not None)
+        if super(XMLFile, cls).valid_file(file_name):
+            return (get_ring(file_name) is not None)
 
         return False
 
     def translate(self):
         if not self.is_translatable():
+            logger.warning('File: %s cannot be translated', self.file_name)
             return False
 
-        partial_path = os.path.join('PgmObject', get_translate_command()[0])
-        if not self.ring.check_file_existence(partial_path):
-            sublime.status_message(
-                'Invalid translate command: %s' % partial_path)
+        ring = self.get_ring()
+        if not ring:
+            logger.warning('No ring configured to translate %s',
+                           self.file_name)
             return False
 
-        logger.info('Using %s for Translate command', partial_path)
+        partial_path = os.path.join(
+            'PgmObject', 'Foc', 'FocZ.Textpad.Translate.P.mps')
 
-        return self.ring.run_file(partial_path=partial_path,
-                                  parameters=self.file_name)
+        if not ring.check_file_existence(partial_path):
+            logger.warning('Translate file (%s) not found in ring: %s',
+                           partial_path, ring)
+            return False
+
+        logger.info('Translating file: %s', self.file_name)
+
+        return ring.run_file(partial_path=partial_path,
+                             parameters=self.file_name)
 
 
 class InvalidFileFormat(Exception):
@@ -582,7 +615,7 @@ class InvalidFileFormat(Exception):
             if ((self.file_type is not None) and
                     (self.supported_extensions is not None)):
                 self._description = (
-                    '%s is not a supported MTRingFile type.') % self.file_name
+                    '%s is not a supported RingFile type.') % self.file_name
             else:
                 self._description = (
                     '%s is not a supported %s type. Supported extensions: %s' %

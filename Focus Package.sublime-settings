@@ -13,6 +13,16 @@
     // List the servers to which you have access to enable server file integration. 
     "server_access": [],
 
+    "tool_file_names": [
+        "FocZ.Textpad.Doc.P.focus",
+        "FocZ.Textpad.Format.P.focus",
+        "FocZ.Textpad.Link.P.focus",
+        "FocZ.Textpad.Run.P.focus",
+        "FocZ.Textpad.Translate.P.focus",
+        "FocZ.TextpadTools.P.focus",
+        "FocZ.Translate.Sublime.P.focus"
+    ],
+
     // This preference can be used to specify a different translate command.
     // For example, Mark's Translate then Backup command.
     // Command paths should be relative to the ring's PgmObject directory.
@@ -47,6 +57,17 @@
         "Additional Notes"
     ],
 
+    // Defines the default separators that are used when generating documentation.
+    // If defined as a string, the separator will be used for both variables and numeric indices.
+    // If defined as a list, index 0 will be used as the variable separator and index 1 will be
+    // used as the numeric separator.
+    // If defined as a dictionary, the separators are defined with keys variable_separator and
+    // numeric_separator.
+    "documentation_separator": {
+        "variable_separator": " - ",
+        "numeric_separator": ".  "
+    },
+
     // DocLink Settings
     // The following settings are used to specify the wikis to use when querying for Focus and FS
     // documentation.
@@ -57,7 +78,7 @@
     // DocLink is invoked. Invoking DocLink a second time will display documentation in it's default
     // location. 
     // Currently, only Focus and FS functions support this feature.
-    "show_doc_in_panel": false,
+    "show_doc_in_panel": true,
 
     // For FS Function Doc Link, this dictionary is used to override the calculated URL for the
     // FS function. This is primarily used to correct functional form operator pages.
@@ -182,6 +203,25 @@
     "break_label": "{subroutine}${{1:{counter}}}",
 
 
+    "disable_translator_indent_for": [
+        ":Alias",
+        ":Code",
+        ":Column",
+        ":Container",
+        ":Element",
+        ":ElementSet",
+        ":EntryPoint",
+        ":Field",
+        ":File",
+        ":Index",
+        ":Key",
+        ":List",
+        ":Object",
+        ":Source",
+        ":Name"
+    ],
+
+
     // list_entity_name - Display name for List Entities Command
     // list_entity_scope - Scope to match for each entity (Required)
     // list_entity_regex - Regular Expression to apply to each entity for display
@@ -212,6 +252,24 @@
         "FIL.Universe", 
         "PTCTQA.Universe"
     ],
+
+    // Dictionary containing utility name and partial path to utility.
+    "ring_utilities": {
+        "Object Viewer": "Foc\\FocXobjUtil.Main.S.focus",
+        "Edit Object": "Foc\\FocObj.Mgmt.S.focus",
+        "Home Care Desktop": "Hha\\HhaBrowser.Refresh.P.focus",
+        "Error Viewer": "Hha\\HhaZt.DevUtilities.ErrorView.S.focus",
+        "Fixer Single Run Utility": "Hha\\HhaZtMaintUtilities.Interface.SingleRun.S.focus",
+        "Test Utility": "Hha\\HhaInterface.TestUtility.S.focus",
+        "View Activity Log": "Hha\\HhaInterface.ViewActivityLog.S.focus",
+        "Find Message": "Hha\\HhaInterface.FindMessage.S.focus",
+        "Super Task Browser": "Hha\\HhaTask.Redo.S.focus",
+        "Manage Source Code": "Foc\\FocSource.Process.S.focus",
+        "Object Locker": "Hha\\HhaZt.ObjectLocker.S.focus"
+    },
+
+    // 
+    "sort_local_rings_to_top": true,
 
     // Used to control whether templates are installed for New Sublime Project. If this setting is
     // true, any templates in Packages\User\Sublime Project Templates with the same name as the bundled

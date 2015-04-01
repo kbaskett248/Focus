@@ -7,110 +7,139 @@ import shutil
 import subprocess
 
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
-
-import sublime
+logger.setLevel('INFO')
 
 from .metaclasses import MiniPluginMeta
-from ..tools import (
-    CACHE_ROOT,
+from ..tools.focus import CACHE_ROOT, parse_ring_path, convert_to_focus_lists
+from ..tools.general import (
     get_env,
     merge_paths,
     read_file,
-    parse_ring_path,
-    strip_alias,
-    create_folder,
-    get_server_access,
+    create_folder
 )
+from ..tools.settings import (
+    get_server_access,
+    get_default_ring,
+    get_tool_file_names
+)
+from ..tools.sublime import strip_alias
 
 
 focus_extension_list = ('.mcs', '.mps', '.mts')
 
 
-def get_mt_ring(path):
-    return MTRing.get_mt_ring(path)
+def get_ring(path):
+    return Ring.get_ring(path)
+
+
+def get_backup_ring():
+    return Ring.get_backup_ring()
 
 
 def is_local_ring(ring):
     return isinstance(ring, LocalRing)
 
 
-class MTRing(object, metaclass=MiniPluginMeta):
+def is_homecare_ring(ring):
+    return isinstance(ring, HomeCareRing)
+
+
+class Ring(object, metaclass=MiniPluginMeta):
     """Represents a Focus Ring"""
 
     Rings = {}
-    HomeCareRing = False
+    ManageSourceCmd = os.path.join('Foc', 'FocSource.Process.S.focus')
 
-    def __new__(cls, ring_path, universe_path, ring_name, universe_name):
-        if ((ring_path is not None) and
-                cls.valid_ring(ring_path, ring_name, universe_name)):
-            return super(MTRing, cls).__new__(cls)
+    def __new__(cls, universe_name, ring_name, is_local, path):
+        if cls.valid_ring(universe_name, ring_name, is_local):
+            return super(Ring, cls).__new__(cls)
         else:
-            raise InvalidRingError(ring_path, cls)
+            raise InvalidRingError(universe_name, ring_name, path, cls)
 
-    def __init__(self, ring_path, universe_path, ring_name, universe_name):
-        super(MTRing, self).__init__()
+    def __init__(self, universe_name, ring_name, is_local, path):
+        super(Ring, self).__init__()
 
-        self.name = ring_name
         self.universe_name = universe_name
-        self.universe_path = self.get_universe_path()
-        self.path = os.path.join(self.universe_path, ring_name + '.Ring')
-        self.cache_path = self.get_cache_path()
-        self.server_path = None
+        self.name = ring_name
+        self.populate_paths()
+        logger.debug("__init__: path = %s", self.path)
+        if not os.path.isdir(self.path):
+            raise InvalidRingError(universe_name, ring_name, path)
 
-        MTRing.Rings[self.path.lower()] = self
+        Ring.Rings[self.key] = self
+
+    def __str__(self):
+        return '{0}.Universe\\{1}.Ring'.format(self.universe_name,
+                                               self.name)
+
+    @classmethod
+    def ring_dict_key(cls, universe_name, ring_name, is_local):
+        return (universe_name.lower(), ring_name.lower(), is_local)
 
     @classmethod
     @abstractmethod
-    def valid_ring(cls, ring_path, ring_name, universe_name):
+    def valid_ring(cls, universe_name, ring_name, is_local):
         pass
 
     @classmethod
-    def get_mt_ring(cls, path):
+    def get_ring(cls, path):
+        logger.debug(".get_ring: getting ring for %s", path)
         r = None
-        (ring_path, universe_path,
-         ring_name, universe_name) = parse_ring_path(path)
-
-        if ring_path is None:
+        ring_info = parse_ring_path(path)
+        if not (ring_info[0] and ring_info[1]):
             return None
-        else:
-            try:
-                r = MTRing.Rings[ring_path.lower()]
-            except KeyError:
-                for c in cls.get_plugins():
-                    try:
-                        r = c(ring_path, universe_path,
-                              ring_name, universe_name)
-                    except InvalidRingError:
-                        # logger.exception('Failed to create Ring Type %s',
-                        #                  c.__name__)
-                        continue
-                    else:
-                        if not os.path.isdir(r.path):
-                            r = None
-                        break
+
+        ring_key = Ring.ring_dict_key(*ring_info)
+        logger.debug('ring_key = %s', ring_key)
+
+        try:
+            r = Ring.Rings[ring_key]
+        except KeyError:
+            ring_info = list(ring_info)
+            ring_info.append(path)
+            ring_info = tuple(ring_info)
+            logger.debug(".get_ring: ring_info = %s", ring_info)
+
+            for c in cls.get_plugins():
+                logger.debug(".get_ring: checking classes")
+                try:
+                    r = c(*ring_info)
+                except InvalidRingError:
+                    # logger.exception(".get_ring: InvalidRingError exception")
+                    continue
+                except Exception:
+                    # logger.exception(".get_ring: Other exception")
+                    continue
                 else:
-                    MTRing.Rings[ring_path.lower()] = None
-            finally:
-                # logger.debug("MTRing.Rings: %s", MTRing.Rings)
-                # logger.debug("MTRing: %s", MTRing)
-                return r
+                    break
+            else:
+                Ring.Rings[ring_key] = None
+        finally:
+            logger.debug(".get_ring: returning ring - %s", r)
+            return r
 
     @classmethod
     def get_backup_ring(cls):
         ring = None
+        default_ring_path = get_default_ring()
+        if default_ring_path:
+            ring = cls.get_ring(default_ring_path)
 
-        settings = sublime.load_settings('MT-Focus.sublime-settings')
-        if settings.has('default_ring'):
-            path = settings.get('default_ring')
-            ring = cls.get_mt_ring(path)
+        if not ring:
+            ring_list = Ring.Rings.values()
+            ring = ring_list[0]
+            for r in ring_list:
+                if is_local_ring(r):
+                    ring = r
+                    break
 
         return ring
 
     @classmethod
-    def get_mt_ring_by_name(cls, name):
+    def get_ring_by_id(cls, id_):
+        id_ = id_.lower()
         for ring in cls.Rings.values():
-            if ring.name.lower() == name:
+            if ring.id_.lower() == id_:
                 return ring
         return None
 
@@ -120,132 +149,90 @@ class MTRing(object, metaclass=MiniPluginMeta):
         result = set()
         for ring in cls.Rings.values():
             if ((not (local_only or server_only)) or
-                    (local_only and isinstance(ring, LocalRing)) or
+                    (local_only and is_local_ring(ring)) or
                     (server_only and isinstance(ring, ServerRing))):
                 if ((not (homecare_only or acute_only)) or
-                        (homecare_only and ring.HomeCareRing) or
-                        (acute_only and not ring.HomeCareRing)):
+                        (homecare_only and is_homecare_ring(ring)) or
+                        (acute_only and not is_homecare_ring(ring))):
                     result.add(ring)
         return list(result)
 
     @classmethod
-    def list_ring_names(cls, local_only=False, server_only=False,
-                        homecare_only=False, acute_only=False):
-        result = [r.name for r in cls.list_rings(local_only, server_only)]
+    def list_ring_names(cls, **kwargs):
+        result = [r.name for r in cls.list_rings(**kwargs)]
         result.sort()
         return result
 
     @classmethod
-    def num_rings(cls, local_only=False, server_only=False,
-                  homecare_only=False, acute_only=False):
-        return len(cls.list_rings(local_only, server_only))
+    def num_rings(cls, **kwargs):
+        return len(cls.list_rings(**kwargs))
 
     @property
-    def system_path(self):
-        try:
-            return self._system_path
-        except AttributeError:
-            if self.path is None:
-                return None
-
-            self._system_path = os.path.join(self.path, '!Misc')
-            if not os.path.isdir(self._system_path):
-                self._system_path = os.path.join(self.path, 'System')
-                if not os.path.isdir(self._system_path):
-                    self._system_path = None
-            return self._system_path
+    def key(self):
+        return self.__class__.ring_dict_key(
+            self.universe_name, self.name, False)
 
     @property
-    def magic_path(self):
-        try:
-            return self._magic_path
-        except AttributeError:
-            if self.system_path is None:
-                return None
-            else:
-                self._magic_path = os.path.join(self.system_path, 'magic.exe')
-            return self._magic_path
+    def id(self):
+        return self.name
 
-    @property
-    def datadefs_path(self):
-        try:
-            return self._datadefs_path
-        except AttributeError:
-            if self.server_path is None:
-                return None
-            else:
-                self._datadefs_path = os.path.join(self.server_path,
-                                                   'DataDefs',
-                                                   'Standard')
-            return self._datadefs_path
+    def populate_paths(self):
+        self.universe_path = self.get_universe_path()
+        self.path = self.get_ring_path()
+        self.system_path = self.get_system_path()
+        self.magic_path = self.get_magic_path()
+        self.system_programs_path = self.get_system_programs_path()
 
-    @property
-    def pgmsource_path(self):
-        try:
-            return self._pgmsource_path
-        except AttributeError:
-            if self.server_path is None:
-                return None
-            else:
-                path = os.path.join(self.server_path, 'PgmSource')
-                logger.debug('path = %s', path)
-                if os.path.exists(path):
-                    self._pgmsource_path = path
-                else:
-                    self._pgmsource_path = None
+        self.cache_path = self.get_cache_path()
+        self.pgm_cache_path = self.get_pgm_cache_path()
 
-            return self._pgmsource_path
-
-    @property
-    def pgm_cache_path(self):
-        try:
-            return self._pgmsource_cache_path
-        except AttributeError:
-            if self.cache_path is None:
-                return None
-            else:
-                self._pgmsource_cache_path = os.path.join(
-                    self.cache_path, 'Sys', 'PgmCache', 'Ring')
-
-            return self._pgmsource_cache_path
-
-    @property
-    def system_programs_path(self):
-        try:
-            return self._system_programs_path
-        except AttributeError:
-            if self.system_path is None:
-                return None
-            else:
-                self._system_programs_path = os.path.join(
-                    self.system_path, 'Programs')
-
-            return self._system_programs_path
-
-    @property
-    def possible_paths(self):
-        try:
-            return self._possible_paths
-        except AttributeError:
-            paths = [p for p in (
-                     ('Local Cache', self.pgm_cache_path),
-                     ('Ring', self.path),
-                     ('System', self.system_path),
-                     ('System Programs', self.system_programs_path),
-                     ('Server', self.server_path))
-                     if p[1] is not None]
-            if paths:
-                self._possible_paths = paths
-            return paths
+        self.server_path = self.get_server_path()
+        self.datadefs_path = self.get_datadefs_path()
+        self.pgmsource_path = self.get_pgmsource_path()
+        self.alias_list_path = self.get_alias_list_path()
 
     def get_universe_path(self):
-        path = os.path.join(get_env("ProgramFiles(x86)"),
-                            'Meditech',
-                            self.universe_name + '.Universe')
-        if not os.path.isdir(path):
-            path = None
+        universe_path = os.path.join(
+            get_env("ProgramFiles(x86)"), 'Meditech',
+            self.universe_name + '.Universe')
 
-        return path
+        if os.path.isdir(universe_path):
+            return universe_path
+        else:
+            return None
+
+    def get_ring_path(self):
+        if not self.universe_path:
+            return None
+
+        ring_path = os.path.join(self.universe_path, self.name + '.Ring')
+        if os.path.isdir(ring_path):
+            return ring_path
+        else:
+            return None
+
+    def get_system_path(self):
+        if self.path is None:
+            return None
+
+        system_path = os.path.join(self.path, '!Misc')
+        if not os.path.isdir(system_path):
+            system_path = os.path.join(self.path, 'System')
+            if not os.path.isdir(system_path):
+                system_path = None
+        return system_path
+
+    def get_magic_path(self):
+        if self.system_path is None:
+            return None
+        else:
+            return os.path.join(self.system_path, 'magic.exe')
+
+    def get_system_programs_path(self):
+        if self.system_path is None:
+            return None
+        else:
+            return os.path.join(self.system_path, 'Programs')
 
     def get_cache_path(self):
         path = os.path.join(CACHE_ROOT,
@@ -257,30 +244,72 @@ class MTRing(object, metaclass=MiniPluginMeta):
 
         return path
 
-    def allow_running(self):
-        return (self.magic_path is not None)
+    def get_pgm_cache_path(self):
+        if self.cache_path is None:
+            return None
+        else:
+            return os.path.join(self.cache_path, 'Sys', 'PgmCache', 'Ring')
+
+    def get_server_path(self):
+        return None
+
+    def get_datadefs_path(self):
+        if self.server_path is None:
+            return None
+        else:
+            path = os.path.join(self.server_path, 'DataDefs', 'Standard')
+            if os.path.isdir(path):
+                return path
+        return None
+
+    def get_pgmsource_path(self):
+        if self.server_path is None:
+            return None
+        else:
+            path = os.path.join(self.server_path, 'PgmSource')
+            if os.path.isdir(path):
+                return path
+        return None
+
+    def get_alias_list_path(self):
+        return None
+
+    def possible_paths(self):
+        paths = [p for p in (
+                 ('Local Cache', self.pgm_cache_path),
+                 ('Ring', self.path),
+                 ('System', self.system_path),
+                 ('System Programs', self.system_programs_path),
+                 ('Server', self.server_path))
+                 if p[1] is not None]
+        return paths
 
     def check_file_existence(self, partial_path, multiple_matches=False):
         if multiple_matches:
             results = []
-        for k, v in self.possible_paths:
+        for k, v in self.possible_paths():
             path = merge_paths(v, partial_path)
             if os.path.exists(path):
                 if multiple_matches:
                     results.append((k, path))
                 else:
                     return (k, path)
+
         if multiple_matches:
             return results
         else:
             return None
 
     def get_file_path(self, partial_path):
-        result = None
         possible_paths = self.check_file_existence(partial_path)
         if possible_paths:
-            result = possible_paths[1]
-        return result
+            return possible_paths[1]
+        # If we don't have server access and no match was found, give the
+        # benefit of the doubt and return a possible path.
+        elif self.server_path is None:
+            return merge_paths(self.path, partial_path)
+        else:
+            return None
 
     def get_translated_path(self, file_path):
         name, ext = os.path.splitext(file_path)
@@ -312,18 +341,22 @@ class MTRing(object, metaclass=MiniPluginMeta):
                     return path
             return None
 
+        return None
+
     def get_app_and_filename(self, file_path):
         a, n = os.path.split(file_path)
         unused, a = os.path.split(a)
         return (a, n)
 
     def partial_path(self, path):
-        partial_path = None
-        for k, v in self.possible_paths:
+        for k, v in self.possible_paths():
             if path.lower().startswith(v.lower()):
-                partial_path = path[len(v)+1:]
+                return path[len(v)+1:]
                 break
-        return partial_path
+        return None
+
+    def allow_running(self):
+        return (self.magic_path is not None)
 
     def run_file(self, partial_path=None, full_path=None,
                  parameters=None, separate_process=True, use_cache=False):
@@ -403,64 +436,14 @@ class MTRing(object, metaclass=MiniPluginMeta):
             return self.run_file(full_path=path)
 
     @property
-    def alias_list_path(self):
-        try:
-            return self._alias_list_path
-        except AttributeError:
-            if self.HomeCareRing:
-                partial_path = os.path.join('System', 'Translators',
-                                            'AliasList.mtIo')
-                self._alias_list_path = self.get_file_path(partial_path)
-                if self._alias_list_path is None:
-                    partial_path = os.path.join('System', 'Translators',
-                                                'AliasList0.mtIo')
-                    self._alias_list_path = self.get_file_path(partial_path)
-            else:
-                self._alias_list_path = None
-
-            return self._alias_list_path
-
-    @property
     def alias_lookup(self):
-        try:
-            return self._alias_lookup
-        except AttributeError:
-            self._alias_lookup = None
-            if self.HomeCareRing:
-                self.load_aliases()
-            return self._alias_lookup
+        return None
 
     def load_aliases(self):
-        """Loads the alias lookup dictionary for the ring."""
-        self._alias_lookup = dict()
-
-        if self.alias_list_path is None:
-            logger.info('No alias list exists for %s', self.name)
-            return
-
-        logger.info('Loading aliases for %s', self.name)
-        with open(self.alias_list_path, 'r') as f:
-            contents = f.read()
-
-        matches = re.findall(
-            r'{start}(.+?){sep}.+?{sep}(.+?){sep}(.+?)({sep}.*?)?{end}'.format(
-                start=chr(1), sep=chr(3), end=chr(2)),
-            contents)
-
-        self._alias_lookup = {a[0]: (a[2], a[1]) for a in matches}
-        logger.info('Aliases loaded for %s', self.name)
+        pass
 
     def find_alias_definition(self, alias):
-        alias = strip_alias(alias)
-        if alias is None:
-            return None
-
-        if (alias in self.alias_lookup.keys()):
-            alias_entry = self.alias_lookup[alias]
-            logger.debug(alias_entry)
-            return self.get_file_path(
-                os.path.join('PgmSource', alias_entry[0],
-                             alias_entry[1] + '.focus'))
+        return None
 
     def find_object_file(self, object_name):
         object_name = object_name.split('.')[0]
@@ -505,103 +488,326 @@ class MTRing(object, metaclass=MiniPluginMeta):
                 universe=self.universe_name, ring=self.name,
                 ring_path=self.path, server_path=self.server_path,
                 pgm_cache_path=self.pgm_cache_path,
-                pos_paths=self.possible_paths, type=self.__class__.__name__)
+                pos_paths=self.possible_paths(), type=self.__class__.__name__)
 
-    def __str__(self):
-        return '{0}.Universe\\{1}.Ring'.format(self.universe_name,
-                                               self.name)
+    def get_shell_cmd(self, target_ring=None, partial_path=None,
+                      full_path=None, parameters=None):
+        if target_ring is None:
+            target_ring = self
+        if not full_path and partial_path:
+            full_path = target_ring.get_file_path(partial_path)
+            if not full_path:
+                logger.error(
+                    '.get_shell_cmd: file (%s) does not exist in ring (%s)',
+                    partial_path,
+                    target_ring)
+                return None
+        elif not full_path and not partial_path:
+            logger.error('.get_shell_cmd: '
+                         'either full path or partial path must be specified')
+            return None
+
+        logger.debug("get_shell_cmd: self = %s", self.__repr__())
+        logger.debug("get_shell_cmd: target_ring = %s", target_ring.__repr__())
+
+        if not full_path.lower().endswith('.focus'):
+            return self.get_shell_cmd_direct(full_path, parameters)
+        elif self == target_ring:
+            return self.get_shell_cmd_tool(full_path, parameters)
+        else:
+            return self.get_shell_cmd_target(
+                target_ring, full_path, parameters)
+
+        # if self is target_ring:
+        #     if not full_path and partial_path:
+        #         full_path = self.get_file_path(partial_path)
+        #     logger.debug(".get_shell_cmd: full_path = %s", full_path)
+        #     full_path = self.get_translated_path(full_path)
+        #     logger.debug(".get_shell_cmd: full_path = %s", full_path)
+        #     shell_cmd = 'magic.exe "{full_path}"'.format(full_path=full_path)
+        #     if parameters:
+        #         shell_cmd += ' ' + parameters
+        #     logger.debug(".get_shell_cmd: shell_cmd = %s", shell_cmd)
+        #     return shell_cmd
+
+        # elif (is_local_ring(self) and is_local_ring(target_ring)):
+        #     omnilaunch = self.get_file_path('Omnilaunch.mps')
+        #     if omnilaunch:
+        #         if not full_path and partial_path:
+        #             full_path = target_ring.get_file_path(partial_path)
+        #         full_path = target_ring.get_translated_path(full_path)
+        #         logger.debug(".get_shell_cmd: full_path = %s", full_path)
+        #         partial_path = target_ring.partial_path(full_path)
+        #         logger.debug(".get_shell_cmd: partial_path = %s", partial_path)
+        #         shell_cmd = 'magic.exe "{omnilaunch}"  {partial_path}'.format(
+        #             omnilaunch=omnilaunch, partial_path=partial_path)
+        #         if parameters:
+        #             shell_cmd += '  ' + parameters
+        #         logger.debug(".get_shell_cmd: shell_cmd = %s", shell_cmd)
+        #         return shell_cmd
+
+        # tools_path = self.ring.get_file_path(os.path.join(
+        #     'PgmObject', 'Foc', 'FocZ.TextPadTools.P.mps'))
+        # if tools_path:
+        #     if not full_path and partial_path:
+        #         full_path = self.get_file_path(partial_path)
+        #     shell_cmd = 'magic.exe "{tools_path}" {tool_cmd} "{full_path}"'
+        #     shell_cmd = shell_cmd.format(
+        #         tools_path=tools_path, tool_cmd=tool_cmd, full_path=full_path)
+        #     if parameters:
+        #         shell_cmd += ' ' + parameters
+        #     return shell_cmd
+
+        # return None
+
+    def get_shell_cmd_direct(self, full_path, parameters=None):
+        ext = os.path.splitext(full_path)[1]
+        if ext not in focus_extension_list:
+            run_path = self.get_translated_path(full_path)
+            if not run_path:
+                logger.error('.get_shell_cmd_direct: ' +
+                             'failed to get translated oath for %s in %s',
+                             full_path, self)
+                return None
+        else:
+            run_path = full_path
+
+        logger.debug(".get_shell_cmd_direct: run_path = %s", run_path)
+        shell_cmd = 'magic.exe "{run_path}"'.format(run_path=run_path)
+
+        if parameters:
+            shell_cmd += ' ' + convert_to_focus_lists(parameters)
+        logger.debug(".get_shell_cmd: shell_cmd = %s", shell_cmd)
+
+        return shell_cmd
+
+    def get_tools_path(self):
+        return self.get_file_path(
+            os.path.join('PgmObject', 'Foc', 'FocZ.TextPadTools.P.mps'))
+
+    def format_shell_cmd_for_tool(self, run_path, tool_cmd, full_path,
+                                  parameters):
+        if parameters:
+            if hasattr(parameters, '__iter__'):
+                new_parameters = parameters
+                parameters = [tool_cmd, full_path]
+                parameters.extend(new_parameters)
+            else:
+                parameters = [tool_cmd, full_path, parameters]
+            parameters = convert_to_focus_lists(parameters)
+            shell_cmd = 'magic.exe "{run_path}" {parameters}'.format(
+                run_path=run_path, full_path=full_path, parameters=parameters)
+        else:
+            shell_cmd = 'magic.exe "{run_path}" {tool_cmd} "{full_path}"'.format(
+                run_path=run_path, tool_cmd=tool_cmd, full_path=full_path)
+
+        return shell_cmd
+
+    def get_shell_cmd_tool(self, full_path, parameters=None):
+        run_path = self.get_tools_path()
+        if run_path is None:
+            logger.error('.get_shell_cmd_tool: could not find tools path')
+            return None
+
+        logger.debug(".get_shell_cmd_tool: run_path = %s", run_path)
+        name = os.path.basename(full_path)
+        tool_cmd = 'RUN'
+        if name in get_tool_file_names():
+            tool_cmd = 'RUNRING'
+
+        shell_cmd = self.format_shell_cmd_for_tool(run_path, tool_cmd,
+                                                   full_path, parameters)
+        logger.debug(".get_shell_cmd_tool: shell_cmd = %s", shell_cmd)
+
+        return shell_cmd
+
+    def get_shell_cmd_target(self, target_ring, full_path, parameters=None):
+        run_path = self.get_tools_path()
+        if run_path is None:
+            logger.error('.get_shell_cmd_tool: could not find tools path')
+            return None
+
+        logger.debug("'.get_shell_cmd_tool: run_path = %s", run_path)
+        name = os.path.basename(full_path)
+        tool_cmd = 'RUNTOOL'
+        if name in get_tool_file_names:
+            tool_cmd = 'RUNRINGTOOL'
+
+        shell_cmd = self.format_shell_cmd_for_tool(run_path, tool_cmd,
+                                                   full_path, parameters)
+        logger.debug(".get_shell_cmd_target: shell_cmd = %s", shell_cmd)
+
+        return shell_cmd
 
 
-class LocalRing(MTRing):
+class HomeCareRing(Ring):
+    """docstring for HomeCareRing"""
+
+    def get_alias_list_path(self):
+        if not self.system_path:
+            return None
+
+        alias_list_path = os.path.join(
+            self.system_path, 'Translators', 'AliasList.mtIo')
+        if not os.path.isfile(alias_list_path):
+            alias_list_path = os.path.join(
+                self.system_path, 'Translators', 'AliasList0.mtIo')
+            if not os.path.isfile(alias_list_path):
+                alias_list_path = None
+
+        return alias_list_path
+
+    @property
+    def alias_lookup(self):
+        try:
+            return self._alias_lookup
+        except AttributeError:
+            self._alias_lookup = None
+            self.load_aliases()
+            return self._alias_lookup
+
+    def load_aliases(self):
+        """Loads the alias lookup dictionary for the ring."""
+        self._alias_lookup = dict()
+
+        if self.alias_list_path is None:
+            logger.info('No alias list exists for %s', self.name)
+            return
+
+        logger.info('Loading aliases for %s', self.name)
+        with open(self.alias_list_path, 'r') as f:
+            contents = f.read()
+
+        matches = re.findall(
+            r'{start}(.+?){sep}.+?{sep}(.+?){sep}(.+?)({sep}.*?)?{end}'.format(
+                start=chr(1), sep=chr(3), end=chr(2)),
+            contents)
+
+        self._alias_lookup = {a[0]: (a[2], a[1]) for a in matches}
+        logger.info('Aliases loaded for %s', self.name)
+
+    def find_alias_definition(self, alias):
+        alias = strip_alias(alias)
+        if alias is None:
+            return None
+
+        if (alias in self.alias_lookup.keys()):
+            alias_entry = self.alias_lookup[alias]
+            logger.debug(alias_entry)
+            return self.get_file_path(
+                os.path.join('PgmSource', alias_entry[0],
+                             alias_entry[1] + '.focus'))
+
+
+class LocalRing(HomeCareRing):
     """Represents a locally installed ring."""
 
-    HomeCareRing = True
+    def __str__(self):
+        return '{0}.Universe\\{1}.Ring Local'.format(self.universe_name,
+                                                     self.name)
 
-    def __init__(self, ring_path, universe_path, ring_name, universe_name):
-        super(LocalRing, self).__init__(ring_path, universe_path,
-                                        ring_name, universe_name)
+    @classmethod
+    def valid_ring(cls, universe_name, ring_name, is_local):
+        return (bool(universe_name) and bool(ring_name) and is_local)
 
-        self.server_path = self.path
-        self.name = ring_name + " Local"
+    @property
+    def id(self):
+        return self.name + " Local"
+
+    @property
+    def key(self):
+        return self.__class__.ring_dict_key(
+            self.universe_name, self.name, True)
+
+    @property
+    def ManageSourceCmd(self):
+        if self.key == ('ptctdev', 'dev25', True):
+            return os.path.join('Foc', 'FocSource.Process.Ptct.S.focus')
+        else:
+            return os.path.join('Foc', 'FocSource.Process.S.focus')
 
     def get_universe_path(self):
-        path = os.path.join(get_env("ProgramFiles(x86)"),
-                            'PTCT-AP',
-                            'SoloFocus',
-                            self.universe_name + '.Universe')
-        if not os.path.isdir(path):
-            path = None
-
-        return path
+        path = os.path.join(
+            get_env("ProgramFiles(x86)"), 'PTCT-AP', 'SoloFocus',
+            self.universe_name + '.Universe')
+        if os.path.isdir(path):
+            return path
+        else:
+            return None
 
     def get_cache_path(self):
-        path = os.path.join(CACHE_ROOT,
-                            self.universe_name + '.Universe',
-                            self.name + '.Ring.Local',
-                            '!AllUsers')
-        if not os.path.isdir(path):
-            path = None
+        path = os.path.join(
+            CACHE_ROOT, self.universe_name + '.Universe',
+            self.name + '.Ring.Local', '!AllUsers')
+        if os.path.isdir(path):
+            return path
+        else:
+            return None
 
-        return path
+    def get_server_path(self):
+        return self.path
 
     def update(self):
         path = os.path.join('PgmSource', 'HHA', 'HhaZtSvn.CommandEe.S.focus')
         return self.run_file_nice(partial_path=path)
 
-    @property
-    def possible_paths(self):
-        try:
-            return self._possible_paths
-        except AttributeError:
-            paths = [p for p in (
-                     ('Ring', self.path),
-                     ('System', self.system_path),
-                     ('System Programs', self.system_programs_path),
-                     ('Server', self.server_path))
-                     if p[1] is not None]
-            if paths:
-                self._possible_paths = paths
-            return paths
+    # def possible_paths(self):
+    #     paths = [p for p in (
+    #              ('Ring', self.path),
+    #              ('System', self.system_path),
+    #              ('System Programs', self.system_programs_path),
+    #              ('Server', self.server_path))
+    #              if p[1] is not None]
+    #     return paths
 
-    @classmethod
-    def valid_ring(cls, ring_path, ring_name, universe_name):
-        r = ring_path.lower()
-        print(r)
-        return (('solofocus' in r) or ('ring.local' in r))
+    def get_shell_cmd_target(self, target_ring, full_path, parameters=None):
+        if (self != target_ring) and is_local_ring(target_ring):
+            omnilaunch = self.get_file_path('Omnilaunch.mps')
+            if omnilaunch:
+                run_path = target_ring.get_translated_path(full_path)
+                if not run_path:
+                    logger.error('.get_shell_cmd_target: ' +
+                                 'failed to get translated path for %s in %s',
+                                 full_path, target_ring)
+                    return super(LocalRing, self).get_shell_cmd_target(
+                        target_ring, full_path, parameters)
+                logger.debug('.get_shell_cmd_target: run_path = %s', run_path)
+
+                partial_path = target_ring.partial_path(run_path)
+                if not partial_path:
+                    logger.error('.get_shell_cmd_target: ' +
+                                 'failed to get partial path for %s in %s',
+                                 run_path, target_ring)
+                    return super(LocalRing, self).get_shell_cmd_target(
+                        target_ring, full_path, parameters)
+                else:
+                    partial_path = os.sep + partial_path
+
+                logger.debug('.get_shell_cmd_target: partial_path = %s',
+                             partial_path)
+                shell_cmd = 'magic.exe "{omnilaunch}"  {partial_path}'.format(
+                    omnilaunch=omnilaunch, partial_path=partial_path)
+
+                if parameters:
+                    if hasattr(parameters, '__iter__'):
+                        parameters = '  '.join(
+                            ['"{0}"'.format(convert_to_focus_lists(x))
+                             for x in parameters])
+                    else:
+                        parameters = '"{0}"'.format(parameters)
+                    shell_cmd += '  ' + parameters
+
+                logger.debug('.get_shell_cmd_target: shell_cmd = %s',
+                             shell_cmd)
+
+                return shell_cmd
+
+        return super(LocalRing, self).get_shell_cmd_target(
+            target_ring, full_path, parameters)
 
 
-class ServerRing(MTRing):
+class ServerRing(Ring):
     """Represents a standard server ring."""
-
-    def __init__(self, ring_path, universe_path, ring_name, universe_name):
-        super(ServerRing, self).__init__(ring_path, universe_path,
-                                         ring_name, universe_name)
-
-        self.server_path = self.get_server_path()
-
-    def copy_source_to_cache(self, source, overwrite=True):
-        partial_path = self.partial_path(source)
-        if partial_path is not None:
-            source = os.path.join(self.server_path, partial_path)
-            dest = os.path.join(self.pgm_cache_path, partial_path)
-            if (overwrite or (not os.path.exists(dest))):
-                logger.debug('Copying file to cache: %s', source)
-                create_folder(os.path.dirname(dest))
-                shutil.copyfile(source, dest)
-                return dest
-
-    def file_exists_in_cache(self, source):
-        result = False
-        logger.debug('source: %s', source)
-        partial_path = self.partial_path(source)
-        logger.debug('partial_path: %s', partial_path)
-        file_existence = self.check_file_existence(partial_path)
-        if file_existence:
-            for t, p in file_existence:
-                if (t == 'Local Cache'):
-                    result = True
-                    break
-        return result
 
     def get_server_path(self):
         unv_server_drive = None
@@ -634,28 +840,53 @@ class ServerRing(MTRing):
             logger.debug('path = %s', path)
             return path
 
+    def copy_source_to_cache(self, source, overwrite=True):
+        partial_path = self.partial_path(source)
+        if partial_path is not None:
+            source = os.path.join(self.server_path, partial_path)
+            dest = os.path.join(self.pgm_cache_path, partial_path)
+            if (overwrite or (not os.path.exists(dest))):
+                logger.debug('Copying file to cache: %s', source)
+                create_folder(os.path.dirname(dest))
+                shutil.copyfile(source, dest)
+                return dest
+
+    def file_exists_in_cache(self, source):
+        result = False
+        logger.debug('source: %s', source)
+        partial_path = self.partial_path(source)
+        logger.debug('partial_path: %s', partial_path)
+        file_existence = self.check_file_existence(partial_path)
+        if file_existence:
+            for t, p in file_existence:
+                if (t == 'Local Cache'):
+                    result = True
+                    break
+        return result
+
 
 class ServerAcuteRing(ServerRing):
     """Represents a standard server ring."""
 
     @classmethod
-    def valid_ring(cls, ring_path, ring_name, universe_name):
+    def valid_ring(cls, universe_name, ring_name, is_local):
+        if is_local:
+            return False
+
         u = universe_name.lower()
-        r = ring_path.lower()
-        return (('ring.local' not in r) and
-                (not (('ptct' in u) or ('fil' in u))))
+        return not (('ptct' in u) or ('fil' in u))
 
 
-class ServerHCRing(ServerRing):
+class ServerHCRing(ServerRing, HomeCareRing):
     """Represents a standard server ring."""
 
-    HomeCareRing = True
-
     @classmethod
-    def valid_ring(cls, ring_path, ring_name, universe_name):
+    def valid_ring(cls, universe_name, ring_name, is_local):
+        if is_local:
+            return False
+
         u = universe_name.lower()
-        r = ring_path.lower()
-        return (('ring.local' not in r) and (('ptct' in u) or ('fil' in u)))
+        return (('ptct' in u) or ('fil' in u))
 
 
 class InvalidRingError(Exception):
@@ -664,24 +895,21 @@ class InvalidRingError(Exception):
 
     """
 
-    def __init__(self, path, ring_type=None):
+    def __init__(self, universe_name, ring_name, path, ring_type=None):
         super(InvalidRingError, self).__init__()
+        self.universe_name = universe_name
+        self.ring_name = ring_name
         self.path = path
         self.ring_type = ring_type
+        self.description = self.get_description()
 
     def __str__(self):
         return self.description
 
-    @property
-    def description(self):
-        try:
-            return self._description
-        except AttributeError:
-            if self.ring_type is not None:
-                self._description = (
-                    '{0} does not represent a valid {1}').format(
-                    self.path, self.ring_type.__name__)
-            else:
-                self._description = ('{0} does not represent a '
-                                     ' valid M-AT Ring').format(self.path)
-            return self._description
+    def get_description(self):
+        if self.ring_type is not None:
+            return '{0} does not represent a valid {1}'.format(
+                self.path, self.ring_type.__name__)
+        else:
+            return '{0} does not represent a valid M-AT Ring'.format(
+                self.path)

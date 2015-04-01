@@ -2,7 +2,13 @@ import re
 
 import sublime
 
-from ..tools import get_member_region, split_member_region
+from ..tools.sublime import (
+    split_member_region
+)
+from ..tools.settings import (
+    get_documentation_sections,
+    get_default_separators,
+)
 
 
 class CodeBlock(object):
@@ -11,14 +17,24 @@ class CodeBlock(object):
     ARG_MATCHER = re.compile(r"^(\[.*?\])*\^([A-Z]|\{[A-Z,{}]*\})")
     ARG_SPLITTER = re.compile(r"\{[A-Z,\d$]*\}")
 
-    def __init__(self, view, point):
+    def __init__(self, ring_view, point):
         super(CodeBlock, self).__init__()
-        self.view = view
+        self.ring_view = ring_view
+        if self.ring_view is None:
+            raise InvalidCodeBlockError(self.view, point)
         self.point = point
-        if view.score_selector(point, 'meta.subroutine.fs') <= 0:
-            raise InvalidCodeBlockError(view, point)
+        if self.view.score_selector(point, 'meta.subroutine.fs') <= 0:
+            raise InvalidCodeBlockError(self.view, point)
 
-        self.codeblock_region = get_member_region(self.view, self.point)
+        reg = self.ring_view.get_member_region(self.point)
+        if not reg:
+            raise InvalidCodeBlockError(self.view, point)
+
+        self.codeblock_region = sublime.Region(reg[0], reg[1])
+
+    @property
+    def view(self):
+        return self.ring_view.view
 
     @property
     def header_region(self):
@@ -70,6 +86,14 @@ class CodeBlock(object):
     @codeblock_name.setter
     def codeblock_name(self, value):
         self._codeblock_name = value
+
+    @property
+    def doc(self):
+        try:
+            return self._doc
+        except AttributeError:
+            self._doc = CodeBlockDoc(self)
+            return self._doc
 
     def split_codeblock_region(self):
         """
@@ -191,13 +215,6 @@ class CodeBlock(object):
 
         return codeblock_sets
 
-    def update_documentation(self, update_only=False, use_snippets=False):
-        documentation = CodeBlockDoc(self)
-        return documentation.update(update_only, use_snippets)
-
-    def get_documentation(self):
-        return CodeBlockDoc(self)
-
 
 class CodeBlockAttribute(object):
     """Represents a piece of data used in a CodeBlock.
@@ -288,19 +305,22 @@ class CodeBlockDoc(object):
     def __init__(self, codeblock):
         super(CodeBlockDoc, self).__init__()
         self.codeblock = codeblock
+
         self.doc_regions = dict()
         for region in self.split_doc_region():
-            if not region.empty():
-                dr = self.get_region(region)
-                self.doc_regions[dr.section] = dr
+            self.add_region(region)
+
         self._snippet_counter = 0
         self.omit_sections = CodeBlockDoc.omit_sections
-        settings = sublime.load_settings('m-at.sublime-settings')
-        requested_sections = settings.get('documentation_sections')
+
+        requested_sections = get_documentation_sections()
         if (requested_sections is not None):
             self.omit_sections = list(
                 set(CodeBlockDoc.all_doc_sections) -
                 set(requested_sections))
+
+    def __str__(self):
+        return self.view.substr(self.region)
 
     @property
     def region(self):
@@ -329,6 +349,13 @@ class CodeBlockDoc(object):
             yield sublime.Region(start, self.region.end())
         else:
             yield self.region
+
+    def add_region(self, region):
+        if not region.empty():
+            dr = self.get_region(region)
+            self.doc_regions[dr.section] = dr
+            attribute = dr.section.lower().replace(' ', '_')
+            setattr(self, attribute, dr)
 
     def get_region(self, region=None, section=None):
         r = None
@@ -381,13 +408,8 @@ class CodeBlockDoc(object):
 
         def __init__(self, documentation, region=None, section=None):
             self.documentation = documentation
-            settings = sublime.load_settings('m-at.sublime-settings')
-            self.separators = dict()
-            self.separators['alpha'] = settings.get(
-                'default_variable_separator', ' - ')
-            self.separators['numeric'] = settings.get(
-                'default_numeric_separator', '.  ')
-            # logger.debug('self.separators = %s', self.separators)
+
+            self.separators = get_default_separators()
             self.separator_width = max(len(self.separators['alpha']),
                                        len(self.separators['numeric']))
 
@@ -407,7 +429,7 @@ class CodeBlockDoc(object):
             elif section is not None:
                 self.section = section
                 self.region = None
-                self.current_content = None
+                self.current_content = ''
                 self.header_region = None
                 self.body_region = None
                 self.current_header = None
@@ -416,6 +438,9 @@ class CodeBlockDoc(object):
                 raise DocRegionException(
                     'A Doc Region must have a specified Region or Type to ' +
                     'be instantiated.')
+
+        def __str__(self):
+            return self.current_content
 
         @property
         def codeblock(self):
@@ -674,6 +699,9 @@ class CodeBlockDoc(object):
         require special parsing and updating.
         """
 
+        LocalVarParser = re.compile(
+            r"//\s*([A-Z])(\s*[-=:]\s*)([\s\S]*?)\n(?=//\s*[A-Z]\s*[-=:]|END)")
+
         def __init__(self, documentation, region=None, section=None):
             super(CodeBlockDoc.LocalVarsRegion, self).__init__(documentation,
                                                                region,
@@ -684,9 +712,7 @@ class CodeBlockDoc(object):
         def parse_doc(self):
             if self.current_body is not None:
                 # Extract the variable documentation
-                documented_var_info = re.findall(
-                    (r"//\s*([A-Z])(\s*[-=:]\s*)([\s\S]*?)\n" +
-                        r"(?=//\s*[A-Z]\s*[-=:]|END)"),
+                documented_var_info = self.LocalVarParser.findall(
                     self.current_body + '\nEND')
                 for var, sep, content in documented_var_info:
                     self.documented_vars[var] = (var, sep, content)
@@ -746,6 +772,10 @@ class CodeBlockDoc(object):
         require special parsing and updating.
         """
 
+        DataStrucParser = re.compile(
+            r"//\s*((L|U)\(\d+\))(\s*[-=:]\s*)([\s\S]*?)\n" +
+            r"(?=//\s*(L|U)\(\d+\)\s*[-=:]|END)")
+
         def __init__(self, documentation, region=None, section=None):
             super(CodeBlockDoc.DataStrucRegion, self).__init__(documentation,
                                                                region,
@@ -756,9 +786,7 @@ class CodeBlockDoc(object):
         def parse_doc(self):
             if self.current_body is not None:
                 # Extract the set documentation
-                documented_set_info = re.findall(
-                    (r"//\s*((L|U)\(\d+\))(\s*[-=:]\s*)([\s\S]*?)\n" +
-                     r"(?=//\s*(L|U)\(\d+\)\s*[-=:]|END)"),
+                documented_set_info = self.DataStrucParser.findall(
                     self.current_body + '\nEND')
                 for set, type, sep, content, unused in documented_set_info:
                     self.documented_sets[set] = (set, sep, content)
@@ -818,6 +846,9 @@ class CodeBlockDoc(object):
         require special parsing.
         """
 
+        UnitTestParser = re.compile(
+            r"(// *:Test *([\s\S]*?))\n(?=// *:Test *|END)")
+
         def __init__(self, documentation, region=None, section=None):
             super(CodeBlockDoc.UnitTestRegion, self).__init__(documentation,
                                                               region,
@@ -828,8 +859,7 @@ class CodeBlockDoc(object):
         def parse_doc(self):
             if (self.current_body is not None):
                 # Extract the set documentation
-                unit_tests = re.findall(
-                    r"(// *:Test *([\s\S]*?))\n(?=// *:Test *|END)",
+                unit_tests = self.UnitTestParser.findall(
                     self.current_body + '\nEND')
                 for test, unused in unit_tests:
                     self.unit_tests.append(test)
