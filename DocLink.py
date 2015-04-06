@@ -37,17 +37,38 @@ from .tools.settings import (
 )
 
 
+TOOLTIP_SUPPORT = int(sublime.version()) >= 3072
+css = ''
+
+
 def plugin_loaded():
     for c in EntitySelector.get_defined_classes(globals()):
         c.add_possible_selector()
     FSFunctionDocLink.load_doc_cache()
     FocusFunctionDocLink.load_doc_cache()
+    init_css()
 
 
 def plugin_unloaded():
     for c in EntitySelector.get_defined_classes(globals()):
         c.remove_possible_selector()
     imp.reload(sys.modules[__name__])
+
+
+def init_css():
+    """ Load up desired CSS """
+    global css
+
+    settings = sublime.load_settings('Focus Package.sublime-settings')
+    css_file = settings.get('documentation_css',
+                            'Packages/Focus/resources/css/dark.css')
+    try:
+        css = sublime.load_resource(css_file).replace('\r', '\n')
+    except:
+        css = ''
+
+    settings.clear_on_change('reload')
+    settings.add_on_change('reload', init_css)
 
 
 class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
@@ -389,6 +410,8 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         else:
             doc = None
 
+        print(doc)
+
         if (doc is None) or self.doc_already_shown:
             try:
                 url = get_fs_function_doc_url_overrides_setting()[
@@ -404,16 +427,12 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
             return
         else:
             sublime.status_message(self.open_status_message)
-            doc = self.format_documentation(doc)
-            window = self.view.window()
-            output_panel = window.create_output_panel('fs_function_doc')
-            output_panel.set_read_only(False)
-            output_panel.run_command('entity_select_insert_in_view',
-                                     {'text': doc})
-            output_panel.set_read_only(True)
-            output_panel.assign_syntax("Packages/Text/Plain text.tmLanguage")
-            window.run_command('show_panel',
-                               {'panel': 'output.fs_function_doc'})
+
+            doc1 = self.format_documentation_for_popup(doc)
+            logger.debug('doc = %s', doc1)
+            self.show_doc_in_popup(doc1)
+            doc2 = self.format_documentation(doc)
+            self.show_doc_in_panel(doc2)
             self.doc_already_shown = True
 
     def get_url(self):
@@ -604,6 +623,67 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
                 "Code Examples\n"
                 "-------------\n"
                 "{examples}\n").format(**doc)
+
+    POPUP_DOC_TEMPLATE = (
+        '''<style>{css}</style>
+        <h1 class="header">{function} {name}</h1>
+        <div class="row">
+            <span class="title">Function:</span>
+            <ind x="100px">{function}</ind>
+        </div>
+        <table>
+            <tr>
+                <td>Function:</td>
+                <td>{function}</td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td>{name}</td>
+            </tr>
+            <tr>
+                <td>Group:</td>
+                <td>{group}</td>
+            </tr>
+            <tr>
+                <td>Precondition:</td>
+                <td>{precondition}</td>
+            </tr>
+            <tr>
+                <td>Return:</td>
+                <td>{return}</td>
+            </tr>
+            <tr>
+                <td>Side Effect:</td>
+                <td>{side effect}</td>
+            </tr>
+        </table><br /><br />
+        '''
+    )
+
+    COMMENT_TEMPLATE = '''
+        <h2 class="header">Comments</h2>
+        <p>{comments}</p>
+        '''
+
+    CODE_EXAMPLES_TEMPLATE = '''
+        <h2 class="header">Code Examples</h2>
+        <p>{examples}</p>
+        '''
+
+    def format_documentation_for_popup(self, doc):
+        global css
+        doc['css'] = css
+        template = self.POPUP_DOC_TEMPLATE
+        if doc['comments']:
+            template += self.COMMENT_TEMPLATE
+            doc['comments'] = doc['comments'].replace('\n\r', '\n').replace(
+                '\n', '<br />')
+        if doc['examples']:
+            template += self.CODE_EXAMPLES_TEMPLATE
+            doc['examples'] = doc['examples'].replace('\n\r', '\n').replace(
+                '\n', '<br />')
+        return template.format(**doc)
+
 
     @property
     def status_string(self):
