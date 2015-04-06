@@ -10,7 +10,7 @@ import sublime
 import sublime_plugin
 
 from .classes.command_templates import CallbackCmdMeta
-from .tools.classes import get_ring, is_local_ring, get_ring_file
+from .tools.classes import get_ring, is_local_ring, get_ring_file, is_fs_file, is_homecare_ring
 from .tools.settings import (
     get_default_ring,
     get_translate_command,
@@ -41,9 +41,7 @@ class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
 
     @property
     def ring_file(self):
-        r = get_ring_file(self.file_name)
-        logger.debug("self.ring_file=%s", r)
-        return r
+        return get_ring_file(self.file_name)
 
     def determine_ring(self):
         logger.debug("determining ring for %s", self.__class__.__name__)
@@ -279,7 +277,11 @@ class TranslateRingFileCommand(RingExecCommand):
         translate_cmd = get_translate_command()
         logger.debug('translate_cmd = %s', translate_cmd)
 
-        if self.default_flag:
+        if is_fs_file(self.ring_file):
+            self.translate_fs()
+        elif self.default_flag:
+            self.translate_other()
+        elif not is_homecare_ring(self.ring):
             self.translate_other()
         elif 'focz.translate.sublime.p.mps' in translate_cmd.lower():
             self.translate_sublime()
@@ -289,27 +291,16 @@ class TranslateRingFileCommand(RingExecCommand):
     def translate_sublime(self):
         translate_cmd = os.path.join('PgmObject', 'Foc',
                                      'FocZ.Translate.Sublime.P.mps')
-        translate_path = self.ring.get_file_path(translate_cmd)
-        logger.debug('translate_path = %s', translate_path)
 
-        if not translate_path:
+        if not self.ring.check_file_existence(translate_cmd):
             if not self.create_sublime_translate_file():
                 self.translate_other()
                 return
             else:
                 translate_path = self.ring.get_file_path(translate_cmd)
 
+        logger.debug('translate_path = %s', translate_path)
         include_files, include_count = get_translate_include_settings()
-        # parameters = convert_to_focus_lists([self.file_name,
-        #                                      '<result_file>',
-        #                                      '',
-        #                                      '',
-        #                                      include_files,
-        #                                      include_count])
-        # shell_cmd = 'magic.exe "{0}" {1}'.format(translate_path, parameters)
-        # logger.debug('shell_cmd = %s', shell_cmd)
-
-        # self.kwargs['shell_cmd'] = shell_cmd
 
         parameters = [self.file_name, '<result_file>', '', '', include_files,
                       include_count]
@@ -321,26 +312,33 @@ class TranslateRingFileCommand(RingExecCommand):
     def translate_other(self,
                         translate_cmd='Foc\\FocZ.Textpad.Translate.P.focus'):
         translate_cmd = os.path.join('PgmSource', translate_cmd)
-        translate_path = self.ring.get_file_path(translate_cmd)
-        logger.debug('translate_path = %s', translate_path)
 
-        if not translate_path:
+        if not self.ring.check_file_existence(translate_cmd):
             self.translate_other()
             return
 
-        # if self.default_flag:
-        #     shell_cmd = self.build_default_shell_cmd(translate_cmd)
-        # else:
-        #     shell_cmd = 'magic.exe "{0}" "{1}"'.format(translate_path,
-        #                                                self.file_name)
+        translate_path = self.ring.get_file_path(translate_cmd)
+        logger.debug('translate_path = %s', translate_path)
 
         self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
             target_ring=self.target_ring, partial_path=translate_cmd,
-            parameters=self.file_path)
+            parameters=self.file_name)
+        logger.debug("self.kwargs['shell_cmd'] = %s", self.kwargs['shell_cmd'])
 
-        # self.kwargs['shell_cmd'] = shell_cmd
-        # logger.debug('shell_cmd = %s', shell_cmd)
         self.kwargs['quiet'] = True
+
+    def translate_fs(self):
+
+        if not self.target_ring.check_file_existence('magic.mas'):
+            logger.error('magic.mas does not exist in ring %s', self.ring)
+            return
+
+        translate_path = self.target_ring.get_file_path('magic.mas')
+        logger.debug('translate_path = %s', translate_path)
+
+        self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
+            target_ring=self.target_ring, full_path=translate_path,
+            parameters=self.file_path)
 
     def is_enabled(self, *args, file_name=None, **kwargs):
         self._file_name = file_name

@@ -35,6 +35,10 @@ def is_focus_file(ring_file):
     return isinstance(ring_file, Focus.classes.ring_files.FocusFile)
 
 
+def is_fs_file(ring_file):
+    return isinstance(ring_file, Focus.classes.ring_files.FSFile)
+
+
 def get_view(view):
     return Focus.classes.views.RingView.get_view(view)
 

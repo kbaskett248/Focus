@@ -297,9 +297,12 @@ class FocusFile(RingFile, FocusCompatibility):
             'PgmObject', 'Foc', 'FocZ.Textpad.Translate.P.mps')
 
         if not ring.check_file_existence(partial_path):
-            logger.warning('Translate file (%s) not found in ring: %s',
-                           partial_path, ring)
-            return False
+            partial_path = os.path.join(
+                'PgmObject', 'FocZ.Textpad.Translate.P.mps')
+            if not ring.check_file_existence(partial_path):
+                logger.warning('Translate file (%s) not found in ring: %s',
+                               partial_path, ring)
+                return False
 
         logger.info('Translating file: %s', self.file_name)
 

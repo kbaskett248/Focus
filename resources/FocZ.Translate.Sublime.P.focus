@@ -136,7 +136,8 @@ IF{[] @{,E}@CallSub(WriteMessageToResults)},
 //:Doc Returns
 //     Nil if no errors; otherwise list of errors.
 ^{F,E}
-IF{@GetLocal(DoNotFormat) "";
+IF{{".focus",F%6}@WV@NV "";
+   @GetLocal(DoNotFormat) "";
    {("Formatting file: ",F,"..."),E}@CallSub(WriteMessageToResults),
    {"Foc","FocZ.Format.P",{F,1}}@CallProgram()@CallSub(UnformatValue) @{"Formatting",}@CallSub(FormatResults);
    {{"Done",""},E}@CallSub(WriteMessageToResults),""}

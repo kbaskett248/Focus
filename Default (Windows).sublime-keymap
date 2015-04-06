@@ -1,4 +1,15 @@
 [
+    // Build translate
+    {   "keys": ["ctrl+b"], 
+        "command": "build",
+        "args": {
+            "default": true
+        },
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus", "match_all": true }
+        ]
+    },
+
     // Fold selected subroutine
     {   "keys": ["ctrl+k", "ctrl+f"], 
         "command": "fold_subroutine", 

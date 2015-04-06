@@ -7,7 +7,7 @@ import shutil
 import subprocess
 
 logger = logging.getLogger(__name__)
-logger.setLevel('INFO')
+logger.setLevel('DEBUG')
 
 from .metaclasses import MiniPluginMeta
 from ..tools.focus import CACHE_ROOT, parse_ring_path, convert_to_focus_lists
@@ -126,12 +126,13 @@ class Ring(object, metaclass=MiniPluginMeta):
             ring = cls.get_ring(default_ring_path)
 
         if not ring:
-            ring_list = Ring.Rings.values()
-            ring = ring_list[0]
-            for r in ring_list:
+            ring = None
+            for r in Ring.Rings.values():
                 if is_local_ring(r):
                     ring = r
                     break
+                elif not ring:
+                    ring = r
 
         return ring
 
@@ -182,6 +183,7 @@ class Ring(object, metaclass=MiniPluginMeta):
         self.system_path = self.get_system_path()
         self.magic_path = self.get_magic_path()
         self.system_programs_path = self.get_system_programs_path()
+        self.system_pgmobject_path = self.get_system_pgmobject_path()
 
         self.cache_path = self.get_cache_path()
         self.pgm_cache_path = self.get_pgm_cache_path()
@@ -234,6 +236,16 @@ class Ring(object, metaclass=MiniPluginMeta):
         else:
             return os.path.join(self.system_path, 'Programs')
 
+    def get_system_pgmobject_path(self):
+        if self.system_path is None:
+            return None
+
+        path = os.path.join(self.system_path, 'PgmObject')
+        if os.path.isdir(path):
+            return path
+
+        return False
+
     def get_cache_path(self):
         path = os.path.join(CACHE_ROOT,
                             self.universe_name + '.Universe',
@@ -280,15 +292,26 @@ class Ring(object, metaclass=MiniPluginMeta):
                  ('Ring', self.path),
                  ('System', self.system_path),
                  ('System Programs', self.system_programs_path),
+                 ('System PgmObject', self.system_pgmobject_path),
                  ('Server', self.server_path))
                  if p[1] is not None]
         return paths
 
     def check_file_existence(self, partial_path, multiple_matches=False):
+        file_name = os.path.basename(partial_path)
         if multiple_matches:
             results = []
+        logger.debug("check_file_existence")
         for k, v in self.possible_paths():
-            path = merge_paths(v, partial_path)
+            logger.debug("%s: %s", k, v)
+
+            if k == 'System Programs':
+                path = merge_paths(v, file_name)
+            elif k == 'System PgmObject':
+                path = merge_paths(v, file_name)
+            else:
+                path = merge_paths(v, partial_path)
+
             if os.path.exists(path):
                 if multiple_matches:
                     results.append((k, path))
@@ -301,13 +324,14 @@ class Ring(object, metaclass=MiniPluginMeta):
             return None
 
     def get_file_path(self, partial_path):
+        logger.debug("getting file path for %s", partial_path)
         possible_paths = self.check_file_existence(partial_path)
         if possible_paths:
             return possible_paths[1]
         # If we don't have server access and no match was found, give the
         # benefit of the doubt and return a possible path.
-        elif self.server_path is None:
-            return merge_paths(self.path, partial_path)
+        # elif self.server_path is None:
+        #     return merge_paths(self.path, partial_path)
         else:
             return None
 
@@ -582,18 +606,23 @@ class Ring(object, metaclass=MiniPluginMeta):
         return shell_cmd
 
     def get_tools_path(self):
+        logger.debug("running get_tools_path")
         return self.get_file_path(
             os.path.join('PgmObject', 'Foc', 'FocZ.TextPadTools.P.mps'))
 
     def format_shell_cmd_for_tool(self, run_path, tool_cmd, full_path,
                                   parameters):
+        logger.debug('parameters = %s', parameters)
         if parameters:
-            if hasattr(parameters, '__iter__'):
+            if isinstance(parameters, str):
+                parameters = [tool_cmd, full_path, parameters]
+            elif hasattr(parameters, '__iter__'):
                 new_parameters = parameters
                 parameters = [tool_cmd, full_path]
                 parameters.extend(new_parameters)
             else:
                 parameters = [tool_cmd, full_path, parameters]
+            logger.debug('parameters = %s', parameters)
             parameters = convert_to_focus_lists(parameters)
             shell_cmd = 'magic.exe "{run_path}" {parameters}'.format(
                 run_path=run_path, full_path=full_path, parameters=parameters)
@@ -604,7 +633,9 @@ class Ring(object, metaclass=MiniPluginMeta):
         return shell_cmd
 
     def get_shell_cmd_tool(self, full_path, parameters=None):
+        logger.debug('get_shell_cmd_tool')
         run_path = self.get_tools_path()
+        logger.debug('run_path = %s', run_path)
         if run_path is None:
             logger.error('.get_shell_cmd_tool: could not find tools path')
             return None
@@ -622,7 +653,9 @@ class Ring(object, metaclass=MiniPluginMeta):
         return shell_cmd
 
     def get_shell_cmd_target(self, target_ring, full_path, parameters=None):
+        logger.debug('get_shell_cmd_target')
         run_path = self.get_tools_path()
+        logger.debug('run_path = %s', run_path)
         if run_path is None:
             logger.error('.get_shell_cmd_tool: could not find tools path')
             return None
