@@ -231,6 +231,7 @@ class OpenInOtherRingCommand(RingCommand):
         self.current_file = sublime.active_window().active_view().file_name()
         self.current_ring = get_ring(self.current_file)
 
+        self.target_ring = ring
         self.target_file = file
         if (ring is not None):
             logger.debug('Attempting to use supplied ring: %s', ring)

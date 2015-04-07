@@ -244,7 +244,7 @@ class Ring(object, metaclass=MiniPluginMeta):
         if os.path.isdir(path):
             return path
 
-        return False
+        return None
 
     def get_cache_path(self):
         path = os.path.join(CACHE_ROOT,
@@ -301,6 +301,7 @@ class Ring(object, metaclass=MiniPluginMeta):
         file_name = os.path.basename(partial_path)
         if multiple_matches:
             results = []
+            result_set = set()
         logger.debug("check_file_existence")
         for k, v in self.possible_paths():
             logger.debug("%s: %s", k, v)
@@ -314,7 +315,9 @@ class Ring(object, metaclass=MiniPluginMeta):
 
             if os.path.exists(path):
                 if multiple_matches:
-                    results.append((k, path))
+                    if path not in result_set:
+                        results.append((k, path))
+                        result_set.add(path)
                 else:
                     return (k, path)
 
