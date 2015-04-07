@@ -1,4 +1,7 @@
 {
-    "target": "build_translate_ring_file",
-    "selector": "source.fs"
+    "target": "window_translate_ring_file",
+    "selector": "source.fs",
+    "encoding": "ascii",
+    "exec_cmd": "enhanced_exec",
+    "startup_info": false
 }

@@ -25,7 +25,7 @@ from ..tools.settings import (
 from ..tools.sublime import strip_alias
 
 
-focus_extension_list = ('.mcs', '.mps', '.mts')
+focus_extension_list = ('.mcs', '.mps', '.mts', '.mas')
 
 
 def get_ring(path):

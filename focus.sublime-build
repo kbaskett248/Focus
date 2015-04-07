@@ -1,5 +1,4 @@
 {
-    "name": "Translate",
     "target": "window_translate_ring_file",
     "selector": "source.focus",
     "encoding": "ascii",

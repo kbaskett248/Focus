@@ -296,8 +296,8 @@ class TranslateRingFileCommand(RingExecCommand):
             if not self.create_sublime_translate_file():
                 self.translate_other()
                 return
-            else:
-                translate_path = self.ring.get_file_path(translate_cmd)
+
+        translate_path = self.ring.get_file_path(translate_cmd)
 
         logger.debug('translate_path = %s', translate_path)
         include_files, include_count = get_translate_include_settings()
@@ -336,9 +336,10 @@ class TranslateRingFileCommand(RingExecCommand):
         translate_path = self.target_ring.get_file_path('magic.mas')
         logger.debug('translate_path = %s', translate_path)
 
+        self.kwargs['initial_message'] = 'Translating %s\n\n' % self.file_name
         self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
             target_ring=self.target_ring, full_path=translate_path,
-            parameters=self.file_path)
+            parameters=self.file_name)
 
     def is_enabled(self, *args, file_name=None, **kwargs):
         self._file_name = file_name

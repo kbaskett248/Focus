@@ -1,9 +1,11 @@
 [
     // Build translate
     {   "keys": ["ctrl+b"], 
-        "command": "build",
+        "command": "window_translate_ring_file",
         "args": {
-            "default": true
+            "encoding": "ascii",
+            "exec_cmd": "enhanced_exec",
+            "startup_info": false,
         },
         "context": [
             { "key": "selector", "operator": "equal", "operand": "source.focus", "match_all": true }
