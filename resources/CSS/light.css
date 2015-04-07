@@ -6,15 +6,19 @@ html {
 body {
     background-color: #FAFDFF;
     margin: 1px;
-    font-size: 1em;
+    font-size: 0.95em;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-size: 1.2em;
+    font-size: 1em;
 }
 
 p {
     padding-left: 1em;
+    padding-top: 0em;
+    padding-bottom: 0em;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
 }
 
 .content {
@@ -36,7 +40,14 @@ p {
 }
 
 .header {
+    font-size: 1.2em;
     color: #718c00;
+}
+
+.subheader {
+    font-size: 1.1em;
+    padding-left: 1em;
+    color: #9999cc;
 }
 
 .divider {

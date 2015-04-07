@@ -33,7 +33,7 @@ from .tools.settings import (
     get_translator_doc_url_overrides_setting,
     get_focus_function_argument_type,
     get_focus_function_doc_url_overrides_setting,
-    get_fs_function_doc_url_overrides_setting,
+    get_fs_function_doc_url,
 )
 
 
@@ -59,11 +59,13 @@ def init_css():
     """ Load up desired CSS """
     global css
 
+    logger.debug("initializing css")
+
     settings = sublime.load_settings('Focus Package.sublime-settings')
     css_file = settings.get('documentation_css',
                             'Packages/Focus/resources/css/dark.css')
     try:
-        css = sublime.load_resource(css_file).replace('\r', '\n')
+        css = sublime.load_resource(css_file).replace('\r', '')
     except:
         css = ''
 
@@ -403,36 +405,26 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         a second time, the web page is opened.
 
         """
-        show_doc_setting = get_show_doc_setting()
-
-        if show_doc_setting:
-            doc = self.get_doc_from_cache()
+        if self.doc_already_shown:
+            show_doc_setting = 'source'
         else:
-            doc = None
+            show_doc_setting = get_show_doc_setting('fs_function')
+            if show_doc_setting != 'source':
+                doc = self.get_doc_from_cache()
 
-        print(doc)
-
-        if (doc is None) or self.doc_already_shown:
-            try:
-                url = get_fs_function_doc_url_overrides_setting()[
-                    self.search_string]
-                if url is None:
-                    url = self.get_url()
-            except KeyError:
-                url = self.get_url()
+        if (show_doc_setting == 'source') or (doc is None):
+            url = self.get_url()
 
             if url is not None:
                 sublime.status_message(self.open_status_message)
                 self.show_doc_on_web(url)
-            return
-        else:
-            sublime.status_message(self.open_status_message)
-
-            doc1 = self.format_documentation_for_popup(doc)
-            logger.debug('doc = %s', doc1)
-            self.show_doc_in_popup(doc1)
-            doc2 = self.format_documentation(doc)
-            self.show_doc_in_panel(doc2)
+        elif show_doc_setting == 'panel':
+            doc = self.format_documentation(doc)
+            self.show_doc_in_panel(doc)
+            self.doc_already_shown = True
+        elif show_doc_setting == 'popup':
+            doc = self.format_documentation_for_popup(doc)
+            self.show_doc_in_popup(doc)
             self.doc_already_shown = True
 
     def get_url(self):
@@ -443,7 +435,9 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         if match is None:
             return None
 
-        return get_fs_wiki_setting() + match.group(0)
+        print(get_fs_function_doc_url(match.group(0)))
+
+        return get_fs_function_doc_url(match.group(0))
 
     def enable_highlight(self):
         try:
@@ -559,13 +553,7 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         dictionary.
 
         """
-        try:
-            url = get_fs_function_doc_url_overrides_setting()[
-                self.search_string]
-            if url is None:
-                url = self.get_url()
-        except KeyError:
-            url = self.get_url()
+        url = self.get_url()
 
         logger.info('Scraping %s for documentation for %s',
                     url,
@@ -626,47 +614,26 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
 
     POPUP_DOC_TEMPLATE = (
         '''<style>{css}</style>
-        <h1 class="header">{function} {name}</h1>
-        <div class="row">
-            <span class="title">Function:</span>
-            <ind x="100px">{function}</ind>
-        </div>
-        <table>
-            <tr>
-                <td>Function:</td>
-                <td>{function}</td>
-            </tr>
-            <tr>
-                <td>Name:</td>
-                <td>{name}</td>
-            </tr>
-            <tr>
-                <td>Group:</td>
-                <td>{group}</td>
-            </tr>
-            <tr>
-                <td>Precondition:</td>
-                <td>{precondition}</td>
-            </tr>
-            <tr>
-                <td>Return:</td>
-                <td>{return}</td>
-            </tr>
-            <tr>
-                <td>Side Effect:</td>
-                <td>{side effect}</td>
-            </tr>
-        </table><br /><br />
+        <div class="content">
+            <h1 class="header">{function} {name}</h1>
+            <p><a href="open_source" class="copy-link">(Open source)</a></p>
+            <p><span class="key">Group:</span> <span class="value">{group}</span></p>
+            <p><span class="key">Precondition:</span> <span class="value">{precondition}</span></p>
+            <p><span class="key">Argument:</span> <span class="value">{argument}</span></p>
+            <p><span class="key">Return:</span> <span class="value">{return}</span></p>
+            <p><span class="key">Side Effect:</span> <span class="value">{side effect}</span></p>
         '''
     )
 
     COMMENT_TEMPLATE = '''
-        <h2 class="header">Comments</h2>
+        <div class="divider"></div>
+        <h2 class="subheader">Comments</h2>
         <p>{comments}</p>
         '''
 
     CODE_EXAMPLES_TEMPLATE = '''
-        <h2 class="header">Code Examples</h2>
+        <div class="divider"></div>
+        <h2 class="subheader">Code Examples</h2>
         <p>{examples}</p>
         '''
 
@@ -682,7 +649,21 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
             template += self.CODE_EXAMPLES_TEMPLATE
             doc['examples'] = doc['examples'].replace('\n\r', '\n').replace(
                 '\n', '<br />')
+        template += '</div>'
         return template.format(**doc)
+
+
+    def popup_navigate(self, href):
+        """ Execute link callback """
+        logger.debug('href = %s', href)
+        params = href.split(':')
+        logger.debug('params = %s', params)
+        key = params[0]
+        logger.debug('key = %s', key)
+
+        if key == 'open_source':
+            self.doc_already_shown = True
+            self.show_doc()
 
 
     @property

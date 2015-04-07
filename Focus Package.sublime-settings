@@ -74,11 +74,25 @@
     "focus_wiki": "http://stxwiki/wiki10/",
     "fs_wiki": "http://stxwiki/magicfs6/",
 
-    // For DocLink that supports it, this will show the documentation in an output panel when 
-    // DocLink is invoked. Invoking DocLink a second time will display documentation in it's default
-    // location. 
-    // Currently, only Focus and FS functions support this feature.
-    "show_doc_in_panel": true,
+    // This controls where documentation is shown for DocLink. The options are:
+    //  - "popup": documentation will be shown in a popup if supported
+    //  - "panel": documentation will be shown in an output panel
+    //  - "source": documentation will be shown in the browser or in a file view
+    // Furthermore, this can be set to a dictionary to control the documentation method on an
+    // individual basis. In this format, the key is the type of documentation and the value
+    // is one of the locations above.
+    "show_doc_method": {
+        "focus_function": "popup",
+        "fs_function": "popup",
+        "subroutine": "panel",
+        "translator": "popup",
+        "alias": "panel",
+        "include_file": "source",
+        "local": "source",
+        "object": "panel",
+        "screen_component": "source",
+        "rt_tool": "source"
+    },
 
     // For FS Function Doc Link, this dictionary is used to override the calculated URL for the
     // FS function. This is primarily used to correct functional form operator pages.

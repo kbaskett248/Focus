@@ -14,7 +14,6 @@ SETTINGS_FILE = 'Focus Package.sublime-settings'
 
 
 SETTINGS_INFO = (
-    ('get_show_doc_setting', 'show_doc_in_panel', False),
     ('get_focus_wiki_setting', 'focus_wiki', 'http://stxwiki/wiki10/'),
     ('get_fs_wiki_setting', 'fs_wiki', 'http://stxwiki/magicfs6/'),
     ('get_set_highlighter_setting', 'highlight_sets_across_file', False),
@@ -23,8 +22,6 @@ SETTINGS_INFO = (
     ('get_documentation_sections', 'documentation_sections',
      ["Purpose", "Arguments", "Preconditions", "Local Variables",
       "Data Structures", "Side Effects", "Returns", "Additional Notes"]),
-    ('get_fs_function_doc_url_overrides_setting',
-     'fs_function_doc_url_overrides', {}),
     ('get_focus_function_doc_url_overrides_setting',
      'focus_function_doc_url_overrides', {}),
     ('get_default_ring', 'default_ring', None),
@@ -54,46 +51,54 @@ for info in SETTINGS_INFO:
 del info
 
 
-# DocLink Settings
-# def get_show_doc_setting():
-#     settings = sublime.load_settings(SETTINGS_FILE)
-#     return settings.get('show_doc_in_panel', False)
+DOC_METHOD_DEFAULTS = {
+    "focus_function": "popup",
+    "fs_function": "popup",
+    "subroutine": "panel",
+    "translator": "popup",
+    "alias": "panel",
+    "include_file": "source",
+    "local": "source",
+    "object": "panel",
+    "screen_component": "source",
+    "rt_tool": "source"
+}
 
 
-# def get_focus_wiki_setting():
-#     settings = sublime.load_settings(SETTINGS_FILE)
-#     return settings.get('focus_wiki', "http://stxwiki/wiki10/")
+def get_show_doc_setting(doc_type):
+    settings = sublime.load_settings(SETTINGS_FILE)
+    s = settings.get('show_doc_method', None)
+    if isinstance(s, str):
+        return s
+    else:
+        doc_method = DOC_METHOD_DEFAULTS.copy()
+        if isinstance(s, dict):
+            doc_method.update(s)
+        return doc_method[doc_type]
 
 
-# def get_fs_wiki_setting():
-#     settings = sublime.load_settings(SETTINGS_FILE)
-#     return settings.get('fs_wiki', "http://stxwiki/magicfs6/")
+def get_fs_function_doc_url(fs_function):
+    settings = sublime.load_settings(SETTINGS_FILE)
+    s = settings.get('fs_function_doc_url_overrides', None)
+    if not isinstance(s, dict):
+        s = {}
 
+    if fs_function in s.keys():
+        value = s[fs_function]
+        if value:
+            return value
 
-# def get_set_highlighter_setting():
-#     settings = sublime.load_settings(SETTINGS_FILE)
-#     return settings.get('highlight_sets_across_file', False)
+    s = settings.get('fs_wiki', None)
+    if (not s) or (not isinstance(s, str)):
+        s = 'http://stxwiki/magicfs6/'
 
-
-# def get_translator_doc_url_overrides_setting():
-#     settings = sublime.load_settings(SETTINGS_FILE)
-#     return settings.get('translator_doc_url_overrides', {})
+    return s + fs_function
 
 
 def get_focus_function_argument_type(function):
     settings = sublime.load_settings(
         'Focus-Function Argument Types.sublime-settings')
     return settings.get(function, None)
-
-
-# def get_fs_function_doc_url_overrides_setting():
-#     settings = sublime.load_settings(SETTINGS_FILE)
-#     return settings.get('fs_function_doc_url_overrides', {})
-
-
-# def get_focus_function_doc_url_overrides_setting():
-#     settings = sublime.load_settings(SETTINGS_FILE)
-#     return settings.get('focus_function_doc_url_overrides', {})
 
 
 # Completions
