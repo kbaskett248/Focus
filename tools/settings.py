@@ -99,6 +99,24 @@ def get_fs_function_doc_url(fs_function):
     return s + fs_function
 
 
+def get_focus_function_doc_url(focus_function):
+    settings = sublime.load_settings(SETTINGS_FILE)
+    s = settings.get('focus_function_doc_url_overrides', None)
+    if not isinstance(s, dict):
+        s = {}
+
+    if focus_function in s.keys():
+        value = s[focus_function]
+        if value:
+            return value
+
+    s = settings.get('focus_wiki', None)
+    if (not s) or (not isinstance(s, str)):
+        s = 'http://stxwiki/wiki10/'
+
+    return s + focus_function
+
+
 def get_focus_function_argument_type(function):
     settings = sublime.load_settings(
         'Focus-Function Argument Types.sublime-settings')

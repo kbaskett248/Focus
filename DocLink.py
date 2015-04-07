@@ -34,6 +34,7 @@ from .tools.settings import (
     get_focus_function_argument_type,
     get_focus_function_doc_url_overrides_setting,
     get_fs_function_doc_url,
+    get_focus_function_doc_url,
 )
 
 
@@ -133,7 +134,7 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
                       indent='    ')
 
     def get_url(self):
-        return get_focus_wiki_setting() + self.search_string
+        return get_focus_function_doc_url(self.search_string)
 
     def get_doc_from_cache(self):
         """Returns a doc dictionary from the cache.
@@ -142,54 +143,49 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
         the documentation cache is saved.
 
         """
+        wiki = get_focus_wiki_setting()
+        url = self.get_url()
+        if not url.startswith(wiki):
+            return None
+
         doc = None
         try:
-            doc = FocusFunctionDocLink.DocumentationCache[self.get_url()]
+            doc = FocusFunctionDocLink.DocumentationCache[url]
         except KeyError:
             doc = self.scrape_page()
             if doc is not None:
-                FocusFunctionDocLink.DocumentationCache[self.get_url()] = doc
+                FocusFunctionDocLink.DocumentationCache[url] = doc
                 FocusFunctionDocLink.save_doc_cache()
         return doc
 
     def show_doc(self):
-        overrides = get_focus_function_doc_url_overrides_setting()
-        try:
-            url = overrides[self.search_string]
-            if (url is not None):
-                sublime.status_message(self.open_status_message)
-                self.show_doc_on_web(url)
-                return
-        except KeyError:
-            pass
+        """Shows documentation for the currently selected FS function.
 
-        show_doc_setting = get_show_doc_setting()
-        if show_doc_setting:
-            doc = self.get_doc_from_cache()
+        If possible, documentation is scraped from the web page or retrieved
+        from the documentation cache and shown in an output panel. Otherwise,
+        the web page is opened in the default browser. If the key is pressed
+        a second time, the web page is opened.
+
+        """
+        if self.doc_already_shown:
+            show_doc_setting = 'source'
         else:
-            doc = None
+            show_doc_setting = get_show_doc_setting('focus_function')
+            if show_doc_setting != 'source':
+                doc = self.get_doc_from_cache()
 
-        if (doc is None) or self.doc_already_shown:
+        if (show_doc_setting == 'source') or (doc is None):
             url = self.get_url()
-            if (url is not None):
+            if url is not None:
                 sublime.status_message(self.open_status_message)
                 self.show_doc_on_web(url)
-            return
-        else:
-            sublime.status_message(self.open_status_message)
+        elif show_doc_setting == 'panel':
             doc = self.format_documentation(doc)
-            window = self.view.window()
-            output_panel = window.create_output_panel('focus_function_doc')
-            output_panel.set_read_only(False)
-            output_panel.run_command('entity_select_insert_in_view',
-                                     {'text': doc})
-            output_panel.set_read_only(True)
-            output_panel.assign_syntax("Packages/Text/Plain text.tmLanguage")
-            ops = output_panel.settings()
-            ops.set('word_wrap', True)
-            ops.set('wrap_width', 100)
-            window.run_command('show_panel',
-                               {'panel': 'output.focus_function_doc'})
+            self.show_doc_in_panel(doc)
+            self.doc_already_shown = True
+        elif show_doc_setting == 'popup':
+            doc = self.format_documentation_for_popup(doc)
+            self.show_doc_in_popup(doc)
             self.doc_already_shown = True
 
     def enable_highlight(self):
@@ -223,11 +219,15 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
         Parses the contents of the documentation page and returns them as a
         dictionary.
         """
-        logger.info('Scraping %s for documentation for %s',
-                    self.get_url(),
+        wiki = get_focus_wiki_setting()
+        url = self.get_url()
+        if not url.startswith(wiki):
+            return None
+
+        logger.info('Scraping %s for documentation for %s', url,
                     self.search_string)
         try:
-            f = urllib.request.urlopen(self.get_url())
+            f = urllib.request.urlopen(url)
         except urllib.error.URLError:
             return None
         else:
@@ -309,6 +309,51 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
                 "Code Examples\n"
                 "-------------\n"
                 "{examples}\n").format(**doc)
+
+    POPUP_DOC_TEMPLATE = (
+        '''<style>{css}</style>
+        <div class="content">
+            <h1 class="header">{function}</h1>
+            <p>{overview}</p>
+            <p><a href="open_source" class="copy-link">(Open source)</a></p>
+            <p><span class="key">Usage:</span> <span class="value">{usage}</span></p>
+            <p><span class="key">Runtime Arg:</span> <span class="value">{runtime arg}</span></p>
+            <p><span class="key">Translation Args:</span> <span class="value">{translation args}</span></p>
+            <p><span class="key">Precondition:</span> <span class="value">{precondition}</span></p>
+            <p><span class="key">Return:</span> <span class="value">{return}</span></p>
+            <p><span class="key">Side Effect:</span> <span class="value">{side effect}</span></p>
+            <p>{extra info}</p>
+        '''
+    )
+
+    CODE_EXAMPLES_TEMPLATE = '''
+        <div class="divider"></div>
+        <h2 class="subheader">Code Examples</h2>
+        <p>{examples}</p>
+        '''
+
+    def format_documentation_for_popup(self, doc):
+        global css
+        doc['css'] = css
+        template = self.POPUP_DOC_TEMPLATE
+        if doc['examples']:
+            template += self.CODE_EXAMPLES_TEMPLATE
+            doc['examples'] = doc['examples'].replace('\r', '').replace(
+                '\n', '<br />')
+        template += '</div>'
+        return template.format(**doc)
+
+    def popup_navigate(self, href):
+        """ Execute link callback """
+        logger.debug('href = %s', href)
+        params = href.split(':')
+        logger.debug('params = %s', params)
+        key = params[0]
+        logger.debug('key = %s', key)
+
+        if key == 'open_source':
+            self.doc_already_shown = True
+            self.show_doc()
 
 
 class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
@@ -650,7 +695,6 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         template += '</div>'
         return template.format(**doc)
 
-
     def popup_navigate(self, href):
         """ Execute link callback """
         logger.debug('href = %s', href)
@@ -662,7 +706,6 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         if key == 'open_source':
             self.doc_already_shown = True
             self.show_doc()
-
 
     @property
     def status_string(self):
