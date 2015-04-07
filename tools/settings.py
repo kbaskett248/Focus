@@ -11,6 +11,7 @@ logger.setLevel('DEBUG')
 
 
 SETTINGS_FILE = 'Focus Package.sublime-settings'
+TOOLTIP_SUPPORT = int(sublime.version()) >= 3072
 
 
 SETTINGS_INFO = (
@@ -69,12 +70,15 @@ def get_show_doc_setting(doc_type):
     settings = sublime.load_settings(SETTINGS_FILE)
     s = settings.get('show_doc_method', None)
     if isinstance(s, str):
-        return s
+        value = s
     else:
         doc_method = DOC_METHOD_DEFAULTS.copy()
         if isinstance(s, dict):
             doc_method.update(s)
-        return doc_method[doc_type]
+        value = doc_method[doc_type]
+    if (value == 'popup') and (not TOOLTIP_SUPPORT):
+        value = 'panel'
+    return value
 
 
 def get_fs_function_doc_url(fs_function):

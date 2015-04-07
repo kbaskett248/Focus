@@ -37,7 +37,6 @@ from .tools.settings import (
 )
 
 
-TOOLTIP_SUPPORT = int(sublime.version()) >= 3072
 css = ''
 
 
@@ -414,7 +413,6 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
 
         if (show_doc_setting == 'source') or (doc is None):
             url = self.get_url()
-
             if url is not None:
                 sublime.status_message(self.open_status_message)
                 self.show_doc_on_web(url)
