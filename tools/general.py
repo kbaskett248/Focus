@@ -155,10 +155,11 @@ def extract_entity(reg_ex, string, point, base_point=0, match_group=0,
 
     """
     if isinstance(point, int):
-        temp_point = point - base_point
+        lower_bound = upper_bound = point - base_point
     else:
-        temp_point = (point[0] - base_point, point[1] - base_point)
-    span = match_string = None
+        lower_bound, upper_bound = [p - base_point for p in point]
+
+    span = match_string = prev_match = None
 
     if isinstance(reg_ex, str):
         match_iter = re.finditer(reg_ex, string, flags)
@@ -168,28 +169,32 @@ def extract_entity(reg_ex, string, point, base_point=0, match_group=0,
         return (None, None)
 
     for match in match_iter:
-        # print(match.groups())
-        temp_span = match.span(match_group)
-
-        if isinstance(point, int):
-            if (temp_point >= temp_span[0]) and (temp_point <= temp_span[1]):
-                span = temp_span
-                # print(span)
-                match_string = match.group(match_group)
-                # print(match_string)
-        elif isinstance(point, tuple):
-            if ((temp_point[0] >= temp_span[0]) and
-                    (temp_point[1] <= temp_span[1])):
-                span = temp_span
-                # print(span)
-                match_string = match.group(match_group)
-                # print(match_string)
-
-        if span is not None:
-            span = (base_point + span[0], base_point + span[1])
+        span = match.span(match_group)
+        # If the end of the match is before the start of point, keep searching
+        if span[1] < lower_bound:
+            continue
+        # If the start of the match is past the end of point, stop searching
+        elif span[0] > upper_bound:
             break
+        # If match includes the point, we found a match
+        elif (span[0] <= lower_bound) and (span[1] >= upper_bound):
+            match_string = match.group(match_group)
+            if upper_bound == span[1]:
+                prev_match = (span, match_string)
+                span = match_string = None
+                continue
+            else:
+                break
 
-    return (span, match_string)
+    if span and match_string:
+        span = (base_point + span[0], base_point + span[1])
+        return (span, match_string)
+    elif prev_match:
+        span, match_string = prev_match
+        span = (base_point + span[0], base_point + span[1])
+        return (span, match_string)
+    else:
+        return (None, None)
 
 
 def add_to_path(path):
