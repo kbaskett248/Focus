@@ -4,7 +4,6 @@ import re
 
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
 
 from .metaclasses import MiniPluginMeta
 from .compatibility import FSCompatibility, FocusCompatibility
@@ -44,17 +43,10 @@ class RingFile(object, metaclass=MiniPluginMeta):
 
         self.file_name = file_name
         self.override_read_only = False
-        logger.debug("Running RingFile.__init__ for %s",
-                     self.__class__.__name__)
-
         self.ring = get_ring(self.file_name)
-        logger.debug("self.ring=%s", self.ring)
 
         logger.debug('New %s: %s', self.__class__.__name__, self.file_name)
-        if self.ring is not None:
-            logger.debug(self.ring.ring_info())
-        else:
-            logger.debug('Ring: None')
+        logger.debug("self.ring=%s", self.ring)
 
     def __str__(self):
         """Return a representation of the Ring File."""
@@ -63,32 +55,32 @@ class RingFile(object, metaclass=MiniPluginMeta):
 
     @classmethod
     def get_ring_file(cls, file_name):
-        logger.debug("get_ring_file: running for %s", file_name)
+        logger.debug("Getting ring file for %s", file_name)
         f = None
         try:
             f = cls.Files[file_name.lower()]
             if f is None:
                 raise InvalidFileFormat(file_name)
         except KeyError:
-            logger.debug("get_ring_file: checking classes")
+            logger.debug("checking classes")
             for c in cls.get_plugins():
                 try:
                     f = c(file_name)
-                    logger.debug("get_ring_file: f was set to %s", f)
                 except InvalidFileFormat:
                     logger.exception(
-                        "get_ring_file: InvalidFileFormat exception")
+                        "InvalidFileFormat exception")
                     continue
                 except Exception:
-                    logger.exception("get_ring_file: Other exception")
+                    logger.exception("Other exception")
+                    continue
                 else:
                     break
             else:
-                logger.debug("get_ring_file: no suitable class found")
+                logger.debug("no suitable class found")
                 cls.Files[file_name.lower()] = None
                 raise InvalidFileFormat(file_name)
         finally:
-            logger.debug("get_ring_file: ring_file = %s", f)
+            logger.debug("Ring file: %s", f)
             return f
 
     @classmethod
