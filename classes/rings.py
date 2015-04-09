@@ -534,13 +534,18 @@ class Ring(object, metaclass=MiniPluginMeta):
                          'either full path or partial path must be specified')
             return None
 
-        logger.debug("get_shell_cmd: self = %s", self.__repr__())
-        logger.debug("get_shell_cmd: target_ring = %s", target_ring.__repr__())
+        logger.debug("get_shell_cmd: self = %r", self)
+        logger.debug("get_shell_cmd: target_ring = %r", target_ring)
+        logger.debug("get_shell_cmd: full_path = %s", full_path)
 
         if not full_path.lower().endswith('.focus'):
             return self.get_shell_cmd_direct(full_path, parameters)
         elif self == target_ring:
-            return self.get_shell_cmd_tool(full_path, parameters)
+            name = os.path.basename(full_path)
+            if name in get_tool_file_names():
+                return self.get_shell_cmd_direct(full_path, parameters)
+            else:
+                return self.get_shell_cmd_tool(full_path, parameters)
         else:
             return self.get_shell_cmd_target(
                 target_ring, full_path, parameters)
@@ -666,7 +671,7 @@ class Ring(object, metaclass=MiniPluginMeta):
         logger.debug("'.get_shell_cmd_tool: run_path = %s", run_path)
         name = os.path.basename(full_path)
         tool_cmd = 'RUNTOOL'
-        if name in get_tool_file_names:
+        if name in get_tool_file_names():
             tool_cmd = 'RUNRINGTOOL'
 
         shell_cmd = self.format_shell_cmd_for_tool(run_path, tool_cmd,
@@ -800,7 +805,18 @@ class LocalRing(HomeCareRing):
         if (self != target_ring) and is_local_ring(target_ring):
             omnilaunch = self.get_file_path('Omnilaunch.mps')
             if omnilaunch:
-                run_path = target_ring.get_translated_path(full_path)
+                name = os.path.basename(full_path)
+                if name not in get_tool_file_names():
+                    if parameters is None:
+                        parameters = full_path
+                        run_path = target_ring.get_file_path(
+                            os.path.join('PgmObject', 'Foc',
+                                         'FocZ.TextPad.Run.P.mps'))
+                    else:
+                        run_path = target_ring.get_translated_path(full_path)
+                else:
+                    run_path = target_ring.get_translated_path(full_path)
+
                 if not run_path:
                     logger.error('.get_shell_cmd_target: ' +
                                  'failed to get translated path for %s in %s',
