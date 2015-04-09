@@ -258,7 +258,7 @@ class FocusFile(RingFile, FocusCompatibility):
     INCLUDE_CONTENT_MATCHER = re.compile(
         r"(?P<source>:Source)|Folder\s+(?P<folder>.+)|File\s+(?P<filename>.+)")
     PAGESET_CONTENT_MATCHER = re.compile(
-        r"(?P<pageset>:ExternalPageSet)|Codebase\s+(?P<codebase>.+)|"
+        r"(?P<pageset>:ExternalPageSet)|Code[Bb]ase\s+(?P<codebase>.+)|"
         r"Source\s+(?P<source>.+)")
 
     @classmethod
