@@ -558,9 +558,9 @@ class InsertBreakCommand(FocusViewCommand):
 
             cb = self.focus_view.get_codeblock(sel.begin())
             if cb:
-                subroutine = ' '
-            else:
                 subroutine = cb.codeblock_name + ' '
+            else:
+                subroutine = ' '
 
             label = break_label.format(file=filename,
                                        object=object_name,

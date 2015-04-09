@@ -69,6 +69,15 @@ class RingView(object, metaclass=MiniPluginMeta):
     def view_key(cls, view):
         return (view.id(), scope_from_view(view))
 
+    @property
+    def file_name(self):
+        name = self.view.file_name()
+        if name:
+            return name
+        else:
+            return self.view.name()
+
+
     def get_contents(self):
         return self.view.substr(sublime.Region(0, self.view.size()))
 
