@@ -825,7 +825,9 @@ class LocalRing(HomeCareRing):
                     omnilaunch=omnilaunch, partial_path=partial_path)
 
                 if parameters:
-                    if hasattr(parameters, '__iter__'):
+                    if isinstance(parameters, str):
+                        parameters = '"{0}"'.format(parameters)
+                    elif hasattr(parameters, '__iter__'):
                         parameters = '  '.join(
                             ['"{0}"'.format(convert_to_focus_lists(x))
                              for x in parameters])
