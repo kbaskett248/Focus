@@ -1,13 +1,9 @@
 {
     // Disables automatic translator indent for specific keywords or attributes. This setting can 
     // be specified as a list of keywords/attributes or as a regular expression.
-    // This setting is defined by default in the MT-Focus-Snippets package, but it may be overridden
-    // in User\MT-Focus.sublime-settings.
     // "disable_translator_indent_for": [],
 
-    // MT-Focus-FileTools
-    // If Ring Integration is not enabled, this ring will be used for running commands through
-    // Omnilaunch.
+    // If Ring Integration is not enabled, this ring will be used for running commands.
     // "default_ring": "$ProgramFiles\\PTCT-AP\\SoloFocus\\PTCTDEV.Universe\\DEV26.Ring",
 
     // List the servers to which you have access to enable server file integration. 
@@ -29,7 +25,7 @@
     // Note that the command will not be used for .fs files.
     // Setting the path to "Foc\\FocZ.Translate.Sublime.P.mps" enables advanced
     // translate functionality.
-    "translate_command": "Foc\\FocZ.Translate.Sublime.P.mps",
+    // "translate_command": "Foc\\FocZ.Translate.Sublime.P.mps",
     // If true, whenever you translate an include file, including files will
     // be translated as well.
     "translate_including_files": true,
