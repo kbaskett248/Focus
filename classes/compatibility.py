@@ -315,21 +315,25 @@ class FocusCompatibility(FSCompatibility):
     def extract_attribute_value(self, point):
         return self._extract_entity(extract_attribute_value, point)
 
-    def get_translator_sections_iter(self, translator):
+    def get_translator_sections_iter(self, translator, include_end_space=True):
         if translator.startswith('#'):
             translator = translator[1:]
 
         contents = self.get_contents() + "\n#END"
 
-        regex = (r"^((//[ -=+*_]+\n)?#" +
-                 translator +
-                 r"\n.+?)(//[ -=+*_]+\n)?^#[A-Za-z]+$")
+        regex = r"^((//[ -=+*_]+\n)?#{translator}\n.+?".format(
+            translator=translator)
+        if include_end_space:
+            regex += r")(//[ -=+*_]+\n)?^#[A-Za-z]+$"
+        else:
+            regex += r"\n)\n*(//[ -=+*_]+\n)?^#[A-Za-z]+$"
 
         for m in re.finditer(regex, contents, re.MULTILINE | re.DOTALL):
             yield (m.span(1), m.group(1))
 
-    def get_translator_sections(self, translator):
-        return list(self.get_translator_sections_iter(translator))
+    def get_translator_sections(self, translator, include_end_space=True):
+        return list(self.get_translator_sections_iter(
+            translator, include_end_space))
 
     def get_keyword_and_value(self, point):
         if isinstance(point, tuple):
@@ -340,7 +344,7 @@ class FocusCompatibility(FSCompatibility):
             return ((None, None), (None, None))
 
         return string_match(line_string, KEYWORD_ATTRIBUTE_MATCHER,
-                            base_point=span[0], match_group=(1, 2))
+                            base_point=span[0], match_group=(1, 3))
 
     def find_alias_definition(self, name):
         name = strip_alias(name)

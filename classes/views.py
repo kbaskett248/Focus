@@ -178,13 +178,14 @@ class FocusView(RingView, FocusCompatibility):
     def extract_alias(self, point=None):
         return super(FocusView, self).extract_alias(point)
 
-    def get_locals(self, only_undocumented=False, with_documentation=False):
+    def get_locals(self, only_undocumented=False, only_documented=False,
+                   with_documentation=False):
         if with_documentation:
             pass
         else:
             used_locals = set()
 
-            if only_undocumented:
+            if only_undocumented or only_documented:
                 locals_sections = [sublime.Region(r[0][0], r[0][1]) for r in
                                    self.get_translator_sections('Locals')]
                 documented_locals = set()
@@ -192,7 +193,7 @@ class FocusView(RingView, FocusCompatibility):
             for r in self.view.find_by_selector('variable.other.local.focus'):
                 local = self.view.substr(r)
                 used_locals.add(local)
-                if only_undocumented:
+                if only_undocumented or only_documented:
                     for ls in locals_sections:
                         if ls.contains(r):
                             documented_locals.add(local)
@@ -203,6 +204,9 @@ class FocusView(RingView, FocusCompatibility):
             if only_undocumented:
                 used_locals = used_locals - documented_locals
                 logger.debug('Undefined Locals in file: %s', used_locals)
+            elif only_documented:
+                used_locals = documented_locals
+                logger.debug('Documented Locals in file: %s', used_locals)
 
             used_locals = list(used_locals)
             used_locals.sort()

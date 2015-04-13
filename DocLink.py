@@ -23,16 +23,15 @@ except ImportError as e:
 
 from .classes.code_blocks import CodeBlockSet
 from .tools.classes import get_ring_file, get_view
+from .tools.focus import TRANSLATOR_SEPARATOR
 from .tools.general import create_folder, string_search, string_match
 from .tools.sublime import split_focus_function
 from .tools.settings import (
     get_show_doc_setting,
     get_focus_wiki_setting,
-    get_fs_wiki_setting,
     get_set_highlighter_setting,
     get_translator_doc_url_overrides_setting,
     get_focus_function_argument_type,
-    get_focus_function_doc_url_overrides_setting,
     get_fs_function_doc_url,
     get_focus_function_doc_url,
 )
@@ -1212,6 +1211,68 @@ class LocalDocLink(DocLink, Highlight):
         else:
             return "%s highlighted instances of %s" % (
                 total, self.search_string)
+
+    def has_doc(self):
+        ring_view = get_view(self.view)
+        if ring_view is None:
+            return False
+
+        return (self.search_string in
+                ring_view.get_locals(only_documented=True))
+
+    def add_doc(self, edit, use_snippets=True):
+        ring_view = get_view(self.view)
+        if ring_view is None:
+            return
+        self._snippet_counter = 0
+        create_locals_section = False
+        indent = '  '
+
+        try:
+            locals_section = ring_view.get_translator_sections(
+                'Locals', include_end_space=False)[-1][0]
+            locals_section = sublime.Region(locals_section[0],
+                                            locals_section[1])
+        except IndexError:
+            start = ring_view.get_translator_sections(
+                'Magic')[0].begin()-1
+            locals_section = sublime.Region(start, start)
+            create_locals_section = True
+
+        logger.debug('locals_section = %s', locals_section)
+
+        lines_to_add = list()
+
+        line = '{0}:Name                           {1}'.format(
+            indent, self.search_string)
+        line += '\n{0}// ${1}'.format(indent, self.snippet_counter)
+        lines_to_add.append(line)
+
+        content = '\n\n'.join(lines_to_add)
+        logger.debug('content = %s', content)
+
+        if create_locals_section:
+            content = '\n{0}\n#Locals\n{1}\n\n'.format(
+                TRANSLATOR_SEPARATOR, content)
+        else:
+            content = '\n' + content + '\n\n'
+
+        logger.debug('content = %s', content)
+
+        if use_snippets:
+            selection = self.view.sel()
+            selection.clear()
+            selection.add(sublime.Region(locals_section.end(),
+                                         locals_section.end()))
+            self.view.run_command("insert_snippet", {"contents": content})
+
+        else:
+            self.view.insert(edit, locals_section.end(), content)
+
+    @property
+    def snippet_counter(self):
+        self._snippet_counter += 1
+        return self._snippet_counter
 
 
 class ObjectDocLink(DocLink):
