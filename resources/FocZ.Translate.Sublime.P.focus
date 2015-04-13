@@ -25,6 +25,9 @@
   :Name                           DoNotTranslate
   // If Non-Nil, files will not be translated.
 
+  :Name                           MatVersionNumber
+  // M-AT Version Number
+
 
 //------------------------------------------------------------------------------
 #Magic
@@ -51,6 +54,7 @@ F@IF{@QV@NV @{}^F},
 IF{T 1@PutLocal(DoNotFormat)},
 IF{A 1@PutLocal(DoNotTranslate)},
 IF{L@NV 20^L},
+`versioninfo'@f15@y15@r15|1@PutLocal(MatVersionNumber)
 IF{{"Foc","FocZ.Startup.Init.P"}@CallProgram() @{"Translation",}@CallSub(FormatResults);
    @CallExternalSub(Mis,MisZ.Signon.C,GetSignonUser) @{"Translation",}@CallSub(FormatResults);
    IF{I {F,L}@CallSub(BuildFileList);
@@ -159,7 +163,9 @@ IF{{".focus",F%6}@WV@NV "";
 ^{F,E,I,C}
 IF{@GetLocal(DoNotTranslate) "";
    {("Translating file: ",F,"..."),E}@CallSub(WriteMessageToResults),
-   {"Foc","FocZ.Translate.P",{F,I,C,E,,,,"Suppress Delete Error Path"}}@CallProgram(),
+   IF{@GetLocal(MatVersionNumber)<11 {F,I,C,E,,,,"Suppress Delete Error Path"};
+      1 {F,I,C,E,,,,,,,,"Suppress Delete Error Path"}}
+   @{"Foc","FocZ.Translate.P",}@CallProgram(),
    {{"Done",""},E}@CallSub(WriteMessageToResults),
    F@LA@IF{%21=".processlocks.i.focus" "";
            @{,""@RootServer(DataDefs)@LA}@#=0;
