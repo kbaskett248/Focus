@@ -78,12 +78,14 @@ INCLUDE_FILE_MATCHER = re.compile(r"[ \t]*File[ \t]+([\w._-]+)")
 
 EXTERNAL_PAGESET_MATCHER = re.compile(r"[ \t]*Source[ \t]+([\w._-]+)")
 
-KEYWORD_MATCHER = re.compile(r"[ \t]*(:[A-Za-z0-9]+)[ \t]+(\S[\s\S]+?\S)?")
+KEYWORD_MATCHER = re.compile(
+    r"^[ \t]*(:[A-Z][A-Za-z0-9]+)[ \t]([ \t]*(.+\S))?")
 
-ATTRIBUTE_MATCHER = re.compile(r"[ \t]*([A-Za-z0-9]+)[ \t]+(\S[\s\S]+?\S)?")
+ATTRIBUTE_MATCHER = re.compile(
+    r"^[ \t]*([A-Z][A-Za-z0-9]+)[ \t]([ \t]*(.+\S))?")
 
 KEYWORD_ATTRIBUTE_MATCHER = re.compile(
-    r"[ \t]*([A-Za-z0-9]+)[ \t]+(\S[\s\S]+?\S)?")
+    r"^^[ \t]*(:?[A-Z][A-Za-z0-9]+)[ \t]([ \t]*(.+\S))?")
 
 
 def extract_focus_function(string, point, base_point=0):
@@ -269,7 +271,7 @@ def extract_keyword_value(string, point, base_point=0):
 
     """
     return extract_entity(KEYWORD_MATCHER, string, point, base_point,
-                          match_group=2)
+                          match_group=3)
 
 
 def extract_attribute(string, point, base_point=0):
@@ -305,7 +307,7 @@ def extract_attribute_value(string, point, base_point=0):
 
     """
     return extract_entity(ATTRIBUTE_MATCHER, string, point, base_point,
-                          match_group=2)
+                          match_group=3)
 
 
 ALIAS_NAME_MATCHER = re.compile(r"(\@\@)?([^(]+)\(")

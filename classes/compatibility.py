@@ -403,7 +403,7 @@ class FocusCompatibility(FSCompatibility):
         if name is None:
             return None
 
-        reg_ex = r"^[ \t]*:Region[ \t]+({name})".format(name=name)
+        reg_ex = r"^[ \t]*:ContainerRegion[ \t]+({name})".format(name=name)
 
         for t_span, t_string in self.get_translator_sections('ScreenPage'):
             span = string_search(t_string,

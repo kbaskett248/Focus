@@ -1360,7 +1360,9 @@ class ScreenComponentDocLink(DocLink):
 
     @classmethod
     def scope_selection_enabler(cls):
-        return 'meta.translator.screenpage.focus'
+        return (
+            'meta.translator.screenpage.focus meta.value.attribute.focus, ' +
+            'meta.translator.screenpage.focus meta.value.keyword.focus')
 
     @classmethod
     def enable_for_selection(cls, view):
@@ -1373,6 +1375,8 @@ class ScreenComponentDocLink(DocLink):
                 ((k_span, k_str),
                  (v_span, v_str)) = ring_view.get_keyword_and_value(point)
                 if (k_span is not None) and (v_span is not None):
+                    logger.debug(":Component - %s", ((k_span, k_str),
+                                                     (v_span, v_str)))
                     reg = sublime.Region(v_span[0], v_span[1])
                     return {'search_string': v_str,
                             'search_region': reg,
@@ -1383,12 +1387,12 @@ class ScreenComponentDocLink(DocLink):
             keyword, value = ring_view.get_keyword_and_value(point)
             if (keyword is not None) and (keyword[1] == ':Region'):
                 reg = sublime.Region(value[0][0], value[0][1])
+                logger.debug(":Region - %s", (value[1], reg))
                 return {'search_string': value[1],
                         'search_region': reg,
                         'component_type': ':Region'}
 
-        else:
-            return None
+        return None
 
     def show_doc(self):
         sublime.status_message(self.open_status_message)
@@ -1406,10 +1410,10 @@ class ScreenComponentDocLink(DocLink):
     def find_and_show(self, view_or_file, file_name):
         if view_or_file is None:
             return False
-        if self.type_ == ':Region':
+        if self.component_type == ':Region':
             span = view_or_file.find_container_region(self.search_string)
         else:
-            span = view_or_file.find_screen_component(self.type_,
+            span = view_or_file.find_screen_component(self.component_type,
                                                       self.search_string)
 
         if span is not None:
