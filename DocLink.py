@@ -1582,7 +1582,7 @@ class FSLocalHighlighter(Highlight):
 
 class RTToolDocLink(DocLink):
     """
-    DocLink class for RT Tool calls. Shows the RT tool definition.
+    DocLink class for RT or TT Tool calls. Shows the RT tool definition.
 
     """
 
@@ -1614,6 +1614,7 @@ class RTToolDocLink(DocLink):
             return False
 
         match = re.match(r"[a-wz]", os.path.split(file_name)[1])
+        logger.debug("file_name = %s", file_name)
         if match is not None:
             return True
         else:
@@ -1621,7 +1622,7 @@ class RTToolDocLink(DocLink):
 
     @classmethod
     def scope_selection_enabler(cls):
-        return 'meta.tool.rt.fs'
+        return 'meta.tool.fs'
 
     @classmethod
     def enable_for_selection(cls, view):
@@ -1690,14 +1691,29 @@ class RTToolDocLink(DocLink):
             if ring_view is not None:
                 yield (ring_view, file_name)
 
-        ring_file = get_ring_file(file_name)
-        rt_tools_path = os.path.join(ring_file.ring.system_path, "RTTools")
-        if not os.path.isdir(rt_tools_path):
+        tools_path = self.get_tools_path()
+        if tools_path is None:
             return
 
-        for f in os.listdir(rt_tools_path):
+        for f in os.listdir(tools_path):
             if f.startswith(start_letter):
-                f = os.path.join(rt_tools_path, f)
+                f = os.path.join(tools_path, f)
                 ring_file_2 = get_ring_file(f)
                 if ring_file_2 is not None:
                     yield (ring_file_2, f)
+
+    def get_tools_path(self):
+        file_name = self.view.file_name().lower()
+        ring_file = get_ring_file(file_name)
+        if ring_file is None:
+            return None
+
+        if ('translators' in file_name) or ('tttools' in file_name):
+            path = os.path.join(ring_file.ring.system_path, 'TTTools')
+        else:
+            path = os.path.join(ring_file.ring.system_path, 'RTTools')
+
+        if os.path.isdir(path):
+            return path
+        else:
+            return None
