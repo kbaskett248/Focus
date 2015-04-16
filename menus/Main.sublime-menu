@@ -4,7 +4,6 @@
         "children":
         [
             {
-                "caption": "Package Settings",
                 "id": "package-settings",
                 "children":
                 [
@@ -50,10 +49,38 @@
                                     "platform": "Windows"
                                 },
                                 "caption": "Key Bindings – Default"
+                            },
+                            {   "caption": "-"  },
+                            {
+                                "caption": "Open Issue Tracker",
+                                "command": "open_web_page",
+                                "args": {
+                                    "url": "https://bitbucket.org/kbaskett/focus/issues?status=new&status=open",
+                                }
                             }
                         ]
                     }
                 ]
+            }
+        ]
+    },
+    {
+        "id": "help",
+        "children":
+        [
+            {
+                "id": "package-help",
+                "children":
+                [
+                    {
+                        "caption": "Focus",
+                        "command": "open_web_page",
+                        "args": {
+                            "url": "https://bitbucket.org/kbaskett/focus/wiki/Home",
+                        }
+                    }
+                ]
+                
             }
         ]
     }
