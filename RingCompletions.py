@@ -28,8 +28,8 @@ from .misc.completion_types import (
     # CT_SUBROUTINE,
     # CT_LIST,
     # CT_TRANSLATOR,
-    # CT_INCLUDE_FILE,
-    # CT_EXTERNAL_PAGESET,
+    CT_INCLUDE_FILE,
+    CT_EXTERNAL_PAGESET,
     CT_STATE,
     CT_SYSTEM,
 
@@ -283,6 +283,103 @@ class ObjectRingLoader(RingLoader):
                     self.completions[key].update(value)
                 except KeyError:
                     self.completions[key] = value
+
+
+class IncludeLoader(RingLoader):
+    """Loads completions from a View."""
+
+    EmptyReturn = ([], (sublime.INHIBIT_EXPLICIT_COMPLETIONS |
+                        sublime.INHIBIT_WORD_COMPLETIONS))
+    LoadAsync = True
+
+    @classmethod
+    def completion_types(cls):
+        """
+        Return a set of completion types that this CompletionLoader can return.
+        """
+        return [CT_INCLUDE_FILE, CT_EXTERNAL_PAGESET]
+
+    @classmethod
+    def view_check(cls, view):
+        if not super(IncludeLoader, cls).view_check(view):
+            return False
+        elif ('!DictionarySource' in view.file_name()):
+            return False
+        else:
+            return True
+
+    @classmethod
+    def get_path_from_ring(cls, ring):
+        return ring.pgmsource_path
+
+    def load_completions(self, **kwargs):
+        """Loads the Include and ExternalPageSet completions from the ring.
+
+        Walks through the PgmSource directory, finding all the Include files,
+        DataDef files, and ExternalPageSet files.
+
+        """
+        logger.debug('Loading Include File Completions')
+        self.completions = dict()
+        self.completions[CT_INCLUDE_FILE] = set()
+        self.completions[CT_EXTERNAL_PAGESET] = set()
+        self.modified_dict = self.build_modified_dict()
+
+        for path, dirs, files in os.walk(self.path):
+            for f in files:
+                f_lower = f.lower()
+                if (f_lower.endswith('.i.focus') or
+                        f_lower.endswith('.d.focus')):
+                    self.completions[CT_INCLUDE_FILE].add((f,))
+                elif f_lower.endswith('.e.focus'):
+                    self.completions[CT_EXTERNAL_PAGESET].add((f,))
+
+        logger.debug('Done Loading Include File Completions')
+
+    def refresh_completions(self):
+        """Return True if the completions need to be reloaded.
+
+        Iterates through the folders in the DataDef folders. If any of them
+        have been modified since the last time the completions were loaded,
+        return True. Else return False.
+
+        """
+        logger.debug('Should Include File Completions be Refreshed?')
+        try:
+            m1 = self.modified_dict
+        except AttributeError:
+            logger.debug('Refresh Include File Completions')
+            return True
+        else:
+            m2 = self.build_modified_dict()
+            keys1 = set(m1.keys())
+            keys2 = set(m2.keys())
+            if keys1.symmetric_difference(keys2):
+                logger.debug('Refresh Include File Completions')
+                return True
+            keys = keys1.union(keys2)
+            if len(keys) == 0:
+                logger.debug("Don't Refresh Include File Completions")
+                return False
+
+            for k in keys:
+                try:
+                    if m2[k] > m1[k]:
+                        logger.debug('Refresh Include File Completions')
+                        return True
+                except KeyError:
+                    logger.debug('Refresh Include File Completions')
+                    return True
+            logger.debug("Don't Refresh Include File Completions")
+            return False
+
+    def build_modified_dict(self):
+        mod_dict = dict()
+        for d in os.listdir(self.path):
+            full_path = os.path.join(self.path, d)
+            if os.path.isdir(full_path):
+                mod_dict[d] = os.path.getmtime(full_path)
+        return mod_dict
 
 
 class StateRingLoader(RingLoader, FileLoader):
