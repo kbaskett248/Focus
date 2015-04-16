@@ -102,7 +102,7 @@ class RingFile(object, metaclass=MiniPluginMeta):
         """Return True if the file should be read-only."""
         if self.override_read_only:
             result = False
-        elif os.path.splitdrive(self.file_name).endswith(':'):
+        elif os.path.splitdrive(self.file_name)[0].endswith(':'):
             result = False
         else:
             result = True
