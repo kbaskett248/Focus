@@ -473,9 +473,9 @@ class FoldSubroutineCommand(RingViewCommand):
     def get_region(self, region):
         """Expands the selected region to include the entire subroutine."""
         member_region = self.ring_view.get_member_region(region.begin())
-        header_line = self.view.line(member_region.begin())
+        header_line = self.view.line(member_region[0])
         r = sublime.Region(header_line.end(),
-                           member_region.end())
+                           member_region[1])
         return r
 
     def is_enabled(self, all_regions=False):
