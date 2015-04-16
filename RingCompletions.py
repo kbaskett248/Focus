@@ -17,7 +17,10 @@ except ImportError as e:
 
 from .tools.classes import get_ring, get_ring_file, is_homecare_ring
 from .tools.general import read_file
-from .tools.settings import get_completion_source_enabled_setting
+from .tools.settings import (
+    get_completion_source_enabled_setting,
+    get_system_variables
+)
 
 from .misc.completion_types import (
     CT_ALIAS,
@@ -362,10 +365,4 @@ class SystemLoader(StaticLoader):
         Loads system variable completions.
 
         """
-        self.completions = set([(v, ) for v in self.system_variables])
-
-    @property
-    def system_variables(self):
-        settings = sublime.load_settings(
-            'MTFocus - System Variables.sublime-settings')
-        return settings.get('system_variables', [])
+        self.completions = set([(v, ) for v in get_system_variables()])

@@ -156,17 +156,6 @@ def get_completion_source_enabled_setting(completion_type, source):
     return convert_setting(s, completion_type, source)
 
 
-# Rings
-# def get_default_ring():
-#     settings = sublime.load_settings(SETTINGS_FILE)
-#     return settings.get('default_ring', None)
-
-
-# def get_server_access():
-#     settings = sublime.load_settings(SETTINGS_FILE)
-#     return settings.get('server_access', [])
-
-
 def get_universe_roots():
     results = []
     pgm_files = get_env('ProgramFiles(x86)')
@@ -180,17 +169,6 @@ def get_universe_roots():
             if os.path.exists(path):
                 results.append(path)
     return results
-
-
-# def get_universes_to_load():
-#     settings = sublime.load_settings(SETTINGS_FILE)
-#     return settings.get('universes_to_load', [])
-
-
-# def get_translate_command():
-#     settings = sublime.load_settings(SETTINGS_FILE)
-#     return settings.get('translate_command',
-#                         'Foc\\FocZ.Textpad.Translate.P.mps')
 
 
 def get_translate_include_settings():
@@ -229,3 +207,9 @@ def get_default_separators():
             pass
 
     return sep_dict
+
+
+def get_system_variables():
+    settings = sublime.load_settings('Focus-System Variables.sublime-settings')
+    print("settings.get('system_variables', []) = %s" % settings.get('system_variables', []))
+    return settings.get('system_variables', [])
