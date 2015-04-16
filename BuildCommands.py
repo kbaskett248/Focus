@@ -10,7 +10,13 @@ import sublime
 import sublime_plugin
 
 from .classes.command_templates import CallbackCmdMeta
-from .tools.classes import get_ring, is_local_ring, get_ring_file, is_fs_file, is_homecare_ring
+from .tools.classes import (
+    get_ring,
+    is_local_ring,
+    get_ring_file,
+    is_fs_file,
+    is_homecare_ring
+)
 from .tools.settings import (
     get_default_ring,
     get_translate_command,
@@ -509,13 +515,13 @@ class CreateFileInRingCommand(sublime_plugin.ApplicationCommand):
                 application = match.group(1)
 
         if not force:
-            sublime.ok_cancel_dialog(
-                ('Sublime Text will create file %s\n'
-                 'in application %s in ring %s.\n'
-                 'Would you like to create the file?') % (file_name,
-                                                          application,
-                                                          ring.name),
-                'Create')
+            if not sublime.ok_cancel_dialog(
+                    ('Sublime Text will create file {file}\n'
+                     'in application {app} in ring {ring}.\n'
+                     'Would you like to create the file?').format(
+                        file=file_name, app=application, ring=ring.name),
+                    'Create'):
+                return
 
         file_path = ring.create_file_in_ring(application, file_name, contents)
         if not file_path:
