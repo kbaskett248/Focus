@@ -15,6 +15,7 @@ from .tools.classes import (
     is_local_ring,
     get_ring_file,
     is_fs_file,
+    is_focus_file,
     is_homecare_ring
 )
 from .tools.settings import (
@@ -100,13 +101,20 @@ class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
 
     def post_run_callback(self, *args, **kwargs):
         try:
-            self.kwargs['shell_cmd']
+            shell_cmd = self.kwargs['shell_cmd']
         except KeyError:
             logger.warning('no shell_cmd defined')
             return
-        logger.debug("post_run_callback: self.exec_cmd")
-        self.replace_variables()
-        self.window.run_command(self.exec_cmd, self.kwargs)
+        else:
+            logger.debug("post_run_callback: self.exec_cmd")
+            if isinstance(shell_cmd, str):
+                self.replace_variables()
+                self.window.run_command(self.exec_cmd, self.kwargs)
+            elif hasattr(shell_cmd, '__iter__'):
+                for cmd in shell_cmd:
+                    self.kwargs['shell_cmd'] = cmd
+                    self.replace_variables()
+                    self.window.run_command(self.exec_cmd, self.kwargs)
 
     @abstractmethod
     def run(self, edit, **kwargs):
@@ -306,11 +314,27 @@ class TranslateRingFileCommand(RingExecCommand):
 
         translate_path = self.ring.get_file_path(translate_cmd)
         logger.debug('translate_path = %s', translate_path)
+        include_files, include_count = get_translate_include_settings()
 
-        self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
-            target_ring=self.target_ring, partial_path=translate_cmd,
-            parameters=self.file_name)
-        logger.debug("self.kwargs['shell_cmd'] = %s", self.kwargs['shell_cmd'])
+        if (not self.ring_file.is_includable()) or (not include_files):
+            self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
+                target_ring=self.target_ring, partial_path=translate_cmd,
+                parameters=self.file_name)
+            logger.debug("shell_cmd = %s", self.kwargs['shell_cmd'])
+        else:
+            shell_cmd_list = []
+            logger.info('Instead of translating %s, ' +
+                        'translating all open files that include it',
+                        self.file_name)
+            self.ring_files = self.get_ring_files(all_windows=True)
+            for f in self.get_including_files(self.ring_file):
+                shell_cmd = self.ring.get_shell_cmd(
+                    target_ring=self.target_ring, partial_path=translate_cmd,
+                    parameters=f.file_name)
+                logger.debug("shell_cmd = %s", shell_cmd)
+                shell_cmd_list.append(shell_cmd)
+            self.kwargs['shell_cmd'] = shell_cmd_list
+            del self.ring_files
 
         self.kwargs['quiet'] = True
 
@@ -327,6 +351,84 @@ class TranslateRingFileCommand(RingExecCommand):
         self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
             target_ring=self.target_ring, full_path=translate_path,
             parameters=self.file_name)
+
+    def get_including_files(self, include_file):
+        """Returns a list of all open files that include the given file."""
+        if not hasattr(self, 'ring_files'):
+            self.ring_files = self.get_ring_files(all_windows=True)
+
+        files_to_translate = set()
+        files_to_translate.add(include_file)
+        logger.debug('Getting including files for %s', include_file.file_name)
+
+        if not include_file.ring:
+            logger.debug('%s has no ring', include_file.file_name)
+            return files_to_translate
+
+        for ring_file in self.ring_files:
+            if ring_file in files_to_translate:
+                continue
+
+            for inc_file in ring_file.get_include_files():
+                if (include_file.file_name.lower() == inc_file.lower()):
+                    logger.debug('%s is included in %s',
+                                 include_file.file_name, ring_file.file_name)
+
+                    if ring_file.is_includable():
+                        files_to_translate = files_to_translate.union(
+                            self.get_including_files(ring_file))
+                    else:
+                        files_to_translate.add(ring_file)
+                    break
+
+        return files_to_translate
+
+    def get_ring_files(self, all_windows=False, different_rings=False,
+                       most_common_ring=False):
+        ring_files = set()
+        if all_windows:
+            win_set = sublime.windows()
+        else:
+            win_set = (self.window(), )
+
+        if (most_common_ring or different_rings or (not self.ring_file) or
+                (not self.ring_file.ring)):
+            record_all = True
+            ring_file_dict = dict()
+        else:
+            record_all = False
+            match_ring = self.ring_file.ring
+
+        for win in win_set:
+            for view in win.views():
+                if not view.file_name():
+                    continue
+
+                ring_file = get_ring_file(view.file_name())
+                if (not ring_file) or (ring_file in ring_files):
+                    continue
+
+                if record_all:
+                    ring_files.add(ring_file)
+                    if not different_rings:
+                        try:
+                            ring_file_dict[ring_file.ring.key].add(ring_file)
+                        except KeyError:
+                            ring_file_dict[ring_file.ring.key] = set()
+                            ring_file_dict[ring_file.ring.key].add(ring_file)
+                elif ring_file.ring is match_ring:
+                    ring_files.add(ring_file)
+
+        if different_rings or (not record_all):
+            return ring_files
+
+        ring_count = 0
+        for k, v in ring_file_dict:
+            if len(v) > ring_count:
+                ring_key = k
+                ring_count = len(v)
+
+        return ring_file_dict[ring_key]
 
     def is_enabled(self, *args, file_name=None, **kwargs):
         self._file_name = file_name
