@@ -112,11 +112,6 @@ class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
     def run(self, edit, **kwargs):
         pass
 
-    def get_tools_path(self):
-        tools_path = os.path.join('PgmObject', 'Foc',
-                                  'FocZ.TextPadTools.P.mps')
-        return self.ring.get_file_path(tools_path)
-
     def create_sublime_translate_file(self):
         logger.debug("ring.path = %s", self.ring.path)
         file_name = 'FocZ.Translate.Sublime.P.focus'
@@ -136,20 +131,6 @@ class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
             return False
         else:
             return True
-
-    def build_default_shell_cmd(self, partial_path):
-        file_ring = get_ring(self.file_name)
-        if is_local_ring(file_ring) and is_local_ring(self.ring):
-            shell_cmd = ('magic.exe "<ring_path>\System\OmniLaunch.mps"  '
-                         '{0}{1}  "{2}"').format(os.sep,
-                                                 partial_path,
-                                                 self.file_name)
-        else:
-            shell_cmd = 'magic.exe "{0}" RUNRINGTOOL "{1}" "{2}"'.format(
-                self.get_tools_path(), self.ring.get_file_path(partial_path),
-                self.file_name)
-
-        return shell_cmd
 
 
 class RingRunCommand(RingExecCommand):
@@ -386,12 +367,6 @@ class FormatRingFileCommand(RingExecCommand):
             else:
                 format_path = self.ring.get_file_path(format_cmd)
 
-        # parameters = convert_to_focus_lists([self.file_name, '<result_file>',
-        #                                      '', 'Format Only'])
-        # shell_cmd = 'magic.exe "{0}" {1}'.format(format_path, parameters)
-
-        # self.kwargs['shell_cmd'] = shell_cmd
-
         parameters = [self.file_name, '<result_file>', '', 'Format Only']
         self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
             target_ring=self.target_ring,
@@ -401,16 +376,7 @@ class FormatRingFileCommand(RingExecCommand):
     def format_other(self):
         format_cmd = os.path.join('PgmSource', 'Foc',
                                   'FocZ.TextPad.Format.P.focus')
-        # format_path = self.ring.get_file_path(format_cmd)
-        # logger.debug('format_path = %s', format_path)
 
-        # if self.default_flag:
-        #     shell_cmd = self.build_default_shell_cmd(format_cmd)
-        # else:
-        #     shell_cmd = 'magic.exe "{0}" "{1}"'.format(format_path,
-        #                                                self.file_name)
-
-        # self.kwargs['shell_cmd'] = shell_cmd
         self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
             target_ring=self.target_ring, partial_path=format_cmd,
             parameters=self.file_path)
@@ -430,20 +396,6 @@ class RunRingFileCommand(RingRunCommand):
 
     def run(self, edit, **kwargs):
         self.kwargs = kwargs
-
-        # if self.default_flag:
-        #     if is_local_ring(self.ring):
-        #         partial_path = os.sep + os.path.join('PgmObject', 'Foc',
-        #                                              'FocZ.Textpad.Run.P.mps')
-        #         shell_cmd = ('magic.exe "<ring_path>\System\OmniLaunch.mps"  '
-        #                      '{0}  "{1}"').format(partial_path,
-        #                                           self.file_name)
-        #     else:
-        #         shell_cmd = 'magic.exe "{0}" RUN "{1}"'.format(
-        #             self.get_tools_path(), self.file_name)
-        # else:
-        #     shell_cmd = 'magic.exe "{0}" RUN "{1}"'.format(
-        #         self.get_tools_path(), self.file_name)
 
         self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
             target_ring=self.target_ring, full_path=self.file_name)
