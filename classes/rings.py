@@ -302,9 +302,7 @@ class Ring(object, metaclass=MiniPluginMeta):
         if multiple_matches:
             results = []
             result_set = set()
-        logger.debug("check_file_existence")
         for k, v in self.possible_paths():
-            logger.debug("%s: %s", k, v)
 
             if k == 'System Programs':
                 path = merge_paths(v, file_name)
@@ -327,7 +325,6 @@ class Ring(object, metaclass=MiniPluginMeta):
             return None
 
     def get_file_path(self, partial_path):
-        logger.debug("getting file path for %s", partial_path)
         possible_paths = self.check_file_existence(partial_path)
         if possible_paths:
             return possible_paths[1]
@@ -362,7 +359,6 @@ class Ring(object, metaclass=MiniPluginMeta):
             for f, e in itertools.product(('PgmSource', 'PgmObject'),
                                           focus_extension_list):
                 partial_path = os.path.join(f, app, name + e)
-                logger.debug('partial_path = %s', partial_path)
                 path = self.get_file_path(partial_path)
                 if path:
                     return path
