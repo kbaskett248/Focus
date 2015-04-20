@@ -4,13 +4,11 @@
     "encoding": "ascii",
     "exec_cmd": "enhanced_exec",
     "startup_info": false,
-    // "wait": 30,
 
     "variants": [
 
         {   "name": "Format",
             "target": "window_format_ring_file",
-            "selector": "source.focus",
             "exec_cmd": "enhanced_exec",
             "encoding": "ascii",
             "startup_info": false
@@ -18,17 +16,15 @@
 
         {   "name": "Run",
             "target": "window_run_ring_file",
-            "selector": "source.focus",
             "startup_info": false,
         },
 
         {   "name": "Translate All",
-            "target": "focus_exec_wrapper",
+            "target": "window_translate_ring_file",
             "encoding": "ascii",
-            "command": "translate_all",
-            "condition": "is_translatable",
             "exec_cmd": "enhanced_exec",
-            "startup_info": false
+            "startup_info": false,
+            "translate_all": true
         }
     ]
 }

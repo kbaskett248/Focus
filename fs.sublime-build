@@ -3,5 +3,21 @@
     "selector": "source.fs",
     "encoding": "ascii",
     "exec_cmd": "enhanced_exec",
-    "startup_info": false
+    "startup_info": false,
+
+    "variants": [
+
+        {   "name": "Run",
+            "target": "window_run_ring_file",
+            "startup_info": false,
+        },
+
+        {   "name": "Translate All",
+            "target": "window_translate_ring_file",
+            "encoding": "ascii",
+            "exec_cmd": "enhanced_exec",
+            "startup_info": false,
+            "translate_all": true
+        }
+    ]
 }

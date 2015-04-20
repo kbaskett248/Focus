@@ -1,4 +1,5 @@
 from abc import abstractmethod
+import functools
 import logging
 import os
 import re
@@ -263,25 +264,56 @@ class RingRunCommand(RingExecCommand):
 
 class TranslateRingFileCommand(RingExecCommand):
 
-    def run(self, edit, exec_cmd, **kwargs):
+    def run(self, edit, exec_cmd, translate_all=False, **kwargs):
         logger.debug("File Version: running translate_ring_file")
 
         self.exec_cmd = exec_cmd
         self.kwargs = kwargs
+        self.translate_all = translate_all
+
+        if not translate_all and is_fs_file(self.ring_file):
+            self.translate_fs()
+            return
 
         translate_cmd = get_translate_command()
         logger.debug('translate_cmd = %s', translate_cmd)
 
-        if is_fs_file(self.ring_file):
-            self.translate_fs()
-        elif self.default_flag:
-            self.translate_other()
+        non_fs_translate = functools.partial(self.translate_other,
+                                             translate_cmd)
+        if self.default_flag:
+            non_fs_translate = self.translate_other
         elif not is_homecare_ring(self.ring):
-            self.translate_other()
+            non_fs_translate = self.translate_other
         elif 'focz.translate.sublime.p.mps' in translate_cmd.lower():
-            self.translate_sublime()
-        else:
-            self.translate_other(translate_cmd)
+            non_fs_translate = self.translate_sublime
+
+        if not translate_all:
+            non_fs_translate()
+            return
+
+        self.ring_files = []
+        shell_commands = []
+        for rf in self.get_ring_files(all_windows=True):
+            self._file_name = rf.file_name
+            if is_fs_file(self.ring_file):
+                self.translate_fs()
+                shell_commands.append(self.kwargs['shell_cmd'])
+            elif non_fs_translate == self.translate_sublime:
+                self.ring_files.append(rf.file_name)
+            else:
+                non_fs_translate()
+                shell_commands.append(self.kwargs['shell_cmd'])
+
+        if self.ring_files and (non_fs_translate == self.translate_sublime):
+            non_fs_translate()
+            shell_commands.append(self.kwargs['shell_cmd'])
+
+        self.kwargs['shell_cmd'] = shell_commands
+        logger.debug("Shell Commands")
+        [logger.debug("    %s", x) for x in shell_commands]
+
+        self._file_name = None
+        del self.ring_files
 
     def translate_sublime(self):
         translate_cmd = os.path.join('PgmObject', 'Foc',
@@ -297,8 +329,13 @@ class TranslateRingFileCommand(RingExecCommand):
         logger.debug('translate_path = %s', translate_path)
         include_files, include_count = get_translate_include_settings()
 
-        parameters = [self.file_name, '<result_file>', '', '', include_files,
-                      include_count]
+        if self.translate_all:
+            parameters = [self.ring_files]
+        else:
+            parameters = [self.file_name]
+        parameters.extend(['<result_file>', '', '', include_files,
+                           include_count])
+
         self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
             target_ring=self.target_ring,
             full_path=translate_path,

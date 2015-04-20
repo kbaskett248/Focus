@@ -8,7 +8,7 @@
             "startup_info": false,
         },
         "context": [
-            { "key": "selector", "operator": "equal", "operand": "source.focus", "match_all": true }
+            { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs, source.xml", "match_all": true }
         ]
     },
 
