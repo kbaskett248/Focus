@@ -54,9 +54,9 @@ F@IF{@QV@NV @{}^F},
 IF{T 1@PutLocal(DoNotFormat)},
 IF{A 1@PutLocal(DoNotTranslate)},
 IF{L@NV 20^L},
-`versioninfo'@f15@y15@r15|1@PutLocal(MatVersionNumber)
 IF{{"Foc","FocZ.Startup.Init.P"}@CallProgram() @{"Translation",}@CallSub(FormatResults);
    @CallExternalSub(Mis,MisZ.Signon.C,GetSignonUser) @{"Translation",}@CallSub(FormatResults);
+   @NL@CallExternalSub(Foc,FocZ.TranslatorVersion.C,Version)@PutLocal(MatVersionNumber),
    IF{I {F,L}@CallSub(BuildFileList);
       1 F}
    @[@{,E}@CallSub(ProcessFile)]},
