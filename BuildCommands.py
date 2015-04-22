@@ -514,11 +514,11 @@ class FormatRingFileCommand(RingExecCommand):
 
     def format_other(self):
         format_cmd = os.path.join('PgmSource', 'Foc',
-                                  'FocZ.TextPad.Format.P.focus')
+                                  'FocZ.Textpad.Format.P.focus')
 
         self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
             target_ring=self.target_ring, partial_path=format_cmd,
-            parameters=self.file_path)
+            parameters=self.file_name)
         self.kwargs['quiet'] = True
 
     def is_enabled(self, *args, file_name=None, **kwargs):

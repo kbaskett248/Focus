@@ -538,7 +538,7 @@ class Ring(object, metaclass=MiniPluginMeta):
             return self.get_shell_cmd_direct(full_path, parameters)
         elif self == target_ring:
             name = os.path.basename(full_path)
-            if name in get_tool_file_names():
+            if name.lower() in [x.lower() for x in get_tool_file_names()]:
                 return self.get_shell_cmd_direct(full_path, parameters)
             else:
                 return self.get_shell_cmd_tool(full_path, parameters)
