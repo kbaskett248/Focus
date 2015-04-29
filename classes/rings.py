@@ -816,25 +816,22 @@ class LocalRing(HomeCareRing):
                     run_path = target_ring.get_translated_path(full_path)
 
                 if not run_path:
-                    logger.error('.get_shell_cmd_target: ' +
-                                 'failed to get translated path for %s in %s',
+                    logger.error('failed to get translated path for %s in %s',
                                  full_path, target_ring)
                     return super(LocalRing, self).get_shell_cmd_target(
                         target_ring, full_path, parameters)
-                logger.debug('.get_shell_cmd_target: run_path = %s', run_path)
+                logger.debug('run_path = %s', run_path)
 
                 partial_path = target_ring.partial_path(run_path)
                 if not partial_path:
-                    logger.error('.get_shell_cmd_target: ' +
-                                 'failed to get partial path for %s in %s',
+                    logger.error('failed to get partial path for %s in %s',
                                  run_path, target_ring)
                     return super(LocalRing, self).get_shell_cmd_target(
                         target_ring, full_path, parameters)
                 else:
                     partial_path = os.sep + partial_path
 
-                logger.debug('.get_shell_cmd_target: partial_path = %s',
-                             partial_path)
+                logger.debug('partial_path = %s', partial_path)
                 shell_cmd = 'magic.exe "{omnilaunch}"  {partial_path}'.format(
                     omnilaunch=omnilaunch, partial_path=partial_path)
 
@@ -849,8 +846,7 @@ class LocalRing(HomeCareRing):
                         parameters = '"{0}"'.format(parameters)
                     shell_cmd += '  ' + parameters
 
-                logger.debug('.get_shell_cmd_target: shell_cmd = %s',
-                             shell_cmd)
+                logger.debug('shell_cmd = %s', shell_cmd)
 
                 return shell_cmd
 
