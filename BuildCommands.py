@@ -500,7 +500,7 @@ class FormatRingFileCommand(RingExecCommand):
         logger.debug('format_path = %s', format_path)
 
         if not format_path:
-            if not self.create_sublime_translate_file(self.ring):
+            if not self.create_sublime_translate_file():
                 self.format_default()
                 return
             else:
