@@ -638,6 +638,7 @@ class Ring(object, metaclass=MiniPluginMeta):
 
     def get_shell_cmd_tool(self, full_path, parameters=None):
         logger.debug('get_shell_cmd_tool')
+
         run_path = self.get_tools_path()
         logger.debug('run_path = %s', run_path)
         if run_path is None:
@@ -647,7 +648,7 @@ class Ring(object, metaclass=MiniPluginMeta):
         logger.debug(".get_shell_cmd_tool: run_path = %s", run_path)
         name = os.path.basename(full_path)
         tool_cmd = 'RUN'
-        if name in get_tool_file_names():
+        if name.lower() in [x.lower() for x in get_tool_file_names()]:
             tool_cmd = 'RUNRING'
 
         shell_cmd = self.format_shell_cmd_for_tool(run_path, tool_cmd,
@@ -667,7 +668,7 @@ class Ring(object, metaclass=MiniPluginMeta):
         logger.debug("'.get_shell_cmd_tool: run_path = %s", run_path)
         name = os.path.basename(full_path)
         tool_cmd = 'RUNTOOL'
-        if name in get_tool_file_names():
+        if name.lower() in [x.lower() for x in get_tool_file_names()]:
             tool_cmd = 'RUNRINGTOOL'
 
         shell_cmd = self.format_shell_cmd_for_tool(run_path, tool_cmd,
@@ -802,7 +803,8 @@ class LocalRing(HomeCareRing):
             omnilaunch = self.get_file_path('Omnilaunch.mps')
             if omnilaunch:
                 name = os.path.basename(full_path)
-                if name not in get_tool_file_names():
+                if name.lower() not in [x.lower() for x in
+                                        get_tool_file_names()]:
                     if parameters is None:
                         parameters = full_path
                         run_path = target_ring.get_file_path(
