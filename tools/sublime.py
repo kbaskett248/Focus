@@ -85,7 +85,10 @@ ATTRIBUTE_MATCHER = re.compile(
     r"^[ \t]*([A-Z][A-Za-z0-9]+)[ \t]([ \t]*(.+\S))?")
 
 KEYWORD_ATTRIBUTE_MATCHER = re.compile(
-    r"^^[ \t]*(:?[A-Z][A-Za-z0-9]+)[ \t]([ \t]*(.+\S))?")
+    r"^[ \t]*(:?[A-Z][A-Za-z0-9]+)[ \t]([ \t]*(.+\S))?")
+
+FOCUS_FILE_MATCHER = re.compile(
+    r"([A-Z][a-z]{1,2}[A-Z0-9][A-Za-z0-9.]+?\.[A-Z])(\.focus)?\b")
 
 
 def extract_focus_function(string, point, base_point=0):
@@ -308,6 +311,23 @@ def extract_attribute_value(string, point, base_point=0):
     """
     return extract_entity(ATTRIBUTE_MATCHER, string, point, base_point,
                           match_group=3)
+
+
+def extract_focus_file(string, point, base_point=0):
+    """
+    Extracts the text and region of the focus file in string containing point.
+
+    Keyword arguments:
+    string - A string containing a Focus file name.
+    point - An int representing a location in the string or a tuple
+            representing a selection. The point may be relative to an
+            optional base point.
+    base_point - If specified, this is subtracted from point before checking
+                 and added to the resulting location before it is returned.
+
+    """
+    return extract_entity(FOCUS_FILE_MATCHER, string, point, base_point,
+                          match_group=1)
 
 
 ALIAS_NAME_MATCHER = re.compile(r"(\@\@)?([^(]+)\(")

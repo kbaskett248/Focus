@@ -1782,3 +1782,51 @@ class RTToolDocLink(DocLink):
             return path
         else:
             return None
+
+
+class FileMatchDocLink(DocLink):
+    """DocLink class for Translator keywords and attributes. Opens the
+    documentation for the selected entity on the wiki."""
+
+    def __init__(self, view, search_file=None, **kwargs):
+        super(FileMatchDocLink, self).__init__(view, **kwargs)
+        self.search_file = search_file
+
+    @classmethod
+    def scope_view_enabler(cls):
+        return 'source.focus'
+
+    @classmethod
+    def scope_selection_enabler(cls):
+        return ('string, meta.function.arguments.translate-time.focus, '
+                'comment, meta.value.attribute.focus')
+
+    @classmethod
+    def enable_for_selection(cls, view):
+        sel = view.sel()[0]
+        ring_view = get_view(view)
+        span, string = ring_view.extract_focus_file(sel)
+
+        if string is None:
+            return None
+
+        app_match = re.match(r"[A-Z][a-z]{1,2}", string)
+        if app_match is None:
+            return None
+
+        app = app_match.group(0)
+        ring_file = get_ring_file(view.file_name())
+        if ((ring_file is not None) and (ring_file.ring is not None)):
+            file_name = os.path.join(ring_file.ring.pgmsource_path,
+                                     app, string) + '.focus'
+            if os.path.isfile(file_name):
+                search_region = sublime.Region(span[0], span[1])
+                return {'search_string': string,
+                        'search_region': search_region,
+                        'search_file': file_name}
+
+        return None
+
+    def show_doc(self):
+        sublime.status_message(self.open_status_message)
+        self.show_doc_in_file(self.search_file, row=0, col=0)

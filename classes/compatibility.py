@@ -16,6 +16,7 @@ from ..tools.sublime import (
     extract_keyword_value,
     extract_attribute,
     extract_attribute_value,
+    extract_focus_file,
     KEYWORD_ATTRIBUTE_MATCHER,
     strip_alias
 )
@@ -314,6 +315,9 @@ class FocusCompatibility(FSCompatibility):
 
     def extract_attribute_value(self, point):
         return self._extract_entity(extract_attribute_value, point)
+
+    def extract_focus_file(self, point):
+        return self._extract_entity(extract_focus_file, point)
 
     def get_translator_sections_iter(self, translator, include_end_space=True):
         if translator.startswith('#'):
