@@ -123,7 +123,7 @@ IF{F@LA@IF{@{,""@RootServer(FocPgmSource)@LA}@#=0 1^I,"";
            @{,""@Root(Toolsets)@LA}@#=0 "";
            @{,""@RootClient(Toolsets)@LA}@#=0 "";
            1 ""} ("File: ",F," not associated with ring ",@GetStateVariable(Ring),".")@{"Translation",}@CallSub(FormatResults);
-   {F,E}@CallSub(FormatFile) @{"Formatting",}@CallSub(FormatResults);
+   {F,E}@CallSub(FormatFile);
    {F,E,I,C}@CallSub(TranslateFile)}
 IF{[] @{,E}@CallSub(WriteMessageToResults)},
 "";
