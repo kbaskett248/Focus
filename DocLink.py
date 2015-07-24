@@ -72,6 +72,14 @@ def init_css():
     settings.add_on_change('reload', init_css)
 
 
+def get_set_reg_ex(upper_or_lower, set_number):
+    if upper_or_lower.islower():
+        upper_or_lower = r"[a-z]"
+    else:
+        upper_or_lower = r"[A-Z]"
+    return r"\@{0}{1}\b".format(upper_or_lower, set_number)
+
+
 class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
     """DocLink class for Focus functions. Shows the documentation for the
     function on the wiki."""
@@ -512,12 +520,11 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         codeblock, set_doc_region = self.setup(self.view)
 
         if get_set_highlighter_setting():
-            if self.set[0] == 'U':
-                upper_or_lower = r"\@[A-Z]"
-            else:
-                upper_or_lower = r"\@[a-z]"
             set_number = self.set[2:-1]
-            reg_ex = upper_or_lower + set_number
+            if self.set[0] == 'U':
+                reg_ex = get_set_reg_ex('U', set_number)
+            else:
+                reg_ex = get_set_reg_ex('l', set_number)
             regions.extend(self.view.find_all(reg_ex))
         else:
             function_sets = codeblock.get_sets_from_function()
@@ -753,12 +760,11 @@ class SetDocHighlighter(Highlight):
         codeblock, set_doc_region = self.setup(self.view)
 
         if get_set_highlighter_setting():
-            if self.search_string[0] == 'U':
-                upper_or_lower = r"\@[A-Z]"
-            else:
-                upper_or_lower = r"\@[a-z]"
             set_number = self.search_string[2:-1]
-            reg_ex = upper_or_lower + set_number
+            if self.search_string[0] == 'U':
+                reg_ex = get_set_reg_ex('U', set_number)
+            else:
+                reg_ex = get_set_reg_ex('l', set_number)
             regions.extend(self.view.find_all(reg_ex))
         else:
             function_sets = codeblock.get_sets_from_function()
