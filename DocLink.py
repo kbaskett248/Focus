@@ -238,67 +238,72 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
         except urllib.error.URLError:
             return None
         else:
-            d = dict()
-            soup = BeautifulSoup(f)
-            content = soup.find('div', class_='mw-content-ltr')
-            # logger.debug('content = %s', content)
-
-            first_div = content.div
-            d['function'] = first_div.div.b.string
-
-            second_div = first_div.find_next_sibling('div')
-            d['usage'] = ''.join(list(second_div.code.stripped_strings))
-
-            tab = second_div.find_next_sibling('div').table
-
-            d['overview'] = ''
-            for r in tab.find_all('tr'):
-                e = list(r.stripped_strings)
-                if (('ide' in e[0]) and ('ffect' in e[0])):
-                    e[0] = 'Side Effect'
-                elif (('untime' in e[0]) and ('arg' in e[0])):
-                    e[0] = 'Runtime Arg'
-
-                if ('ranslation' in e[0]) and ('rg' in e[0]):
-                    try:
-                        d['translation args'] = (d['translation args'] +
-                                                 ', ' + ' '.join(e[1:]))
-                    except KeyError:
-                        d['translation args'] = ' '.join(e[1:])
-                else:
-                    d[e[0].lower()] = ' '.join(e[1:])
-
-            table_elements = ['runtime arg', 'translation args',
-                              'precondition', 'return', 'side effect']
-            for e in table_elements:
-                if e not in d.keys():
-                    d[e] = 'None'
-
-            if d['overview']:
-                d['overview'] = 'Overview\n' + d['overview'] + '\n\n'
-
             try:
-                examples = content.find('b', text='Example').parent
+                return self.parse_page_content(f)
             except AttributeError:
-                examples = ''
+                return None
+
+    def parse_page_content(self, content):
+        d = dict()
+        soup = BeautifulSoup(content)
+        content = soup.find('div', class_='mw-content-ltr')
+
+        first_div = content.div
+        d['function'] = first_div.div.b.string
+
+        second_div = first_div.find_next_sibling('div')
+        d['usage'] = ''.join(list(second_div.code.stripped_strings))
+
+        tab = second_div.find_next_sibling('div').table
+
+        d['overview'] = ''
+        for r in tab.find_all('tr'):
+            e = list(r.stripped_strings)
+            if (('ide' in e[0]) and ('ffect' in e[0])):
+                e[0] = 'Side Effect'
+            elif (('untime' in e[0]) and ('arg' in e[0])):
+                e[0] = 'Runtime Arg'
+
+            if ('ranslation' in e[0]) and ('rg' in e[0]):
+                try:
+                    d['translation args'] = (d['translation args'] +
+                                             ', ' + ' '.join(e[1:]))
+                except KeyError:
+                    d['translation args'] = ' '.join(e[1:])
             else:
-                examples = examples.find_next_sibling('pre')
-                examples = ''.join(list(examples.strings))
-            d['examples'] = examples.strip()
+                d[e[0].lower()] = ' '.join(e[1:])
 
-            d['extra info'] = ''
-            for ei in content.find_all('dl'):
-                ei = list(ei.stripped_strings)
-                if len(ei) == 1:
-                    continue
-                d['extra info'] = (d['extra info'] + ei[0] + '\n' +
-                                   ' '.join(ei[1:]) + '\n\n')
+        table_elements = ['runtime arg', 'translation args',
+                          'precondition', 'return', 'side effect']
+        for e in table_elements:
+            if e not in d.keys():
+                d[e] = 'None'
 
-            soup.find('div', id='footer')
-            credits = soup.find('li', id='credits')
-            d['modified time'] = next(credits.stripped_strings)
+        if d['overview']:
+            d['overview'] = 'Overview\n' + d['overview'] + '\n\n'
 
-            return d
+        try:
+            examples = content.find('b', text='Example').parent
+        except AttributeError:
+            examples = ''
+        else:
+            examples = examples.find_next_sibling('pre')
+            examples = ''.join(list(examples.strings))
+        d['examples'] = examples.strip()
+
+        d['extra info'] = ''
+        for ei in content.find_all('dl'):
+            ei = list(ei.stripped_strings)
+            if len(ei) == 1:
+                continue
+            d['extra info'] = (d['extra info'] + ei[0] + '\n' +
+                               ' '.join(ei[1:]) + '\n\n')
+
+        soup.find('div', id='footer')
+        credits = soup.find('li', id='credits')
+        d['modified time'] = next(credits.stripped_strings)
+
+        return d
 
     def format_documentation(self, doc):
         """Formats a documentation dictionary for display."""
