@@ -36,7 +36,7 @@
                 { "trigger": "@CallStructuredPurge", "contents": "@CallStructuredPurge(${1:Object})" },
                 { "trigger": "@CallStructuredSubmit", "contents": "@CallStructuredSubmit(${1:Object})" },
                 { "trigger": "@CallSub", "contents": "@CallSub(${1:Sub})" },
-                { "trigger": "@CallTool", "contents": "@CallTool()" },
+                { "trigger": "@CallTool", "contents": "@CallTool(${1:Tool})" },
                 { "trigger": "@CallWinHelp", "contents": "@CallWinHelp()" },
                 { "trigger": "@CaptureWindowBitmap", "contents": "@CaptureWindowBitmap()" },
                 { "trigger": "@CaptureWindowMetafile", "contents": "@CaptureWindowMetafile()" },

@@ -343,6 +343,82 @@
                                 }
                             }
                         }
+                    },
+                    ":Index": {
+                        "children": {
+                            "Condition": {},
+                            "FirstKeyFolder": {
+                                "completion_types": ["Translator"],
+                                "completions": ["Yes","No"]
+                            },
+                            "HashLength": {
+                                "required": true
+                            },
+                            "IntraObject": {},
+                            "JType": {
+                                "completion_types": ["Translator"],
+                                "completions": ["Yes","No"]
+                            },
+                            "LastVersionNumber": {},
+                            "LastVersionRelease": {},
+                            "NumKeyFolders": {},
+                            "PhysicalName": {
+                                "required": true
+                            },
+                            "RebuildLogicCodeBase": {},
+                            "RebuildLogicMemberName": {},
+                            "RebuildLogicSubroutineSet": {},
+                            "RootTT": {},
+                            ":IndexKey": {
+                                "completion_types": ["Field", "Key"],
+                                "restrict_to_file": true,
+                                "children": {
+                                    "AllowNilValue": {
+                                        "completion_types": ["Translator"],
+                                        "completions": ["Yes","No"]
+                                    },
+                                    "DisplayOnly": {
+                                        "completion_types": ["Translator"],
+                                        "completions": ["Yes","No"]
+                                    },
+                                    "Normalization": {
+                                        "completion_types": ["Translator"],
+                                        "completions": ["Yes","No"]
+                                    },
+                                    "Pattern": {
+                                        "completion_types": ["Translator"],
+                                        "completions": [
+                                            "AlphaNumeric", 
+                                            "AlphaNumericPunctuation", 
+                                            "Number", 
+                                            "PrefixedNumber", 
+                                            "DateTime", 
+                                            "ObjectID"
+                                        ]
+                                    },
+                                    "SuppressOriginalValue": {
+                                        "completion_types": ["Translator"],
+                                        "completions": ["Yes","No"]
+                                    }
+                                }
+                            },
+                            ":IndexSeed": {
+                                "completion_types": ["Field", "Key"],
+                                "restrict_to_file": true
+                            },
+                            ":OID": {
+                                "completion_types": ["Field", "Key"],
+                                "restrict_to_file": true
+                            }
+                        }
+                    },
+                    ":IndexArrayOrder": {
+                        "children": {
+                            "Element": {
+                                "completion_types": ["Field", "Key"]
+                            },
+                            "ElementDeleted": {}
+                        }
                     }
                 }
             }

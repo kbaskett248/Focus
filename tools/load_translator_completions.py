@@ -25,12 +25,14 @@ def _load_translator_completions():
             """
 
             def __init__(self, children={}, completions=[],
-                         completion_types=[], required=False):
+                         completion_types=[], required=False,
+                         restrict_to_file=False):
                 super(TranslatorObject, self).__init__()
                 self.children = children
                 self.completions = completions
                 self.completion_types = completion_types
                 self.required = required
+                self.restrict_to_file = restrict_to_file
 
         keys = object_dict.keys()
         if ((len(object_dict) == 0) or ('children' in keys) or

@@ -143,11 +143,24 @@
     // focus function. This is primarily used to show Home Care-specific documentation, but can also
     // be used to show custom pages if desired.
     "focus_function_doc_url_overrides": {
+        "@CloseIndex": "http://stxwiki/wiki10/Index_Search_Functions#.40CloseIndex",
+        "@CloseIndexRT": "http://stxwiki/wiki10/Index_Search_Functions#.40CloseIndexRT",
+        "@DeleteIndexEntries": "http://stxwiki/wiki10/Index_Search_Functions#.40DeleteIndexEntries",
+        "@DeleteIndexEntriesRT": "http://stxwiki/wiki10/Index_Search_Functions#.40DeleteIndexEntriesRT",
         "@GetObjectLongLockParams": "http://ptdoc.ptct.com/mwiki/index.php/%40GetObjectLongLockParams",
         "@GetProcessLongLockParams": "http://ptdoc.ptct.com/mwiki/index.php/%40GetProcessLongLockParams",
+        "@InsertIndexEntries": "http://stxwiki/wiki10/Index_Search_Functions#.40InsertIndexEntries",
+        "@InsertIndexEntriesRT": "http://stxwiki/wiki10/Index_Search_Functions#.40InsertIndexEntriesRT",
         "@LockLongMulti": "http://ptdoc.ptct.com/mwiki/index.php/%40LockLongMulti",
-        "@UnlockLongMulti": "http://ptdoc.ptct.com/mwiki/index.php/%40UnlockLongMulti"
-
+        "@MoreIndexEntries": "http://stxwiki/wiki10/Index_Search_Functions#.40MoreIndexEntries",
+        "@MoreIndexEntriesRT": "http://stxwiki/wiki10/Index_Search_Functions#.40MoreIndexEntriesRT",
+        "@NextIndexEntry": "http://stxwiki/wiki10/Index_Search_Functions#.40NextIndexEntry",
+        "@NextIndexEntryRT": "http://stxwiki/wiki10/Index_Search_Functions#.40NextIndexEntryRT",
+        "@OpenIndex": "http://stxwiki/wiki10/Index_Search_Functions#.40OpenIndex",
+        "@OpenIndexRT": "http://stxwiki/wiki10/Index_Search_Functions#.40OpenIndexRT",
+        "@UnlockLongMulti": "http://ptdoc.ptct.com/mwiki/index.php/%40UnlockLongMulti",
+        "@UpdateIndexEntries": "http://stxwiki/wiki10/Index_Search_Functions#.40UpdateIndexEntries",
+        "@UpdateIndexEntriesRT": "http://stxwiki/wiki10/Index_Search_Functions#.40UpdateIndexEntriesRT",
     },
 
     // For the set highlighter, this setting controls whether sets are highlighted within the
