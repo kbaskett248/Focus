@@ -22,7 +22,8 @@
 //             <Answer here>
 //       - Will accessing unconverted data objects with new code cause a crash?
 //           <Answer here>
-//       - Will accessing unconverted data with new code logically fault the existing data objects?
+//       - Will accessing unconverted data with new code logically fault the 
+//         existing data objects?
 //           <Answer here>
 
 
@@ -99,7 +100,7 @@ IF{A@@HhaZtMaintUtilities.Start()@NV;
 //     None
 //:Doc Additional Notes
 //     None
-^{O}
+^O
 ;
 
 ]]></content>
@@ -107,5 +108,5 @@ IF{A@@HhaZtMaintUtilities.Start()@NV;
     <!-- <tabTrigger>hello</tabTrigger> -->
     <!-- Optional: Set a scope to limit where the snippet will trigger -->
     <scope>source.focus</scope>
-    <description>Focus Tools: Empty Fixer Template</description>
+    <description>Focus Tools: Template - Fixer</description>
 </snippet>
