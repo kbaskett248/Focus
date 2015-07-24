@@ -739,7 +739,7 @@ class DocumentAllLocalsCommand(FocusViewCommand):
                                                 locals_section[1])
             except IndexError:
                 start = self.focus_view.get_translator_sections(
-                    'Magic')[0].begin()-1
+                    'Magic')[0][0][0]-1
                 locals_section = sublime.Region(start, start)
                 create_locals_section = True
 
