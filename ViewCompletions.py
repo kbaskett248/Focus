@@ -1,6 +1,5 @@
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
 
 import sublime
 
@@ -183,14 +182,14 @@ class TranslatorTrigger(CompletionTrigger):
 
         current_item = tree[-1]
         partial_completions = get_translator_completions()
-        logger.debug('partial_completions = %s', partial_completions)
 
         for k, v in tree:
             logger.debug('k = %s', k)
+            logger.debug('partial_completions = %s', partial_completions)
             try:
                 translator = partial_completions[k]
                 logger.debug('translator = %s', translator)
-                # print(k, translator)
+                logger.debug('%s %s', k, translator)
             except KeyError:
                 if ((k == current_item[0]) and (v == current_item[1])):
                     if ((match is None) or ((match.group('separator') == '')
@@ -200,6 +199,7 @@ class TranslatorTrigger(CompletionTrigger):
             else:
                 try:
                     partial_completions = translator.children
+                    logger.debug('partial_completions = %s', partial_completions)
                 except AttributeError:
                     return []
 
@@ -483,18 +483,21 @@ class TranslatorViewLoader(ViewLoader):
         for k, v in tree:
             try:
                 translator = partial_completions[k]
-                # print(k, translator)
+                logger.debug('%s %s', k, translator)
             except KeyError:
+                logger.debug("KeyError")
                 if ((k == current_item[0]) and (v == current_item[1])):
                     if ((match is None) or ((match.group('separator') == '')
                                             and (match.group('value') == ''))):
                         self.completions = set(
                             [(x,) for x in translator.children.keys()])
+                        logger.debug('self.completions = %s', self.completions)
                 return
             else:
                 try:
                     partial_completions = translator.children
                 except AttributeError:
+                    logger.debug("AttributeError")
                     return
 
         if ((match is None) or ((match.group('separator') == '') and
