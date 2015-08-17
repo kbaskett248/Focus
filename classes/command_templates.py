@@ -23,11 +23,12 @@ logger = logging.getLogger(__name__)
 logger.setLevel('DEBUG')
 
 
-class WindowTextCommandMeta(ABCMeta):
+class HybridCommandMeta(ABCMeta):
     """
     A TextCommand can use this as its metaclass to automatically create a
-    window command that runs the text command for the active view. Useful when
-    writing a text command that you want to run as a build system.
+    window command and an application command that will run the given text
+    command for the active window and view. Useful when writing a text command
+    that you want to run as a build system.
     """
 
     def __new__(cls, classname, bases, dictionary):
@@ -37,35 +38,47 @@ class WindowTextCommandMeta(ABCMeta):
         condition before running the text command.
 
         """
-        logger.debug("bases=%s", bases)
         if not cls.check_bases(bases):
             raise TypeError(
                 "Class %s is not a subclass of TextCommand" % classname)
 
-        win_class_name, win_class = WindowTextCommandMeta.make_window_version(
-            classname, dictionary)
-
-        c = super(WindowTextCommandMeta, cls).__new__(
+        # Construct this class
+        c = super(HybridCommandMeta, cls).__new__(
             cls, classname, bases, dictionary)
 
-        if c and win_class_name and win_class:
-            module_dict = sys.modules[c.__module__].__dict__
-            module_dict[win_class_name] = win_class
+        if c:
+            # Generate the WindowCommand and ApplicationCommand versions of the
+            # class
+            win_class = HybridCommandMeta.make_window_version(
+                classname, dictionary)
+            app_class = HybridCommandMeta.make_application_version(
+                classname, dictionary)
 
-        app_class_name, app_class = (
-            WindowTextCommandMeta.make_application_version(
-                classname, dictionary))
-        if c and app_class_name and app_class:
+            # Add the classes to the module of the original class
             module_dict = sys.modules[c.__module__].__dict__
-            module_dict[app_class_name] = app_class
+            module_dict[win_class.__name__] = win_class
+            module_dict[app_class.__name__] = app_class
 
         return c
 
     @classmethod
     def check_bases(cls, bases):
+        '''
+        Function: check_bases
+        Summary: Checks to see if this function is a subclass of
+        sublime_plugin.TextCommand
+        Attributes:
+            @param (cls):This class
+            @param (bases):The list of the class's base classes
+        Returns: True if TextCommand is a base class of the current class or
+                 any of its base classes
+        '''
+
         if sublime_plugin.TextCommand in bases:
             return True
         else:
+            # Recursively check each of the base classes to see if they
+            # subclass TextCommand
             for c in bases:
                 if cls.check_bases(c.__bases__):
                     return True
@@ -73,10 +86,17 @@ class WindowTextCommandMeta(ABCMeta):
                 return False
 
     def make_window_version(classname, dictionary):
-        command_name = WindowTextCommandMeta.determine_command_name(classname)
+        '''
+        Function: make_window_version
+        Summary: Returns a new WindowCommand class that calls the current
+                 command on the active view in the given window.
+        Attributes:
+            @param (classname):Name of the current class
+            @param (dictionary):Dictionary of the current class
+        Returns: A WindowCommand class
+        '''
 
-        if command_name is None:
-            return
+        command_name = HybridCommandMeta.determine_command_name(classname)
 
         @property
         def view(self):
@@ -87,16 +107,21 @@ class WindowTextCommandMeta(ABCMeta):
                          self.__class__.__name__)
             self.view.run_command(command_name, kwargs)
 
-        return ('Window' + classname, type('Window' + classname,
-                                           (sublime_plugin.WindowCommand,),
-                                           {'view': view,
-                                            'run': run}))
+        return type('Window' + classname, (sublime_plugin.WindowCommand,),
+                    {'view': view, 'run': run})
 
     def make_application_version(classname, dictionary):
-        command_name = WindowTextCommandMeta.determine_command_name(classname)
+        '''
+        Function: make_application_version
+        Summary: Returns a new ApplicationCommand class that calls the current
+                 command on the active view in the active window.
+        Attributes:
+            @param (classname):Name of the current class
+            @param (dictionary):Dictionary of the current class
+        Returns: An ApplicationCommand class
+        '''
 
-        if command_name is None:
-            return
+        command_name = HybridCommandMeta.determine_command_name(classname)
 
         @property
         def view(self):
@@ -107,27 +132,43 @@ class WindowTextCommandMeta(ABCMeta):
                          self.__class__.__name__)
             self.view.run_command(command_name, kwargs)
 
-        return ('App' + classname, type('App' + classname,
-                                        (sublime_plugin.ApplicationCommand,),
-                                        {'view': view,
-                                         'run': run}))
+        return type('App' + classname, (sublime_plugin.ApplicationCommand,),
+                    {'view': view, 'run': run})
 
     def determine_command_name(classname):
+        '''
+        Function: determine_command_name
+        Summary: Determines the name of the command to be called in sublime
+                 based on the name of the class.
+        Attributes:
+            @param (classname):Name of the class being created.
+        Returns: The name of the command as a string.
+        Raises: ValueError if command name cannot be determined
+        '''
+        # Remove Command if present since it isn't included in the command name
         logger.debug("classname=%s", classname)
         if classname.endswith('Command'):
             classname = classname[:-7]
 
+        # Group the name into groups starting with uppercase letters, then join
+        # the groups with an underscore and convert to lowercase.
         command_name_groups = re.findall(r"[A-Z]+[a-z]+", classname)
         if command_name_groups:
             command_name = '_'.join(command_name_groups).lower()
             logger.debug("command_name=%s", command_name)
             return command_name
 
+        raise ValueError(
+            'Command name could not be determined for {0}'.format(classname))
 
-class CallbackCmdMeta(WindowTextCommandMeta):
+
+class CallbackCmdMeta(HybridCommandMeta):
     """
-    Modifies a command class to optionally call a pre_run_callback and/or a
-    post_run_callback automatically.
+    Modifies a command class to run callbacks before or after the standard
+    methods defined in the API. The following callbacks are supported:
+     - pre_run_callback: Called before the run method
+     - post_run_callback: Called after the run method
+     - pre_check_callback: Called before the is_enabled and is_visible methods
 
     """
 
@@ -138,74 +179,139 @@ class CallbackCmdMeta(WindowTextCommandMeta):
         Modifies the run command to call determine_ring before running.
 
         """
-        old_run_method = CallbackCmdMeta.find_attribute(
-            'run', classname, bases, dictionary)
-        pre_check_callback = CallbackCmdMeta.find_attribute(
-            'pre_check_callback', classname, bases, dictionary)
+        cls.build_new_run_command(classname, bases, dictionary)
 
-        if old_run_method:
-            logger.debug("found run command")
-
-            pre_run_callback = CallbackCmdMeta.find_attribute(
-                'pre_run_callback', classname, bases, dictionary)
-
-            post_run_callback = CallbackCmdMeta.find_attribute(
-                'post_run_callback', classname, bases, dictionary)
-
-            if pre_run_callback and post_run_callback:
-                logger.debug("found pre_run_callback command")
-                logger.debug("found post_run_callback command")
-
-                def run(self, *args, **kwargs):
-                    self.pre_run_callback(*args, **kwargs)
-                    old_run_method(self, *args, **kwargs)
-                    self.post_run_callback(*args, **kwargs)
-
-            elif pre_run_callback:
-                logger.debug("found pre_run_callback command")
-
-                def run(self, *args, **kwargs):
-                    self.pre_run_callback(*args, **kwargs)
-                    old_run_method(self, *args, **kwargs)
-
-            elif post_run_callback:
-                logger.debug("found post_run_callback command")
-
-                def run(self, *args, **kwargs):
-                    old_run_method(self, *args, **kwargs)
-                    self.post_run_callback(*args, **kwargs)
-
-            if pre_run_callback or post_run_callback:
-                dictionary['run'] = run
-
-        if pre_check_callback:
-            logger.debug("found pre_check_callback command")
-            is_enabled_method = CallbackCmdMeta.find_attribute(
-                'is_enabled', classname, bases, dictionary)
-            if is_enabled_method:
-                logger.debug("found is_enabled command")
-
-                def is_enabled(self, *args, **kwargs):
-                    self.pre_check_callback(*args, **kwargs)
-                    return is_enabled_method(self, *args, **kwargs)
-
-                dictionary['is_enabled'] = is_enabled
-
-            is_visible_method = CallbackCmdMeta.find_attribute(
-                'is_visible', classname, bases, dictionary)
-            if is_visible_method:
-                logger.debug("found is_visible command")
-
-                def is_visible(self, *args, **kwargs):
-                    self.pre_check_callback(*args, **kwargs)
-                    return is_visible_method(self, *args, **kwargs)
-
-                dictionary['is_visible'] = is_enabled
+        try:
+            cls.build_new_check_commands(classname, bases, dictionary)
+        except AttributeError:
+            logger.info("No pre_check_callback attribute specified")
 
         return super(CallbackCmdMeta, cls).__new__(
             cls, classname, bases, dictionary)
 
-    def find_attribute(attribute, classname, bases, dictionary, require=False):
+    @classmethod
+    def build_new_run_command(cls, classname, bases, dictionary):
+        '''
+        Function: build_new_run_command
+        Summary: Builds a new run command by calling the pre_run_callback or
+                 post_run_callback.
+        Attributes:
+            @param (cls):A reference to the current class
+            @param (classname):The name of the current class
+            @param (bases):The base classes of the current class
+            @param (dictionary):The dictionary of attributes of the current
+                                class
+        Returns: None
+
+        '''
+        old_run_method = CallbackCmdMeta.find_attribute(
+            'run', classname, bases, dictionary)
+        mode = ''
+
+        # Try to get the pre_run_callback
+        try:
+            pre_run_callback = CallbackCmdMeta.find_attribute(
+                'pre_run_callback', classname, bases, dictionary)
+        except AttributeError:
+            pass
+        else:
+            logger.debug("found pre_run_callback command")
+            mode = 'pre'
+
+        # Try to get the post_run_callback
+        try:
+            post_run_callback = CallbackCmdMeta.find_attribute(
+                'post_run_callback', classname, bases, dictionary)
+        except AttributeError:
+            pass
+        else:
+            logger.debug("found post_run_callback command")
+            if mode == 'pre':
+                mode = 'both'
+            else:
+                mode = 'post'
+
+        # Define a new run method
+        if mode == 'both':
+            def run(self, *args, **kwargs):
+                self.pre_run_callback(*args, **kwargs)
+                old_run_method(self, *args, **kwargs)
+                self.post_run_callback(*args, **kwargs)
+        elif mode == 'pre':
+            def run(self, *args, **kwargs):
+                self.pre_run_callback(*args, **kwargs)
+                old_run_method(self, *args, **kwargs)
+        elif mode == 'post':
+            def run(self, *args, **kwargs):
+                old_run_method(self, *args, **kwargs)
+                self.post_run_callback(*args, **kwargs)
+
+        if mode:
+            dictionary['run'] = run
+
+    @classmethod
+    def build_new_check_commands(cls, classname, bases, dictionary):
+        '''
+        Function: build_new_check_commands
+        Summary: Builds new is_visible and is_enabled commands that call the
+                 pre_check_callback method beforehand.
+        Attributes:
+            @param (cls):A reference to the current class
+            @param (classname):The name of the current class
+            @param (bases):The base classes of the current class
+            @param (dictionary):The dictionary of attributes of the current
+                                class
+        Returns: None
+
+        '''
+        pre_check_callback = CallbackCmdMeta.find_attribute(
+            'pre_check_callback', classname, bases, dictionary)
+        logger.debug("found pre_check_callback command")
+
+        try:
+            is_enabled_method = CallbackCmdMeta.find_attribute(
+                'is_enabled', classname, bases, dictionary)
+        except AttributeError:
+            pass
+        else:
+            logger.debug("found is_enabled command")
+
+            def is_enabled(self, *args, **kwargs):
+                self.pre_check_callback(*args, **kwargs)
+                return is_enabled_method(self, *args, **kwargs)
+
+            dictionary['is_enabled'] = is_enabled
+
+        try:
+            is_visible_method = CallbackCmdMeta.find_attribute(
+                'is_visible', classname, bases, dictionary)
+        except AttributeError:
+            pass
+        else:
+            logger.debug("found is_visible command")
+
+            def is_visible(self, *args, **kwargs):
+                self.pre_check_callback(*args, **kwargs)
+                return is_visible_method(self, *args, **kwargs)
+
+            dictionary['is_visible'] = is_enabled
+
+    def find_attribute(attribute, classname, bases, dictionary):
+        '''
+        Function: find_attribute
+        Summary: Searches for an attribute with the specified name in the
+                 current class or in one of the base classes.
+        Attributes:
+            @param (attribute):Name of the attribute as a string
+            @param (classname):Name of the current class
+            @param (bases):Base classes of the current class
+            @param (dictionary):Dictionary containing the attributes for the
+                                current class
+            @param (require) default=False: True if the
+        Returns: The value of the specified attribute
+        Raises: AttributeError if the specified attribute cannot be found
+        '''
+
         logger.debug("attribute=%s", attribute)
         att = None
         try:
@@ -214,13 +320,14 @@ class CallbackCmdMeta(WindowTextCommandMeta):
             for c in bases:
                 try:
                     att = c.__dict__[attribute]
+                    break
                 except KeyError:
-                    pass
+                    continue
         finally:
-            if (att is None) and require:
-                raise AttributeError('cannot find %s in class %s',
-                                     attribute,
-                                     classname)
+            if (att is None):
+                raise AttributeError(
+                    'cannot find {att} in class {name}'.format(att=attribute,
+                                                               name=classname))
             return att
 
 
