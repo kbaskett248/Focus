@@ -371,31 +371,20 @@ class OpenInOtherRingCommand(RingCommand):
             logger.info('Comparing %s and %s',
                         self.current_file,
                         self.target_file)
-            # compare_program = self.get_compare_program()
-            # cmd = '{0} "{1}" "{2}"'.format(compare_program,
-            #                                self.current_file,
-            #                                self.target_file)
+
             left_read_only = right_read_only = False
             if not is_local_ring(self.current_ring):
                 if (self.current_ring.server_path in self.current_file):
                     left_read_only = True
-                    # cmd += ' /leftreadonly'
             if not is_local_ring(self.target_ring):
                 if (self.target_ring.server_path in self.target_file):
-                    # cmd += ' /rightreadonly'
                     right_read_only = True
             sublime.run_command('compare_in',
                                 {'left_file': self.current_file,
                                  'right_file': self.target_file,
                                  'left_read_only': left_read_only,
                                  'right_read_only': right_read_only})
-            # logger.info(cmd)
-            # try:
-            #     subprocess.Popen(cmd)
-            # except Exception:
-            #     logger.error('Problem opening comparison tool')
-            #     sublime.error_message(
-            #         'There was an error running your merge command.\n%s' % cmd)
+
         else:
             logger.info('Opening file: %s', self.target_file)
             sublime.active_window().open_file(self.target_file)
