@@ -66,19 +66,24 @@ def convert_to_focus_lists(args):
 
 
 def get_ring_locations(universe_name, ring_name, is_local):
+    if not universe_name:
+        raise NotADirectoryError('Missing universe name')
+    elif not ring_name:
+        raise NotADirectoryError('Missing ring name')
+
     ring_locations = []
     universe = universe_name + '.Universe'
     ring = ring_name + '.Ring'
 
     if is_local:
         ring_locations.append(os.path.join(
-            get_env('ProgramFiles'), 'Ptct-AP', 'SoloFocus', universe, ring))
+            get_env('ProgramFiles(x86)'), 'Ptct-AP', 'SoloFocus', universe, ring))
         ring += '.Local'
         ring_locations.append(os.path.join(CACHE_ROOT, universe, ring))
 
     else:
         ring_locations.append(os.path.join(
-            get_env('ProgramFiles'), 'Meditech', universe, ring))
+            get_env('ProgramFiles(x86)'), 'Meditech', universe, ring))
         ring_locations.append(os.path.join(CACHE_ROOT, universe, ring))
 
     return tuple(ring_locations)
