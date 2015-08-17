@@ -789,14 +789,33 @@ class LocalRing(HomeCareRing):
         path = os.path.join('PgmSource', 'HHA', 'HhaZtSvn.CommandEe.S.focus')
         return self.run_file_nice(partial_path=path)
 
-    # def possible_paths(self):
-    #     paths = [p for p in (
-    #              ('Ring', self.path),
-    #              ('System', self.system_path),
-    #              ('System Programs', self.system_programs_path),
-    #              ('Server', self.server_path))
-    #              if p[1] is not None]
-    #     return paths
+    # def get_shell_cmd_tool(self, full_path, parameters=None):
+    #     logger.debug("Local Ring")
+    #     if (full_path.lower().startswith(self.pgm_cache_path.lower()) and
+    #             parameters is None):
+    #         name = os.path.basename(full_path)
+    #         if name.lower() in [x.lower() for x in get_tool_file_names()]:
+    #             run_path = self.get_translated_path(full_path)
+    #         else:
+    #             parameters = full_path
+    #             run_path = self.get_file_path(
+    #                 os.path.join('PgmObject', 'Foc',
+    #                              'FocZ.TextPad.Run.P.mps'))
+
+    #         if not run_path:
+    #             logger.error('failed to get translated path for %s in %s',
+    #                          full_path, self)
+    #             return super(LocalRing, self).get_shell_cmd_tool(
+    #                 full_path, parameters)
+    #         shell_cmd = 'magic.exe "{run_path}"'.format(run_path=run_path)
+
+    #         if parameters:
+    #             shell_cmd += '  "{0}"'.format(parameters)
+    #         logger.debug('shell_cmd = %s', shell_cmd)
+    #         return shell_cmd
+    #     else:
+    #         return super(LocalRing, self).get_shell_cmd_tool(full_path,
+    #                                                          parameters)
 
     def get_shell_cmd_target(self, target_ring, full_path, parameters=None):
         if (self != target_ring) and is_local_ring(target_ring):
