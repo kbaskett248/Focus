@@ -89,6 +89,7 @@
                 { "trigger": "@CopyRecordsRT", "contents": "@CopyRecordsRT()" },
                 { "trigger": "@CreateDirectory", "contents": "@CreateDirectory()" },
                 { "trigger": "@CreateFile", "contents": "@CreateFile()" },
+                { "trigger": "@CreateFileClear", "contents": "@CreateFileClear()" },
                 { "trigger": "@CreateObject", "contents": "@CreateObject(${1:Object})" },
                 { "trigger": "@CreateObjectRT", "contents": "@CreateObjectRT()" },
                 { "trigger": "@CreateRecord", "contents": "@CreateRecord(${1:Object.Record})" },
