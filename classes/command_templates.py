@@ -179,12 +179,15 @@ class CallbackCmdMeta(HybridCommandMeta):
         Modifies the run command to call determine_ring before running.
 
         """
-        cls.build_new_run_command(classname, bases, dictionary)
+        try:
+            cls.build_new_run_command(classname, bases, dictionary)
+        except AttributeError:
+            logger.info('No run attribute defined')
 
         try:
             cls.build_new_check_commands(classname, bases, dictionary)
         except AttributeError:
-            logger.info("No pre_check_callback attribute specified")
+            logger.info("No pre_check_callback attribute defined")
 
         return super(CallbackCmdMeta, cls).__new__(
             cls, classname, bases, dictionary)
