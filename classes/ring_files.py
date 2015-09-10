@@ -67,8 +67,8 @@ class RingFile(object, metaclass=MiniPluginMeta):
                 try:
                     f = c(file_name)
                 except InvalidFileFormat:
-                    logger.exception(
-                        "InvalidFileFormat exception")
+                    # logger.exception(
+                    #     "InvalidFileFormat exception")
                     continue
                 except Exception:
                     logger.exception("Other exception")
