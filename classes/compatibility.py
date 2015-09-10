@@ -136,7 +136,7 @@ class FSCompatibility(metaclass=abc.ABCMeta):
         pass
 
     def find_member(self, name):
-        reg_ex = r"^ *:(Code|List) +({name})".format(name=name)
+        reg_ex = r"^ *:(Code|List) +({name})\b".format(name=name)
         return string_search(self.get_contents(),
                              reg_ex,
                              match_group=2,
@@ -356,7 +356,7 @@ class FocusCompatibility(FSCompatibility):
             return None
 
         reg_ex = (r"^([ \t]*:|:EntryPoint[ \t]+(?P<subroutine>\S+)\s+)"
-                  r"Alias[ \t]+(?P<alias>{name})").format(name=name)
+                  r"Alias[ \t]+(?P<alias>{name})\b").format(name=name)
 
         match = re.search(reg_ex, self.get_contents(), re.MULTILINE)
         if match is None:
@@ -372,7 +372,7 @@ class FocusCompatibility(FSCompatibility):
         if name is None:
             return None
 
-        reg_ex = r"^[ \t]*:Name[ \t]+(?P<local>{name})".format(name=name)
+        reg_ex = r"^[ \t]*:Name[ \t]+(?P<local>{name})\b".format(name=name)
 
         for t_span, t_string in self.get_translator_sections('Locals'):
             span = string_search(t_string,
@@ -392,7 +392,7 @@ class FocusCompatibility(FSCompatibility):
         if component_type[0] == ':':
             component_type = component_type[1:]
 
-        reg_ex = r"^[ \t]*:{component_type}[ \t]+({name})".format(
+        reg_ex = r"^[ \t]*:{component_type}[ \t]+({name})\b".format(
             component_type=component_type, name=name)
 
         for t_span, t_string in self.get_translator_sections(
@@ -411,7 +411,7 @@ class FocusCompatibility(FSCompatibility):
         if name is None:
             return None
 
-        reg_ex = r"^[ \t]*:ContainerRegion[ \t]+({name})".format(name=name)
+        reg_ex = r"^[ \t]*:ContainerRegion[ \t]+({name})\b".format(name=name)
 
         for t_span, t_string in self.get_translator_sections('ScreenPage'):
             span = string_search(t_string,
