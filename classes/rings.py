@@ -346,32 +346,18 @@ class Ring(object, metaclass=MiniPluginMeta):
         name, ext = os.path.splitext(file_path)
         ext = ext.lower()
 
-        if ext == '.xml':
-            path = file_path.replace('PgmSource', 'PgmObject')
-            if os.path.isfile(path):
-                return path
-            return None
-
-        if ext == '.fs':
-            for e in focus_extension_list:
-                path = name + e
-                if os.path.isfile(path):
-                    return path
-            return None
-
-        app, name = self.get_app_and_filename(file_path)
-        name, unused = os.path.splitext(name)
-
         if ext == '.focus':
-            for f, e in itertools.product(('PgmSource', 'PgmObject'),
-                                          focus_extension_list):
-                partial_path = os.path.join(f, app, name + e)
-                path = self.get_file_path(partial_path)
-                if path:
-                    return path
-            return None
+            app, name = self.get_app_and_filename(file_path)
+            possible_paths = [p[1] for p in self.possible_paths()]
+            focus_possible_paths = []
+            for p, f in itertools.product(possible_paths,
+                                          ('PgmSource', 'PgmObject')):
+                focus_possible_paths.append(os.path.join(p, f, app))
+                logger.debug('focus_possible_paths = %s', focus_possible_paths)
+        else:
+            focus_possible_paths = None
 
-        return None
+        return get_translated_path(file_path, focus_possible_paths)
 
     def get_app_and_filename(self, file_path):
         a, n = os.path.split(file_path)

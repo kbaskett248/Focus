@@ -1,4 +1,4 @@
-import itertools
+import glob
 import logging
 import re
 import os
@@ -105,7 +105,8 @@ def get_ring_locations(universe_name, ring_name, is_local):
 
     if is_local:
         ring_locations.append(os.path.join(
-            get_env('ProgramFiles(x86)'), 'Ptct-AP', 'SoloFocus', universe, ring))
+            get_env('ProgramFiles(x86)'), 'Ptct-AP',
+            'SoloFocus', universe, ring))
         ring += '.Local'
         ring_locations.append(os.path.join(CACHE_ROOT, universe, ring))
 
@@ -117,38 +118,50 @@ def get_ring_locations(universe_name, ring_name, is_local):
     return tuple(ring_locations)
 
 
-def get_translated_path(file_path):
+def get_translated_path(file_path, focus_possible_paths=None):
     extension_list = ('.mps', '.mcs', '.mts')
     name, ext = os.path.splitext(file_path)
     ext = ext.lower()
+    logger.debug('name = %s; ext = %s', name, ext)
 
-    if ext == '.fs':
+    if not os.path.isfile(file_path):
+        return None
+
+    elif ext == '.fs':
         for e in extension_list:
             path = name + e
             if os.path.isfile(path):
                 return path
-    elif ext == '.xml':
-        name = name.replace('PgmSource', 'PgmObject')
-        return name + ext
-    elif ext == '.focus':
-        logger.debug('name = %s', name)
-        file_name_list = [name.replace('PgmSource', 'PgmObject'), name]
-        if '.ring.local' in name.lower():
-            universe_name, ring_name, is_local = parse_ring_path(name)
-            logger.debug("universe_name, ring_name = %s, %s", universe_name,
-                         ring_name)
-            app_name, file_name = os.path.split(name)
-            unused, app_name = os.path.split(app_name)
-            local_ring_path = get_ring_locations(
-                ring_name, universe_name, True)[0]
-            file_name_list.append(os.path.join(
-                local_ring_path, 'PgmObject', app_name, file_name))
 
-        for path, extension in itertools.product(file_name_list,
-                                                 extension_list):
-            path += extension
-            logger.debug(path)
-            if os.path.isfile(path):
-                return path
+    elif ext == '.xml':
+        return file_path.replace('PgmSource', 'PgmObject')
+
+    elif ext == '.focus':
+        if focus_possible_paths:
+            name = os.path.basename(name)
+            file_name_list = [os.path.join(p, name) for p in
+                              focus_possible_paths]
+
+        else:
+            file_name_list = [name.replace('PgmSource', 'PgmObject'), name]
+            if '.ring.local' in name.lower():
+                universe_name, ring_name, is_local = parse_ring_path(name)
+                logger.debug("universe_name, ring_name = %s, %s",
+                             universe_name, ring_name)
+
+                app_name, file_name = os.path.split(name)
+                unused, app_name = os.path.split(app_name)
+
+                local_ring_path = get_ring_locations(
+                    ring_name, universe_name, True)[0]
+                file_name_list.append(os.path.join(
+                    local_ring_path, 'PgmObject', app_name, file_name))
+
+        for path in file_name_list:
+            logger.debug("path=%s", path)
+            for f in sorted(glob.glob(path + '*.m?s'), reverse=True):
+                logger.debug(f)
+                if os.path.isfile(f):
+                    return f
 
     return None

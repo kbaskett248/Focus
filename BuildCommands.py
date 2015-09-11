@@ -133,8 +133,10 @@ class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
              'package_path': ('Packages/Focus/resources/'
                               'FocZ.Translate.Sublime.P.focus')})
 
-        translate_path = self.ring.get_file_path(os.path.join(
-            'PgmObject', 'Foc', 'FocZ.Translate.Sublime.P.mps'))
+        translate_source = self.ring.get_file_path(os.path.join(
+            'PgmSource', 'Foc', 'FocZ.Translate.Sublime.P.focus'))
+        logger.debug('translate_source = %s', translate_source)
+        translate_path = self.ring.get_translated_path(translate_source)
         if not translate_path:
             logger.error('creation of %s failed', file_name)
             return False
@@ -316,15 +318,27 @@ class TranslateRingFileCommand(RingExecCommand):
         del self.ring_files
 
     def translate_sublime(self):
-        translate_cmd = os.path.join('PgmObject', 'Foc',
-                                     'FocZ.Translate.Sublime.P.mps')
+        tried_to_create = False
+        translate_source = self.ring.get_file_path(os.path.join(
+            'PgmSource', 'Foc', 'FocZ.Translate.Sublime.P.focus'))
+        logger.debug('translate_source = %s', translate_source)
 
-        if not self.ring.check_file_existence(translate_cmd):
+        if not translate_source:
             if not self.create_sublime_translate_file():
                 self.translate_other()
                 return
+            tried_to_create = True
+            translate_source = self.ring.get_file_path(os.path.join(
+                'PgmSource', 'Foc', 'FocZ.Translate.Sublime.P.focus'))
 
-        translate_path = self.ring.get_file_path(translate_cmd)
+        translate_path = self.ring.get_translated_path(translate_source)
+
+        if not translate_path:
+            if tried_to_create or not self.create_sublime_translate_file():
+                self.translate_other()
+                return
+            tried_to_create = True
+            translate_path = self.ring.get_translated_path(translate_source)
 
         logger.debug('translate_path = %s', translate_path)
         include_files, include_count = get_translate_include_settings()
