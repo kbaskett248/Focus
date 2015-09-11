@@ -44,11 +44,10 @@ def read_file(fileName, filter_out_empty_lines=True):
 
     """
     elements = []
-    f = open(fileName, 'r')
-    for line in f:
-        if ((line != '\n') or not filter_out_empty_lines):
-            elements.append(line.replace('\n', ''))
-    f.close()
+    with open(fileName, 'r') as f:
+        for line in f:
+            if ((line != '\n') or not filter_out_empty_lines):
+                elements.append(line.replace('\n', ''))
     return elements
 
 

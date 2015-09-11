@@ -10,7 +10,14 @@ logger = logging.getLogger(__name__)
 logger.setLevel('DEBUG')
 
 from .metaclasses import MiniPluginMeta
-from ..tools.focus import CACHE_ROOT, parse_ring_path, convert_to_focus_lists
+from ..tools.focus import (
+    CACHE_ROOT,
+    parse_ring_path,
+    convert_to_focus_lists,
+    get_translated_path,
+    read_ini,
+    read_mls
+)
 from ..tools.general import (
     get_env,
     merge_paths,
@@ -108,7 +115,7 @@ class Ring(object, metaclass=MiniPluginMeta):
                     # logger.exception(".get_ring: InvalidRingError exception")
                     continue
                 except Exception:
-                    # logger.exception(".get_ring: Other exception")
+                    logger.exception(".get_ring: Other exception")
                     continue
                 else:
                     break
@@ -878,34 +885,54 @@ class ServerRing(Ring):
 
     def get_server_path(self):
         unv_server_drive = None
+        unv_hcis = None
         ini_path = os.path.join(self.system_path, 'Signon.ini')
-        try:
-            for l in read_file(ini_path):
-                if 'universeserverdrive' in l.lower():
-                    unv_server_drive = l.split('=')[1]
-                    break
-        except Exception:
-            path = None
-        else:
-            if unv_server_drive is None:
-                path = None
-            else:
-                path = os.path.join(unv_server_drive,
-                                    self.universe_name + '.Universe',
-                                    self.name + '.Ring')
-                drive = os.path.splitdrive(path)[0].lower()
-                if not drive.endswith(':'):
-                    for d in get_server_access():
-                        if drive == d.lower():
-                            break
-                    else:
-                        path = None
+        logger.debug('ini_path = %s', ini_path)
 
-            if (path is not None) and (not os.path.isdir(path)):
-                path = None
-        finally:
-            logger.debug('path = %s', path)
-            return path
+        ini_contents = read_ini(ini_path)
+        try:
+            unv_server_drive = ini_contents['UniverseServerDrive']
+            unv_hcis = ini_contents['UniverseHCIS']
+            logger.debug("UniverseServerDrive: %s; UniverseHCIS: %s",
+                         unv_server_drive, unv_hcis)
+        except KeyError:
+            logger.exception(('Failed to get UniverseServerDrive or '
+                              'UniverseHCIS from Signon.ini: %s'), self)
+            return None
+
+        if not unv_server_drive.endswith(':'):
+            for d in get_server_access():
+                if unv_server_drive.lower() == d.lower():
+                    break
+            else:
+                logger.info('No access defined for drive %s', unv_server_drive)
+                return None
+
+        root_table_path = os.path.join(unv_server_drive,
+                                       self.universe_name + '.Universe',
+                                       unv_hcis + '.HCIS',
+                                       '!RootTable',
+                                       self.name + '.Ring',
+                                       'Root Table.mls')
+        logger.debug("root table path=%s", root_table_path)
+
+        if not os.path.isfile(root_table_path):
+            logger.info('Root table does not exist: %s', root_table_path)
+            return None
+
+        root_table = read_mls(root_table_path)
+        logger.debug("root_table: %s", root_table)
+        ring_root = root_table[('Ring', '')][0]
+        logger.debug("ring_root=%s", ring_root)
+
+        for d in get_server_access():
+            if ring_root.lower().startswith(d.lower()):
+                break
+        else:
+            logger.info('No access defined for drive %s', ring_root)
+            return None
+
+        return ring_root
 
     def copy_source_to_cache(self, source, overwrite=True):
         partial_path = self.partial_path(source)

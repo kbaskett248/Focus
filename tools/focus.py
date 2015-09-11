@@ -4,7 +4,7 @@ import re
 import os
 import platform
 
-from .general import get_env
+from .general import get_env, read_file
 
 
 logger = logging.getLogger(__name__)
@@ -19,6 +19,34 @@ TRANSLATOR_SEPARATOR = '//' + ('-' * 77)
 TRANSLATOR_LINE_SPLITTER = re.compile(
     r'^\s*(?P<translator>(:|#)[A-Za-z0-9]*|[A-Za-z0-9]+)'
     r'(?P<separator>\s*)(?P<value>.*)$')
+
+
+def read_ini(filename):
+    elements = {}
+    for line in read_file(filename):
+        k, v = line.split('=', maxsplit=1)
+        elements[k] = v
+    return elements
+
+
+def read_mls(filename):
+    with open(filename, 'r') as f:
+        contents = f.read()
+
+    matches = re.findall(
+        r'{start}(.+?){sep}(.*?){sep}(.*?){sep}(.*?){sep}(.*?){sep}(.*?){sep}(.*?){end}'.format(
+            start=chr(1), sep=chr(3), end=chr(2)),
+        contents)
+
+    if os.path.basename(filename).lower() == 'root table.mls':
+        elements = {}
+        for m in matches:
+            elements[m[0:2]] = m[2:]
+    else:
+        for m in matches:
+            elements.append(m)
+
+    return elements
 
 
 def parse_ring_path(file_path):
