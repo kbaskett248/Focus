@@ -8,9 +8,7 @@
         "args": {"all_regions": true}
     },
 
-    {   "caption": "Copy File to Cache and Open", 
-        "command": "copy_file_to_cache" 
-    },
+    {   "command": "copy_file_to_cache" },
     {   "caption": "Delete File from Cache", 
         "command": "delete_file_from_cache" 
     },

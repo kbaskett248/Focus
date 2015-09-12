@@ -936,7 +936,8 @@ class ServerRing(Ring):
         logger.debug('source: %s', source)
         partial_path = self.partial_path(source)
         logger.debug('partial_path: %s', partial_path)
-        file_existence = self.check_file_existence(partial_path)
+        file_existence = self.check_file_existence(partial_path,
+                                                   multiple_matches=True)
         if file_existence:
             for t, p in file_existence:
                 if (t == 'Local Cache'):
