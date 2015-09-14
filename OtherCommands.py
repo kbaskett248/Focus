@@ -82,7 +82,7 @@ class MigrateFocusSettingsCommand(sublime_plugin.ApplicationCommand):
 
     def get_existing_settings(self):
         old_settings_path = os.path.join(
-            sublime.packages_path(), 'User', 'focus.sublime-settings')
+            sublime.packages_path(), 'User', 'm-at.sublime-settings')
 
         if not os.path.isfile(old_settings_path):
             return None
@@ -91,21 +91,15 @@ class MigrateFocusSettingsCommand(sublime_plugin.ApplicationCommand):
         return old_settings
 
     def get_new_settings(self):
-        new_settings_path = os.path.join(
-            sublime.packages_path(), 'User', 'Focus Package.sublime-settings')
-
-        if os.path.isfile(new_settings_path):
-            new_settings = load_settings(new_settings_path)
+        if os.path.isfile(self.new_settings_path):
+            new_settings = load_settings(self.new_settings_path)
         else:
             new_settings = {}
 
         return new_settings
 
     def dump_new_settings(self, new_settings):
-        new_settings_path = os.path.join(
-            sublime.packages_path(), 'User', 'Focus Package.sublime-settings')
-
-        with open(new_settings_path, 'w') as f:
+        with open(self.new_settings_path, 'w') as f:
             json.dump(new_settings, f, indent=4)
 
     def map_key(self, existing_key):

@@ -1,6 +1,6 @@
 This is a huge update. Nearly all of the code has been refactored to improve supportability, and several new features have been added.
 
-	- Package settings have been moved from focus.sublime-settings to Focus Package.sublime-settings.
+	- Package settings have been moved from m-at.sublime-settings to Focus Package.sublime-settings.
 		- When the package is upgraded, a command will run to migrate existing settings to the new file. It will also optionally configure the 'server_access' setting.
 		- The command can also be run from the Command Palette. Just run "Focus Tools: Migrate Settings to Focus Package Settings".
 		- Syntax-specific settings are still in focus.sublime-settings or fs.sublime-settings.
