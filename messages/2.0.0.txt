@@ -20,12 +20,13 @@ This is a huge update. Nearly all of the code has been refactored to improve sup
 		- DocLink has been added for MagicFS operators.
 		- An option was added to enable listset command highlighting across an entire file.
 		- Settings have been added to override the documentation URL for MagicFS functions, Focus functions and Translators, which enables displaying documentation for Home Care-specific functionality from the Home Care Wiki.
-		- A setting has been added to control where documentation appears. Choices are popup, panel and source. Note that not all options are enabled for are DocLink types.
+		- A setting has been added to control where documentation appears. Choices are popup, panel and source. Note that not all options are enabled for all DocLink types.
 
 	- Completions have been updated so that it is easier to disable completion sources if needed.
 		- The "enable_smart_completion_triggers" setting can be used to disable completions for Aliases, Translators and Focus Function arguments.
+		- The "enable_smart_completion_sources" setting can be used to disable specific sources for each completion type.
 
 	- Commands that deal with the program cache for non-local rings have been refactored for improved usability.
 
 	- Support has been added for the new M-AT 11 caching scheme.
-		
+
