@@ -80,12 +80,12 @@
     "show_doc_method": {
         "focus_function": "popup",
         "fs_function": "popup",
-        "subroutine": "panel",
-        "translator": "popup",
-        "alias": "panel",
+        "subroutine": "source",
+        "translator": "source",
+        "alias": "source",
         "include_file": "source",
         "local": "source",
-        "object": "panel",
+        "object": "source",
         "screen_component": "source",
         "rt_tool": "source"
     },

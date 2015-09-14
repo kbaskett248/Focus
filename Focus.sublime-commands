@@ -142,4 +142,8 @@
     {   "caption": "Focus Tools: Browse Source",
         "command": "browse_source" 
     },
+
+    {   "caption": "Focus Tools: Migrate Settings to Focus Package Settings",
+        "command": "migrate_focus_settings"
+    }
 ]

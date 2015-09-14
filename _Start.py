@@ -1,5 +1,7 @@
 import os
 
+import sublime
+
 try:
     import NewSublimeProject
 except ImportError:
@@ -20,3 +22,9 @@ add_to_path(_BS4_LIB)
 
 def plugin_loaded():
     _load_translator_completions()
+
+    from package_control import events
+    ver = events.install('Focus')
+
+    if ver == '2.0.0':
+        sublime.run_command('migrate_focus_settings')

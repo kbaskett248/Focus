@@ -1,3 +1,4 @@
+import json
 import re
 
 import sublime
@@ -15,23 +16,14 @@ def scope_from_view(view):
     return scope.split(' ')[0]
 
 
-# def get_member_region(view, point):
-#     """Gets the region containing the function surrounding the current point"""
-#     if view.score_selector(point, 'meta.subroutine.fs, meta.list.fs') <= 0:
-#         return None
+def load_settings(file_name):
+    s = ''
+    for line in read_file(file_name):
+        if line.strip().startswith('//'):
+            continue
+        s += (line + '\n')
 
-#     line = view.line(point)
-#     point = line.end()
-#     if view.score_selector(point, 'meta.subroutine.fs, meta.list.fs') <= 0:
-#         point = line.begin() - 1
-
-#     while view.score_selector(point, 'meta.subroutine.fs, meta.list.fs') > 0:
-#         region = view.extract_scope(point)
-#         point = region.end()
-
-#     if view.score_selector(region.begin(), 'meta.list.fs') > 0:
-#         region = sublime.Region(region.begin(), region.end()-1)
-#     return region
+    return json.loads(s)
 
 
 def split_member_region(view, codeblock_region):
