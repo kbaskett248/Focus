@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Symbol List: Subroutine</string>
+	<key>scope</key>
+	<string>keyword.other.translator.focus, meta.subroutine.header.fs, meta.list.header.fs, meta.translator.datadef.focus meta.keyword.object.focus, meta.keyword.alias.focus, meta.keyword.elementset.focus</string>
+	<key>settings</key>
+	<dict>
+		<key>showInSymbolList</key>
+		<integer>1</integer>
+		<key>symbolTransformation</key>
+        <string>
+        s/:Object\s+//g;
+        s/:File\s+//g;
+        s/:Record\s+//g;
+        s/:Key\s+/K: /g;
+        s/:Field\s+/F: /g;
+        s/:Index\s+/Index: /g;
+        s/:IndexKey\s+/IndexKey: /g;
+        s/:Code\s+/  :Code /g;
+        s/:List\s+/  :List /g;
+        s/:Alias\s+/:Alias /g;
+        s/:ElementSet\s+/:ElementSet /g;
+        </string>
+	</dict>
+	<key>uuid</key>
+	<string>d4ebb20b-45c5-42a3-8cce-7fca7b7b609d</string>
+</dict>
+</plist>

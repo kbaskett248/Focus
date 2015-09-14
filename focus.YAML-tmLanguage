@@ -519,11 +519,11 @@ repository:
       captures:
         '1': {name: markup.bold}
     - name: variable.parameter.object.focus
-      match: (?<=LockSystemInfo\()[\w._-]+
+      match: (?<=LockSystemInfo\(|LockParams\(|LockValue\()[\w._-]+
     - name: variable.parameter.object.focus
       match: (?<=IndexLookup\(|Index\(|IndexEntry\(|IndexLookupCx\(|IndexLookupResults\(|IndexEntries\()[\w._-]+
     - name: variable.parameter.object.focus
-      match: (?<=FullyInMemory\()[\w._-]+
+      match: (?<=FullyInMemory\(|AsMemoryOnly\()[\w._-]+
     - name: variable.parameter.object.focus
       match: (?<=NextURN\()[\w._-]+
     - name: variable.parameter.object.focus

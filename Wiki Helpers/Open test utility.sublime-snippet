@@ -1,9 +1,0 @@
-<snippet>
-    <content><![CDATA[
-[[Interface_Setup#Open_the_Interface_Test_Utility|Open the Interface Test Utility.]]
-]]></content>
-    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-    <tabTrigger>open test utility</tabTrigger>
-    <!-- Optional: Set a scope to limit where the snippet will trigger -->
-    <scope>source.wiki</scope>
-</snippet>

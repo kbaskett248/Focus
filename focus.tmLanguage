@@ -1507,7 +1507,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=LockSystemInfo\()[\w._-]+</string>
+					<string>(?&lt;=LockSystemInfo\(|LockParams\(|LockValue\()[\w._-]+</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
@@ -1519,7 +1519,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=FullyInMemory\()[\w._-]+</string>
+					<string>(?&lt;=FullyInMemory\(|AsMemoryOnly\()[\w._-]+</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>

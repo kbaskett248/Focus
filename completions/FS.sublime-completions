@@ -1,0 +1,9 @@
+{
+    "scope": "source.fs - meta.subroutine.fs",
+    "completions":
+    [
+        ":Code",
+        ":List",
+        ":Toolset"
+	]
+}

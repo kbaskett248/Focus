@@ -1,0 +1,46 @@
+<snippet>
+    <content><![CDATA[
+//:Doc Purpose
+//     External Subroutine Set for $1
+//:Doc Additional Notes
+//     
+
+
+//------------------------------------------------------------------------------
+#Translation
+  :Options
+    Result                        MSFile
+
+  :Product
+    Type                          ExternalSubroutineSet
+
+
+//------------------------------------------------------------------------------
+#Preamble
+
+
+//------------------------------------------------------------------------------
+#Magic
+:EntryPoint
+  Alias
+
+
+//------------------------------------------------------------------------------
+#Alias
+
+
+//------------------------------------------------------------------------------
+#Locals
+
+
+//------------------------------------------------------------------------------
+#Magic
+$0
+
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <!-- <tabTrigger>hello</tabTrigger> -->
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.focus</scope>
+    <description>Focus Tools: Empty External Subroutine Set Template</description>
+</snippet>

@@ -1,0 +1,28 @@
+<snippet>
+    <content><![CDATA[
+:Code ${1:Subroutine}
+//:Doc Purpose
+//     $2
+//:Doc Arguments
+//     ${3:None}
+${4://:Doc Preconditions
+//     ${5:None}}
+//:Doc Local Variables
+//     ${6:None}
+${7://:Doc Data Structures
+//     ${8:None}}
+${9://:Doc Side Effects
+//     ${10:None}}
+//:Doc Returns
+//     ${11:None}
+${12://:Doc Additional Notes
+//     ${13:None}}
+$0
+;
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>:Code</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>meta.translator.magic.focus - meta.subroutine.fs - comment - string, source.fs</scope>
+    <description>#Magic | :Code</description>
+</snippet>

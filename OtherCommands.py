@@ -1,89 +1,178 @@
+import copy
+import json
+import logging
 import os
-import re
 import webbrowser
 
 import sublime
 import sublime_plugin
 
-try:
-    import sublimelogging
-    logger = sublimelogging.getLogger(__name__)
-except ImportError:
-    import logging
-    logger = logging.getLogger(__name__)
+from .tools.sublime import load_settings
 
-class OpenFilPageCommand(sublime_plugin.WindowCommand):
-    """Opens the test plan, tech design, design or public test plan for a FIL.
-       If fil_number is "project", the current window's project is checked. If
-       it contains FIL, the number contained in the project title is used as
-       the fil number."""
 
-    Pages = {'Design': 'FIL_${fil_number}', 
-             'Public Test Plan': 'FIL_${fil_number}_PublicTestPlan', 
-             'Technical Design': 'FIL_${fil_number}_TechnicalDesign', 
-             'Test Plan': 'FIL_${fil_number}_TestPlan'}
+logger = logging.getLogger(__name__)
+logger.setLevel('DEBUG')
 
-    WikiUrl = 'http://ptdoc.ptct.com/mwiki/index.php/'
-    
-    def run(self, fil_number = None, page = None):
-        if (fil_number is None):
-            self.window.show_input_panel('FIL Number', '', 
-                lambda x: self.open_page(x, page), 
-                None, None)
-        elif (fil_number.lower() == 'project'):
-            fil_number = self.parse_fil_number_from_project()
-            if (fil_number is not None):
-                self.open_page(fil_number, page)
-        else:
-            self.open_page(fil_number, page)
 
-    def open_page(self, fil_number, page):
-        if (page in self.Pages.keys()):
-            url_part = self.Pages[page]
-            url_part = url_part.replace('${fil_number}', fil_number)
-            url = self.WikiUrl + url_part
+class OpenWebPageCommand(sublime_plugin.WindowCommand):
+
+    def run(self, url=''):
+        if url:
             webbrowser.open(url)
 
-    def parse_fil_number_from_project(self):
-        result = None
-        project_file = self.window.project_file_name()
-        if (project_file is not None):
-            project_file = os.path.basename(project_file).lower()
-            match = re.match(r'fil\s*(\d{4,6})', project_file)
-            if (match is not None):
-                result = match.group(1)
-        return result
+    def is_visible(self, url=''):
+        return bool(url)
 
-    def is_enabled(self, fil_number = None, page = None):
-        result = True
-        if (page not in self.Pages.keys()):
-            result = False
-        elif ((fil_number is not None) and
-              (fil_number.lower() == 'project') and 
-              (self.parse_fil_number_from_project() is None)):
-            result = False
-        return result
 
-class InsertInViewCommand(sublime_plugin.TextCommand):
-    """A command to write a message to an open buffer."""
+class MigrateFocusSettingsCommand(sublime_plugin.ApplicationCommand):
+    """Migrates existing settings from focus.sublime-settings to the new
+       settings location in Focus Package.sublime-settings.
 
-    def run(self, edit, string = ''):
-        self.view.insert(edit, self.view.size(), string)
+    """
 
-# class DebugListFilesCommand(sublime_plugin.ApplicationCommand):
-#     """Debugging function to list the files managed by the file manager."""
-    
-#     def run(self):
-#         print( Manager )
-#         print( 'Focus Files:' )
-#         for x in Manager.list_files():
-#             print( '    ' + x.filename )
-        
-# class DebugListExcludedFilesCommand(sublime_plugin.ApplicationCommand):
-#     """Debugging function to list the files that have been determined to not be Focus Files"""
+    def run(self):
+        try:
+            existing_settings = self.get_existing_settings()
+        except ValueError as e:
+            sublime.error_message(
+                'The existing settings file (m-at.sublime-settings) cannot be '
+                'parsed. Please remove any comments (lines beginning '
+                'with "//") and extra commas. Then re-run Focus Tools: Migrate'
+                ' Settings to Focus Package Settings.\n\n' + str(e))
+            return
 
-#     def run(self):
-#         print( Manager )
-#         print( "Excluded Files:" )
-#         for x in Manager.exclude_set:
-#             print( '    ' + x )
+        if existing_settings is None:
+            sublime.message_dialog(
+                'No focus.sublime-settings file was found. No settings to '
+                'migrate.')
+            return
+        if not self.confirm_run():
+            return
+
+        logger.debug('existing_settings: %s', existing_settings)
+
+        self.new_settings_path = os.path.join(
+            sublime.packages_path(), 'User', 'Focus Package.sublime-settings')
+        new_settings = self.get_new_settings()
+        temp_settings = {}
+
+        for existing_key, existing_value in existing_settings.items():
+            # new_key will be None if it is a setting that doesn't need to be
+            # migrated.
+            new_key = self.map_key(existing_key)
+            if new_key is None:
+                continue
+            try:
+                new_settings[new_key]
+            except KeyError:
+                pass
+            else:
+                continue
+
+            new_value = self.map_value(existing_key, existing_value,
+                                       new_key, temp_settings)
+            temp_settings[new_key] = new_value
+
+        if not self.add_server_access(temp_settings):
+            return
+
+        logger.debug('temp_settings: %s', json.dumps(temp_settings, indent=4))
+
+        for k, v in temp_settings.items():
+            new_settings[k] = v
+        self.dump_new_settings(new_settings)
+        sublime.active_window().open_file(self.new_settings_path)
+
+    def confirm_run(self):
+        """Displays a confirmation message to migrate settings."""
+        return sublime.ok_cancel_dialog(
+            'This will attempt to migrate User settings from '
+            'focus.sublime-settings to Focus Package.sublime-settings.')
+
+    def get_existing_settings(self):
+        old_settings_path = os.path.join(
+            sublime.packages_path(), 'User', 'm-at.sublime-settings')
+
+        if not os.path.isfile(old_settings_path):
+            return None
+        old_settings = load_settings(old_settings_path)
+
+        return old_settings
+
+    def get_new_settings(self):
+        if os.path.isfile(self.new_settings_path):
+            new_settings = load_settings(self.new_settings_path)
+        else:
+            new_settings = {}
+
+        return new_settings
+
+    def dump_new_settings(self, new_settings):
+        with open(self.new_settings_path, 'w') as f:
+            json.dump(new_settings, f, indent=4)
+
+    def map_key(self, existing_key):
+        return self.KEY_MAPPINGS.get(existing_key)
+
+    def map_value(self, existing_key, existing_value, new_key, temp_settings):
+        if new_key == 'documentation_separator':
+            v = temp_settings.get(new_key, dict())
+            m = {'default_numeric_separator': 'numeric_separator',
+                 'default_variable_separator': 'variable_separator'}
+            v[m[existing_key]] = existing_value
+            return v
+
+        elif new_key == 'documentation_sections':
+            return existing_value
+
+        elif new_key == 'translate_command':
+            return existing_value
+
+        elif new_key == 'ring_utilities':
+            return {k: v.replace('.mps', '.focus') for k, v in
+                    existing_value.items()}
+
+        elif new_key == 'show_doc_method':
+            v = copy.deepcopy(self.SHOW_DOC_METHOD)
+            if not existing_value:
+                v['focus_function'] = 'source'
+                v['fs_function'] = 'source'
+            return v
+
+    def add_server_access(self, temp_settings):
+        add = sublime.yes_no_cancel_dialog(
+            'Would you like to initialize the settings file with Home Care '
+            'server access?')
+        if add == sublime.DIALOG_YES:
+            temp_settings['server_access'] = [
+                "\\\\BORIS\\F",
+                "\\\\MOOSE\\F",
+                "\\\\HHFILSRV1\\F",
+                "\\\\HHQA27-FS1\\F"
+            ]
+        elif add == sublime.DIALOG_CANCEL:
+            return False
+
+        return True
+
+    KEY_MAPPINGS = {
+        'default_numeric_separator': 'documentation_separator',
+        'default_variable_separator': 'documentation_separator',
+        'documentation_sections': 'documentation_sections',
+        'custom_translate_command': 'translate_command',
+        'ring_utilities': 'ring_utilities',
+        'show_doc_in_panel': 'show_doc_method'
+        }
+
+    SHOW_DOC_METHOD = {
+        "focus_function": "popup",
+        "fs_function": "popup",
+        "subroutine": "source",
+        "translator": "source",
+        "alias": "source",
+        "include_file": "source",
+        "local": "source",
+        "object": "source",
+        "screen_component": "source",
+        "rt_tool": "source"
+    },

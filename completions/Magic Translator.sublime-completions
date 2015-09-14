@@ -1,0 +1,10 @@
+{
+    "scope": "source.focus meta.translator.magic.focus - meta.keyword",
+    "completions":
+    [
+        ":Code",
+        ":EntryPoint",
+        ":List",
+        "Alias"
+	]
+}

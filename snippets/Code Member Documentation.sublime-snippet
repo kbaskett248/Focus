@@ -1,0 +1,24 @@
+<snippet>
+    <content><![CDATA[
+//:Doc Purpose
+//     $1 
+//:Doc Arguments
+//     ${2:None}
+${3://:Doc Preconditions
+//     ${4:None}}
+//:Doc Local Variables
+//     ${5:None}
+${6://:Doc Data Structures
+//     ${7:None}}
+${8://:Doc Side Effects
+//     ${9:None}}
+//:Doc Returns
+//     ${10:None}
+${11://:Doc Additional Notes
+//     ${12:None}}
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>//:Doc</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>meta.subroutine.fs</scope>
+</snippet>

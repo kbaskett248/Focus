@@ -1,4 +1,30 @@
 {
-    "target": "build_translate",
-    "selector": "source.m-at, text.xml, source.focus, source.fs"
+    "target": "window_translate_ring_file",
+    "selector": "source.focus",
+    "encoding": "ascii",
+    "exec_cmd": "enhanced_exec",
+    "startup_info": false,
+
+    "variants": [
+
+        {   "name": "Format",
+            "target": "window_format_ring_file",
+            "exec_cmd": "enhanced_exec",
+            "encoding": "ascii",
+            "startup_info": false
+        },
+
+        {   "name": "Run",
+            "target": "window_run_ring_file",
+            "startup_info": false,
+        },
+
+        {   "name": "Translate All",
+            "target": "window_translate_ring_file",
+            "encoding": "ascii",
+            "exec_cmd": "enhanced_exec",
+            "startup_info": false,
+            "translate_all": true
+        }
+    ]
 }

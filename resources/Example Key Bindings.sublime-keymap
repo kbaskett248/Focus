@@ -1,0 +1,41 @@
+[
+
+    {   "keys": ["ctrl+1"], 
+        "command": "build",
+        "args": {
+            "variant": "Format"
+        },
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus", "match_all": true }
+        ]
+    },
+
+    {   "keys": ["ctrl+2"], 
+        "command": "window_translate_ring_file",
+        "args": {
+            "encoding": "ascii",
+            "exec_cmd": "enhanced_exec",
+            "startup_info": false,
+        },
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs, source.xml", "match_all": true }
+        ]
+    },
+
+    {   "keys": ["ctrl+3"], 
+        "command": "doc_link",
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs", "match_all": true }
+        ]
+    },
+
+    {   "keys": ["ctrl+4"], 
+        "command": "build",
+        "args": {
+            "Variant": "Run"
+        },
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs", "match_all": true }
+        ]
+    },
+]

@@ -1,0 +1,133 @@
+[
+    {   "caption": "Focus Tools: Generate Documentation",
+        "command": "generate_doc",          
+        "args": { "update_only": false, "use_snippets": true } 
+    },
+
+    {   "caption": "Focus Tools: Update Documentation",
+        "command": "generate_doc",          
+        "args": { "update_only": true, "use_snippets": true } 
+    },
+
+    {   "caption": "Focus Tools: Document All Locals",
+        "command": "document_all_locals",          
+        "args": { "use_snippets": true } 
+    },
+
+    {   "caption": "Focus Tools: Fold all subroutines",
+        "command": "fold_subroutine",          
+        "args": { "all_regions": true } 
+    },
+    
+    {   "caption": "Focus Tools: Fold selected subroutines",
+        "command": "fold_subroutine"
+    },
+
+    {   "caption": "Focus Tools: List Subroutines",
+        "command": "list_entities",
+        "args": { "entity_id": "subroutine" }
+    },
+
+    {   "caption": "Focus Tools: List Locals",
+        "command": "list_entities",
+        "args": { "entity_id": "local" }
+    },
+
+    {   "caption": "Focus Tools: Highlight all breaks",
+        "command": "preemptive_highlight",
+        "args": { "highlighter": "focus_breaks" }
+    },
+
+    {   "caption": "Focus Tools: Unit Test File",
+        "command": "unit_test_focus_file",
+        "args": {  }
+    },
+
+    {   "caption": "Focus Tools: Unit Test File (show Unit Test)",
+        "command": "unit_test_focus_file",
+        "args": { "display_unit_test": true }
+    },
+
+    {   "caption": "Focus Tools: Magic Kingdom",                 
+        "command": "open_magic_kingdom" 
+    },
+
+    {   "caption": "Focus Tools: Launch Focus Utility",
+        "command": "launch_focus_utility" 
+    },
+
+    {   "caption": "Focus Tools: Launch Object Viewer",          
+        "command": "launch_focus_utility",    
+        "args": { "utility": "Object Viewer" } 
+    },
+
+    {   "caption": "Focus Tools: Launch Home Care Desktop",
+        "command": "launch_focus_utility",    
+        "args": { "utility": "Home Care Desktop" } 
+    },
+
+    {   "caption": "Focus Tools: Edit Object",
+        "command": "launch_focus_utility",    
+        "args": { "utility": "Edit Object" } 
+    },
+
+    {   "caption": "Focus Tools: Launch Fixer Single Run Utility", 
+        "command": "launch_focus_utility",
+        "args": { "utility": "Fixer Single Run Utility" } 
+    },
+
+    {   "caption": "Focus Tools: Launch Error Viewer", 
+        "command": "launch_focus_utility",
+        "args": { "utility": "Error Viewer" } 
+    },
+
+    {   "caption": "Focus Tools: Launch Super Task Browser", 
+        "command": "launch_focus_utility",
+        "args": { "utility": "Super Task Browser" } 
+    },
+
+    {   "caption": "Focus Tools: Launch Manage Source Code", 
+        "command": "launch_focus_utility",
+        "args": { "utility": "Manage Source Code" } 
+    },
+
+    {   "caption": "Focus Tools: Build Object Lists for Ring",
+        "command": "build_object_lists" 
+    },
+
+    {   "caption": "Focus Tools: Update Ring",
+        "command": "ring_update" 
+    },
+
+    {   "caption": "Focus Tools: Update Current Ring",
+        "command": "ring_update",
+        "args": {"current": true} 
+    },
+
+    {   "caption": "Focus Tools: Compare Current File with Other Ring",
+        "command": "open_in_other_ring",
+        "args": { "file": "current", "compare": true } 
+    },
+
+    {   "caption": "Focus Tools: View Current File in Other Ring",
+        "command": "open_in_other_ring",
+        "args": { "file": "current" } 
+    },
+
+    {   "caption": "Focus Tools: Edit Current File in Other Ring",
+        "command": "open_in_other_ring",
+        "args": { "file": "current", "edit": true } 
+    },
+
+    {   "caption": "Focus Tools: Lookup Alias",
+        "command": "lookup_alias" 
+    },
+
+    {   "caption": "Focus Tools: Browse Source",
+        "command": "browse_source" 
+    },
+
+    {   "caption": "Focus Tools: Migrate Settings to Focus Package Settings",
+        "command": "migrate_focus_settings"
+    }
+]

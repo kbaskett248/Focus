@@ -1,0 +1,32 @@
+This is a huge update. Nearly all of the code has been refactored to improve supportability, and several new features have been added.
+
+	- Package settings have been moved from m-at.sublime-settings to Focus Package.sublime-settings.
+		- When the package is upgraded, a command will run to migrate existing settings to the new file. It will also optionally configure the 'server_access' setting.
+		- The command can also be run from the Command Palette. Just run "Focus Tools: Migrate Settings to Focus Package Settings".
+		- Syntax-specific settings are still in focus.sublime-settings or fs.sublime-settings.
+
+	- A new Translate command has been added that prints translation results to an output panel in Sublime Text. It also translates including files using the Translate By index. This can be enabled using the "translate_command" preference. Once enabled, the new translate file will be copied to the necessary ring, translated and then used. This functionality requires the EnhancedExec package.
+
+	- The Translate, Format, Run and Translate All commands and key bindings have been modified to reflect changes introduced in Sublime Text build 3080.
+		- The current key binding behavior is as follows:
+			- Ctrl + B will translate the file.
+			- Ctrl + Shift + B displays a build command dropdown, allowing you to choose focus (Translate), Format, Run or Translate All.
+		- If you would like to bind the commands to Ctrl + <number key> as they are in Textpad, click Preferences > Package Settings > Focus > Example Key Bindings. Then click Preferences > Key Bindings - User, and add the desired key bindings to the file.
+
+	- DocLink has been improved with new functions and new entities:
+		- Documentation for MagicFS functions and Focus functions can be shown in a popup if using at least Build 3072 of Sublime Text.
+		- DocLink has been added for Focus files. Any text that matches the pattern for a Focus Ring file can now be opened with DocLink.
+		- DocLink has been added for RT and TT toolset functions. A toolset call is treated as an RT function unless it is called from a file in the TTTools folder.
+		- DocLink has been added for MagicFS operators.
+		- An option was added to enable listset command highlighting across an entire file.
+		- Settings have been added to override the documentation URL for MagicFS functions, Focus functions and Translators, which enables displaying documentation for Home Care-specific functionality from the Home Care Wiki.
+		- A setting has been added to control where documentation appears. Choices are popup, panel and source. Note that not all options are enabled for all DocLink types.
+
+	- Completions have been updated so that it is easier to disable completion sources if needed.
+		- The "enable_smart_completion_triggers" setting can be used to disable completions for Aliases, Translators and Focus Function arguments.
+		- The "enable_smart_completion_sources" setting can be used to disable specific sources for each completion type.
+
+	- Commands that deal with the program cache for non-local rings have been refactored for improved usability.
+
+	- Support has been added for the new M-AT 11 caching scheme.
+

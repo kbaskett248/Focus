@@ -1,0 +1,208 @@
+//------------------------------------------------------------------------------
+#Translation
+  :Options
+    Result                        MSFile
+
+  :Product
+    Type                          Unstructured
+
+
+//------------------------------------------------------------------------------
+#Preamble
+  :Options
+    Type                          Process
+
+
+//------------------------------------------------------------------------------
+#Locals
+  :Name                           UnitTestTemplate_ResultsLog
+  // Upper set used to store results and log messages.
+
+  :Name                           UnitTestTemplate_NumPassed
+  // Counts the number of Unit Tests that have passed.
+
+  :Name                           UnitTestTemplate_NumFailed
+  // Counts the number of Unit Tests that have failed.
+
+
+//------------------------------------------------------------------------------
+#Magic
+:Code UnitTestTemplate_OpenWorkingSet
+//:Doc Purpose
+//     Opens the set used by the Unit Test code
+//:Doc Arguments
+//     None
+//:Doc Local Variables
+//     None
+//:Doc Data Structures
+//     U(0) - List of lines to write to log file
+//     U(1) - List of lines to write to log file
+//:Doc Returns
+//     None
+IF{@GetLocal(UnitTestTemplate_ResultsLog) @OU;
+   @IU@QU@PutLocal(UnitTestTemplate_ResultsLog)},
+"";
+
+:Code UnitTestTemplate_LogResults
+//:Doc Purpose
+//     Opens an upper set and logs the given results.
+//:Doc Arguments
+//     List of lines to add to the set
+//:Doc Local Variables
+//     None
+//:Doc Data Structures
+//     U(0) - List of lines to write to log file
+//:Doc Side Effects
+//     Creates and opens an upper set the first time this is called.
+//:Doc Returns
+//     None
+[@CallSub(UnitTestTemplate_OpenWorkingSet)]
+@[@J0]
+@CU,
+"";
+
+:Code UnitTestTemplate_LogMessage
+//:Doc Purpose
+//     Logs a message for output to the Unit Test results file.
+//:Doc Arguments
+//     Message to log
+//:Doc Local Variables
+//     None
+//:Doc Data Structures
+//     U(1) - List of lines to write to log file
+//:Doc Side Effects
+//     Creates and opens the upper set the first time this is called
+//:Doc Returns
+//     None
+[@CallSub(UnitTestTemplate_OpenWorkingSet)]
+@IF{@QV @[@J1];
+    1 @J1},
+@CU,
+"";
+
+:Code UnitTestTemplate_GetLogMessages
+//:Doc Purpose
+//     Returns the messages in the log
+//:Doc Arguments
+//     None
+//:Doc Preconditions
+//     The upper set must exist and must not be open.
+//:Doc Local Variables
+//     None
+//:Doc Data Structures
+//     U(1) - List of lines to write to log file
+//:Doc Returns
+//     List of log messages
+@CallSub(UnitTestTemplate_OpenWorkingSet),
+@V1@CU
+;
+
+:Code UnitTestTemplate_ClearMessageLog
+//:Doc Purpose
+//     Clears the message log
+//:Doc Arguments
+//     None
+//:Doc Preconditions
+//     The upper set must exist and must not be open.
+//:Doc Local Variables
+//     None
+//:Doc Data Structures
+//     U(1) - List of lines to write to log file
+//:Doc Returns
+//     None
+@CallSub(UnitTestTemplate_OpenWorkingSet),
+@NL@U1,@CU,
+"";
+
+:Code UnitTestTemplate_FormatResults
+//:Doc Purpose
+//     Formats the results of the unit test for output to a test file.
+//:Doc Arguments
+//     {N - Unit Test Name
+//     |I - Unit Test Input
+//     |E - Expected output
+//     |A - Actual output
+//     |T - Run time (microseconds)
+//     |C - Custom comparison result in list}
+//:Doc Local Variables
+//     A - See arguments
+//     C - See arguments
+//     E - See arguments
+//     I - See arguments
+//     L - List of messages logged during unit test
+//     N - See arguments
+//     R - Results comparison: Non-Nil for pass or Nil for Fail
+//     T - See arguments
+//:Doc Returns
+//     List of formatted lines for results file
+^{N,I,E,A,T,C},
+IF{C |0;
+   1 {E,A}@CallSub(UnitTestTemplate_CompareResults)}^R,
+IF{R @GetLocal(UnitTestTemplate_NumPassed)+1@PutLocal(UnitTestTemplate_NumPassed);
+   1 @GetLocal(UnitTestTemplate_NumFailed)+1@PutLocal(UnitTestTemplate_NumFailed)},
+{("    Unit Test: ",N," - ",IF{R "Passed";1 "Failed"}),
+ ("        Input:               ",I@LE),
+ IF{C@NV ("        Expected Output:     ",E@LE)},
+ ("        Actual Output:       ",A@LE),
+ IF{C |0@("        Custom Comparison:   ",@LE)},
+ ("        Run Time:            ",T/1000," ms")}@OV
+@IF{@CallSub(UnitTestTemplate_GetLogMessages)^L=@NL [];
+    @{,L@[@("            ",)]
+      @{"        Log Messages:",}@IV}@MV
+    [@CallSub(UnitTestTemplate_ClearMessageLog)]}
+@{,""}@JV
+@CallSub(UnitTestTemplate_LogResults),
+"";
+
+:Code UnitTestTemplate_CompareResults
+//:Doc Purpose
+//     Compares the expected and actual results.
+//:Doc Arguments
+//     {0. Expected result
+//     |1. Actual result}
+//:Doc Local Variables
+//     None
+//:Doc Returns
+//     Non-Nil if the results match; Nil otherwise.
+//:Doc Additional Notes
+//     If expected is True, checks to see if the value is non-Nil.
+//     If expected is False, checks to see if the value is Nil.
+@IF{@{|0,"True"}@WV |1;
+    @{|0,"False"}@WV |1@NV;
+    |0@NV |1@NV;
+    1 @=}
+;
+
+:Code UnitTestTemplate_WriteResults
+//:Doc Purpose
+//     Writes the results for the unit tests to the specified temp file.
+//:Doc Arguments
+//     {F - File path
+//     |R - Results path}
+//:Doc Preconditions
+//     1. The Results File should already exist
+//:Doc Local Variables
+//     F - See arguments
+//     G - Number of tests failed
+//     P - Number of tests passed
+//     R - See arguments
+//:Doc Data Structures
+//     U(0) - List of lines to write to log file
+//:Doc Side Effects
+//     1. Upper set is opened and then deleted.
+//:Doc Returns
+//     None
+^{F,R}
+R@OpenFileForWritingReplace(),
+("Unit Test Results: ",F)@Pc,
+@GetLocal(UnitTestTemplate_NumPassed)^P,@GetLocal(UnitTestTemplate_NumFailed)^G,
+("Passed:  ",P,"/",P+G,"     Failed:  ",G,"/",P+G)@Pc,
+IF{G=0 "**All Tests Passed**"@Pc},
+""@Pc,
+IF{@GetLocal(UnitTestTemplate_ResultsLog) @OU,
+                                          @V0@[@Pc]
+                                          @DU}
+@BeginTxn(),
+@CloseFileForWriting(),
+@CommitTxn(),
+"";

@@ -1,0 +1,17 @@
+[
+    {   "caption": "-"  },
+
+    {   "command": "fold_subroutine"    },
+    
+    {   "caption": "Fold all subroutines", 
+        "command": "fold_subroutine",
+        "args": {"all_regions": true}
+    },
+
+    {   "command": "copy_file_to_cache" },
+    {   "caption": "Delete File from Cache", 
+        "command": "delete_file_from_cache" 
+    },
+    {   "command": "override_read_only" 
+    }
+]

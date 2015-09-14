@@ -1,0 +1,49 @@
+<snippet>
+    <content><![CDATA[
+//:Doc Purpose
+//     $SELECTION
+//:Doc Additional Notes
+//     Update: ${1:Date}
+//       $0
+
+
+//------------------------------------------------------------------------------
+#Translation
+  :Options
+    Result                        MSFile
+  :Product
+    Type                          Unstructured
+
+
+//------------------------------------------------------------------------------
+#Preamble
+  :Options
+    Type                          Process
+
+
+//------------------------------------------------------------------------------
+#Magic
+:Code Main
+//:Doc Purpose
+//     Fixer is inactivated and prevents the fixer from crashing if
+//     accidentally run.
+//:Doc Arguments
+//     A - Arguments for @@HhaZtMaintUtilities.Start()
+//:Doc Local Variables
+//     See Arguments
+//:Doc Side Effects
+//     Fixer completes
+//:Doc Returns
+//     None
+^A,
+IF{A@@HhaZtMaintUtilities.Start()@NV;
+   @@HhaZtMaintUtilities.End()},
+"";
+
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <!-- <tabTrigger>hello</tabTrigger> -->
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.focus</scope>
+    <description>Focus Tools: Template - Fixer</description>
+</snippet>

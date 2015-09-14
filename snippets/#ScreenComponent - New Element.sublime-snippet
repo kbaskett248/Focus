@@ -1,0 +1,12 @@
+<snippet>
+    <content><![CDATA[
+:Element                      ${1:Object.Field}
+  ${2:Label                       "${3:Label}"}
+  ${4:Width                       ${5:20%}}
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>:Element</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>meta.translator.screencomponent.focus - comment - string</scope>
+    <description>#ScreenComponent | :ElementSet | :Element</description>
+</snippet>

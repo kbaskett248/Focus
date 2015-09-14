@@ -1,0 +1,11 @@
+[
+    { "caption": "-" },
+    { 
+        "caption": "Focus Tools: Update Ring", 
+        "command": "local_update_sidebar", 
+        "args": {
+            "paths": []
+        }
+    },
+    { "caption": "-", "id": "end" }
+]

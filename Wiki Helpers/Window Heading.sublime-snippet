@@ -1,9 +1,0 @@
-<snippet>
-    <content><![CDATA[
-Window: <span style="background-color:#553348;color:#ffddf0;border:2px solid #ffccf0;padding:2px 5px;white-space: nowrap;">'''${1:Window Name}'''</span>
-]]></content>
-    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-    <tabTrigger>window</tabTrigger>
-    <!-- Optional: Set a scope to limit where the snippet will trigger -->
-    <scope>source.wiki</scope>
-</snippet>

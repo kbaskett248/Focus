@@ -1,142 +1,205 @@
 [
-  { "keys": ["ctrl+1"], "command": "format", "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" }
-    ]
-  },
-  { "keys": ["ctrl+2"], "command": "translate" 
-  },
-  // { "keys": ["ctrl+3"], "command": "doc_lookup", "context": [
-  //     { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" }
-  //   ]
-  // },
-  { "keys": ["ctrl+4"], "command": "run", "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" }
-    ]
-  },
-  // Enter on comment line
-  {"keys": ["enter"], "command": "insert_snippet", "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*).*/$1/}"}, "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
-      { "key": "setting.auto_indent", "operator": "equal", "operand": true },
-      { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false },
-      { "key": "auto_complete_visible", "operator": "equal", "operand": false },
-      { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*.*", "match_all": true },
-      { "key": "preceding_text", "operator": "not_regex_match", "operand": "^\\s*//\\s*:Doc\\s*.*", "match_all": true }
-    ]
-  },
-  {"keys": ["enter"], "command": "insert_snippet", "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*).*/$1/}"}, "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
-      { "key": "setting.auto_indent", "operator": "equal", "operand": true },
-      { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true },
-      { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*.*", "match_all": true },
-      { "key": "preceding_text", "operator": "not_regex_match", "operand": "^\\s*//\\s*:Doc\\s*.*", "match_all": true }
-    ]
-  },
-  {"keys": ["enter"], "command": "insert_snippet", "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*):Doc(\\s*).*$/$1    $2/}"}, "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
-      { "key": "setting.auto_indent", "operator": "equal", "operand": true },
-      { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false },
-      { "key": "auto_complete_visible", "operator": "equal", "operand": false },
-      { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*:Doc\\s*.*", "match_all": true }
-    ]
-  },
-  {"keys": ["enter"], "command": "insert_snippet", "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*):Doc(\\s*).*$/$1    $2/}"}, "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
-      { "key": "setting.auto_indent", "operator": "equal", "operand": true },
-      { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true },
-      { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*:Doc\\s*.*", "match_all": true }
-    ]
-  },
-  {"keys": ["backspace"], "command": "run_macro_file", "args": {"file": "Packages/Default/Delete to BOL.sublime-macro"}, "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
-      { "key": "preceding_text", "operator": "regex_match", "operand": "\\s*//\\s*", "match_all": true },
-      { "key": "preceding_text", "operator": "not_regex_match", "operand": "//\\s{5,}", "match_all": true }
-    ]
-  },
-  {"keys": ["tab"], "command": "translator_indent", "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus", "match_all": true },
-      { "key": "selector", "operator": "not_equal", "operand": "codeblock.source.m-at, meta.subroutine.fs", "match_all": true },
-      { "key": "auto_complete_visible", "operator": "equal", "operand": false, "match_all": true },
-      { "key": "has_next_field", "operator": "equal", "operand": false },
-      { "key": "preceding_text", "operator": "regex_match", "operand": "\\s*[:#]?\\w+\\s*", "match_all": true },
-      { "key": "preceding_text", "operator": "not_regex_match", 
-        "operand": "\\s*(:Code|#Alias|:Alias|:EntryPoint|:Container|:Object|:Record|:Key|:Field|:ElementSet|:Element|:Index|:Column|#ImportExport|:Source)", "match_all": true }
-    ]
-  },
-  { "keys": ["ctrl+k", "ctrl+f"], "command": "fold_subroutine", "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" }
-    ]
-  },
-  { "keys": ["ctrl+k", "ctrl+shift+f"], "command": "fold_subroutine", "args":{"all_regions": true}, "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" }
-    ]
-  },
-  // { "keys": ["alt+h"], "command": "focus_highlight", "args":{"command": "highlight"}, "context": [
-  //     { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" }
-  //   ]
-  // },
-  // { "keys": ["alt+j"], "command": "focus_highlight", "args":{"command": "move_forward"}, "context": [
-  //     { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-  //     { "key": "setting.focus_highlight", "operator": "equal", "operand": true }
-  //   ]
-  // },
-  // { "keys": ["alt+k"], "command": "focus_highlight", "args":{"command": "move_backward"}, "context": [
-  //     { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-  //     { "key": "setting.focus_highlight", "operator": "equal", "operand": true }
-  //   ]
-  // },
-  // { "keys": ["escape"], "command": "focus_highlight", "args":{"command": "clear"}, "context": [
-  //     { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-  //     { "key": "setting.focus_highlight", "operator": "equal", "operand": true },
-  //     { "key": "auto_complete_visible", "operator": "equal", "operand": false },
-  //     { "key": "overlay_visible", "operator": "equal", "operand": false },
-  //     { "key": "panel_visible", "operator": "equal", "operand": false },
-  //     { "key": "has_next_field", "operator": "equal", "operand": false },
-  //     { "key": "has_prev_field", "operator": "equal", "operand": false },
-  //     { "key": "num_selections", "operator": "equal", "operand": 1 }
-  //   ]
-  // },
-  // { "keys": ["alt+l"], "command": "focus_highlight", "args":{"command": "select_all"}, "context": [
-  //     { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-  //     { "key": "setting.focus_highlight", "operator": "equal", "operand": true }
-  //   ]
-  // },
-  // { "keys": ["ctrl+5"], "command": "focus_highlight", "args":{"command": "highlight"}, "context": [
-  //     { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" }
-  //   ]
-  // },
-  { "keys": ["home"], "command": "comment_home", "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-      { "key": "selector", "operator": "equal", "operand": "comment.line" },
-      { "key": "preceding_text", "operator": "regex_match", "operand": "^", "match_all": false },
-      { "key": "following_text", "operator": "regex_match", "operand": "//.*", "match_all": false }
-    ]
-  },
-  { "keys": ["shift+home"], "command": "comment_home", "args":{"extend": true}, "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-      { "key": "selector", "operator": "equal", "operand": "comment.line" },
-      { "key": "preceding_text", "operator": "regex_match", "operand": "^", "match_all": false },
-//      { "key": "following_text", "operator": "regex_match", "operand": "//.*", "match_all": false }
-    ]
-  },
-  { "keys": ["home"], "command": "comment_home", "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-      { "key": "preceding_text", "operator": "regex_match", "operand": "^//\\s*[^\\s].*", "match_all": false }
-    ]
-  },
-  { "keys": ["shift+home"], "command": "comment_home", "args":{"extend": true}, "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus" },
-      { "key": "preceding_text", "operator": "regex_match", "operand": "^//\\s*.+", "match_all": false }
-    ]
-  },
+    // Build translate
+    {   "keys": ["ctrl+b"], 
+        "command": "window_translate_ring_file",
+        "args": {
+            "encoding": "ascii",
+            "exec_cmd": "enhanced_exec",
+            "startup_info": false,
+        },
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs, source.xml", "match_all": true }
+        ]
+    },
 
-  { "keys": ["alt+b"], "command": "insert_break", "context": [
-      { "key": "selector", "operator": "equal", "operand": "source.m-at, source.focus", "match_all": true },
-      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
-    ]
-  }
+    // Fold selected subroutine
+    {   "keys": ["ctrl+k", "ctrl+f"], 
+        "command": "fold_subroutine", 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "meta.subroutine.fs, meta.list.fs" }
+        ]
+    },
+
+    // Fold all subroutines
+    {   "keys": ["ctrl+k", "ctrl+shift+f"], 
+        "command": "fold_subroutine", 
+        "args":{"all_regions": true}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "meta.subroutine.fs, meta.list.fs" }
+        ]
+    },
+
+    // Insert Break
+    {   "keys": ["alt+b"], 
+        "command": "insert_break", 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus", "match_all": true },
+            { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
+        ]
+    },
+
+    // Pressing Home on a comment line
+    // At the beginning of a line
+    {   "keys": ["home"], 
+        "command": "comment_home", 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs" },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^", "match_all": false },
+            { "key": "following_text", "operator": "regex_match", "operand": "\\s*//.*", "match_all": false }
+        ]
+    },
+    {   "keys": ["shift+home"], 
+        "command": "comment_home", 
+        "args":{"extend": true}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs" },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^", "match_all": false },
+            { "key": "following_text", "operator": "regex_match", "operand": "\\s*//.*", "match_all": false }
+        ]
+    },
+
+    // In the middle or end of a line
+    {   "keys": ["home"], 
+        "command": "comment_home", 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs" },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*[^\\s].*", "match_all": false }
+        ]
+    },
+    {   "keys": ["shift+home"], 
+        "command": "comment_home", 
+        "args":{"extend": true}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs" },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*.+", "match_all": false }
+        ]
+    },
+
+    // Translator Indent
+    {   "keys": ["tab"], 
+        "command": "translator_indent", 
+        "context": [
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true,           "match_all": true },
+            { "key": "auto_complete_visible",               "operator": "equal", "operand": false,          "match_all": true },
+            { "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
+            { "key": "setting.smart_indent",                "operator": "equal", "operand": true },
+            { "key": "selector",                            "operator": "equal", "operand": "source.focus", "match_all": true },
+            { "key": "has_next_field",                      "operator": "equal", "operand": false },
+            { "key": "enable_translator_indent",            "operator": "equal", "operand": true,           "match_all": true }
+        ]
+    },
+    {   "keys": ["tab"], 
+        "command": "translator_indent", 
+        "context": [
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false,          "match_all": true },
+            { "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
+            { "key": "setting.smart_indent",                "operator": "equal", "operand": true },
+            { "key": "selector",                            "operator": "equal", "operand": "source.focus", "match_all": true },
+            { "key": "has_next_field",                      "operator": "equal", "operand": false },
+            { "key": "enable_translator_indent",            "operator": "equal", "operand": true,           "match_all": true }
+        ]
+    },
+
+    // Enter in a codeblock
+    {   "keys": ["enter"], 
+        "command": "indent_new_line", 
+        "context": [
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true },
+            { "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
+            { "key": "setting.smart_indent",                "operator": "equal", "operand": true },
+            { "key": "selector",                            "operator": "equal", "operand": "meta.subroutine.fs", "match_all": true },
+        ]
+    },
+    {   "keys": ["enter"], 
+        "command": "indent_new_line", 
+        "context": [
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false },
+            { "key": "auto_complete_visible",               "operator": "equal", "operand": false },
+            { "key": "setting.auto_indent",                 "operator": "equal", "operand": true },
+            { "key": "setting.smart_indent",                "operator": "equal", "operand": true },
+            { "key": "selector",                            "operator": "equal", "operand": "meta.subroutine.fs", "match_all": true },
+        ]
+    },
+
+    // Enter on comment line
+    {   "keys": ["enter"], 
+        "command": "insert_snippet", 
+        "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*).*/$1/}"}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus comment, source.fs comment" },
+            { "key": "setting.auto_indent", "operator": "equal", "operand": true },
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false },
+            { "key": "auto_complete_visible", "operator": "equal", "operand": false },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*.*", "match_all": true },
+            { "key": "preceding_text", "operator": "not_regex_match", "operand": "^\\s*//\\s*:Doc\\s*.*", "match_all": true },
+            { "key": "in_method_doc", "operator": "equal", "operand": true, "match_all": true }
+        ]
+    },
+    {   "keys": ["enter"], 
+        "command": "insert_snippet", 
+        "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*).*/$1/}"}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus comment, source.fs comment" },
+            { "key": "setting.auto_indent", "operator": "equal", "operand": true },
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*.*", "match_all": true },
+            { "key": "preceding_text", "operator": "not_regex_match", "operand": "^\\s*//\\s*:Doc\\s*.*", "match_all": true },
+            { "key": "in_method_doc", "operator": "equal", "operand": true, "match_all": true }
+        ]
+    },
+    {   "keys": ["enter"], 
+        "command": "insert_snippet", 
+        "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*):Doc(\\s*).*$/$1    $2/}"}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus comment, source.fs comment" },
+            { "key": "setting.auto_indent", "operator": "equal", "operand": true },
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false },
+            { "key": "auto_complete_visible", "operator": "equal", "operand": false },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*:Doc\\s*.*", "match_all": true },
+            { "key": "in_method_doc", "operator": "equal", "operand": true, "match_all": true }
+        ]
+    },
+    {   "keys": ["enter"], 
+        "command": "insert_snippet", 
+        "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*):Doc(\\s*).*$/$1    $2/}"}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus comment, source.fs comment" },
+            { "key": "setting.auto_indent", "operator": "equal", "operand": true },
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*:Doc\\s*.*", "match_all": true },
+            { "key": "in_method_doc", "operator": "equal", "operand": true, "match_all": true }
+        ]
+    },
+    {   "keys": ["enter"], 
+        "command": "insert_snippet", 
+        "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*).*/$1/}"}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus meta.translator.local comment" },
+            { "key": "setting.auto_indent", "operator": "equal", "operand": true },
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": false },
+            { "key": "auto_complete_visible", "operator": "equal", "operand": false },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*.*", "match_all": true },
+        ]
+    },
+    {   "keys": ["enter"], 
+        "command": "insert_snippet", 
+        "args": {"contents": "\n${TM_CURRENT_LINE/^\\s*(\\/\\/\\s*).*/$1/}"}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus meta.translator.local comment" },
+            { "key": "setting.auto_indent", "operator": "equal", "operand": true },
+            { "key": "setting.auto_complete_commit_on_tab", "operator": "equal", "operand": true },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "^\\s*//\\s*.*", "match_all": true },
+        ]
+    },
+
+    // Backspace on an empty comment line
+    {   "keys": ["backspace"], 
+        "command": "run_macro_file", 
+        "args": {"file": "Packages/Default/Delete to BOL.sublime-macro"}, 
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus comment, source.fs comment" },
+            { "key": "preceding_text", "operator": "regex_match", "operand": "\\s*//\\s*", "match_all": true },
+            { "key": "preceding_text", "operator": "not_regex_match", "operand": "//\\s{5,}", "match_all": true }
+        ]       
+    },
 ]

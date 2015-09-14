@@ -1,0 +1,57 @@
+<snippet>
+    <content><![CDATA[
+//:Doc Purpose
+//     $1
+//:Doc Additional Notes
+//     
+
+
+//-----------------------------------------------------------------------------
+#Translation
+  :Options
+    Result                        MSFile
+  :Product
+    Type                          Unstructured
+
+
+//-----------------------------------------------------------------------------
+#Preamble
+  :Options
+    Type                          Process
+
+
+//-----------------------------------------------------------------------------
+#Alias
+
+
+//------------------------------------------------------------------------------
+#Locals
+
+
+//-----------------------------------------------------------------------------
+#Magic
+:Code Main
+//:Doc Purpose
+//     None
+//:Doc Arguments
+//     None
+//:Doc Preconditions
+//     None
+//:Doc Local Variables
+//     None
+//:Doc Data Structures
+//     None
+//:Doc Returns
+//     None
+//:Doc Additional Notes
+//     None
+$0
+;
+
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <!-- <tabTrigger>hello</tabTrigger> -->
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.focus</scope>
+    <description>Focus Tools: Empty Process Template</description>
+</snippet>
