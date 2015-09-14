@@ -31,7 +31,16 @@ class MigrateFocusSettingsCommand(sublime_plugin.ApplicationCommand):
     """
 
     def run(self):
-        existing_settings = self.get_existing_settings()
+        try:
+            existing_settings = self.get_existing_settings()
+        except ValueError as e:
+            sublime.error_message(
+                'The existing settings file (m-at.sublime-settings) cannot be '
+                'parsed. Please remove any comments (lines beginning '
+                'with "//") and extra commas. Then re-run Focus Tools: Migrate'
+                ' Settings to Focus Package Settings.\n\n' + str(e))
+            return
+
         if existing_settings is None:
             sublime.message_dialog(
                 'No focus.sublime-settings file was found. No settings to '
