@@ -38,22 +38,6 @@
         ]
     },
 
-    // Format Focus File
-    // {   "keys": ["ctrl+alt+b"], 
-    //     "command": "format_ring_file", 
-    //     "context": [
-    //         { "key": "selector", "operator": "equal", "operand": "source.focus" }
-    //     ]
-    // },
-
-    // // Run MTRingFile
-    // {   "keys": ["ctrl+4"], 
-    //     "command": "run_ring_file", 
-    //     "context": [
-    //         { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs", "match_all": true }
-    //     ]
-    // },
-
     // Pressing Home on a comment line
     // At the beginning of a line
     {   "keys": ["home"], 

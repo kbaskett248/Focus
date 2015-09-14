@@ -33,22 +33,6 @@
         "args": { "entity_id": "local" }
     },
 
-    //{   "caption": "Focus Tools: Translate File",
-    //    "command": "translate_ring_file", 
-    //},
-
-    //{   "caption": "Focus Tools: Translate All Open Files",
-    //    "command": "translate_all_ring_files", 
-    //},
-
-    //{   "caption": "Focus Tools: Format File",
-    //    "command": "format_ring_file", 
-    //},
-
-    //{   "caption": "Focus Tools: Run File",
-    //    "command": "run_ring_file", 
-    //},
-
     {   "caption": "Focus Tools: Highlight all breaks",
         "command": "preemptive_highlight",
         "args": { "highlighter": "focus_breaks" }
