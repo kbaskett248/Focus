@@ -70,25 +70,5 @@
                 ]
             }
         ]
-    },
-    {
-        "id": "help",
-        "children":
-        [
-            {
-                "id": "package-help",
-                "children":
-                [
-                    {
-                        "caption": "Focus",
-                        "command": "open_web_page",
-                        "args": {
-                            "url": "https://bitbucket.org/kbaskett/focus/wiki/Home",
-                        }
-                    }
-                ]
-                
-            }
-        ]
     }
 ]
