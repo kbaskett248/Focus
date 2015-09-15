@@ -34,7 +34,9 @@ SETTINGS_INFO = (
     ('get_translate_on_save', 'translate_on_save', False),
     ('get_sort_local_rings', 'sort_local_rings_to_top', False),
     ('get_ring_utilities', 'ring_utilities', {}),
-    ('get_disable_translator_indent', 'disable_translator_indent_for', False)
+    ('get_disable_translator_indent', 'disable_translator_indent_for', False),
+    ('get_break_label', 'break_label', '{counter}'),
+    ('get_list_entities', 'list_entity_commands', {})
 )
 
 

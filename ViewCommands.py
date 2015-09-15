@@ -13,7 +13,11 @@ from .classes.command_templates import RingViewCommand, FocusViewCommand
 from .tools.classes import get_view, is_focus_view, is_fs_view
 from .tools.snippets import insert_compound_snippet
 from .tools.focus import TRANSLATOR_SEPARATOR
-from .tools.settings import get_disable_translator_indent
+from .tools.settings import (
+    get_disable_translator_indent,
+    get_break_label,
+    get_list_entities
+)
 
 
 IN_METHOD_DOC_KEY = 'in_method_doc'
@@ -535,8 +539,7 @@ class InsertBreakCommand(FocusViewCommand):
         """Inserts a break at the current insertion points."""
         view = self.view
 
-        settings = sublime.load_settings('MT-Focus.sublime-settings')
-        break_label = settings.get('break_label', '{counter}')
+        break_label = get_break_label()
 
         filename = view.name()
         if (filename is None) or (filename == ""):
@@ -587,8 +590,7 @@ class ListEntitiesCommand(RingViewCommand):
         """
         Lists the subroutines contained in the current file in an output panel.
         """
-        settings = sublime.load_settings('MT-Focus.sublime-settings')
-        list_entities = settings.get('list_entity_commands', {})
+        list_entities = get_list_entities()
         if not list_entities:
             sublime.status_message("No list entities defined")
             return
@@ -676,8 +678,7 @@ class ListEntitiesCommand(RingViewCommand):
         return entities
 
     def get_entity_definition(self, entity_id):
-        settings = sublime.load_settings('MT-Focus.sublime-settings')
-        list_entities = settings.get('list_entity_commands', {})
+        list_entities = get_list_entities()
         try:
             entity = list_entities[entity_id]
         except KeyError:
