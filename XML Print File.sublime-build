@@ -7,6 +7,13 @@
 
     "variants": [
 
+        {   "name": "Translate",
+            "target": "window_translate_ring_file",
+            "encoding": "ascii",
+            "exec_cmd": "enhanced_exec",
+            "startup_info": false
+        }
+
         {   "name": "Translate All",
             "target": "window_translate_ring_file",
             "encoding": "ascii",

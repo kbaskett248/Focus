@@ -1,15 +1,10 @@
 [
     // Build translate
     {   "keys": ["ctrl+b"], 
-        "command": "window_translate_ring_file",
+        "command": "build",
         "args": {
-            "encoding": "ascii",
-            "exec_cmd": "enhanced_exec",
-            "startup_info": false,
-        },
-        "context": [
-            { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs, source.xml", "match_all": true }
-        ]
+            "variant": "Translate",
+        }
     },
 
     // Fold selected subroutine

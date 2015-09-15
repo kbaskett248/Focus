@@ -11,11 +11,9 @@
     },
 
     {   "keys": ["ctrl+2"], 
-        "command": "window_translate_ring_file",
+        "command": "build",
         "args": {
-            "encoding": "ascii",
-            "exec_cmd": "enhanced_exec",
-            "startup_info": false,
+            "variant": "Translate"
         },
         "context": [
             { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs, source.xml", "match_all": true }
