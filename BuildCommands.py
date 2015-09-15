@@ -359,7 +359,8 @@ class TranslateRingFileCommand(RingExecCommand):
                         translate_cmd='Foc\\FocZ.Textpad.Translate.P.focus'):
         translate_cmd = os.path.join('PgmSource', translate_cmd)
 
-        if not self.ring.check_file_existence(translate_cmd):
+        if ((translate_cmd != 'PgmSource\\Foc\\FocZ.Textpad.Translate.P.focus')
+                and not self.ring.check_file_existence(translate_cmd)):
             self.translate_other()
             return
 
