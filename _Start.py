@@ -1,5 +1,3 @@
-import os
-
 import sublime
 
 try:
@@ -12,12 +10,32 @@ else:
         'Focus Package.sublime-settings',
         'install_new_sublime_project_templates')
 
-from .tools.general import add_to_path
 from .tools.load_translator_completions import _load_translator_completions
 
-# Add beautiful soup 4 to the path so it works correctly
-_BS4_LIB = os.path.join(os.path.dirname(__file__), 'Lib')
-add_to_path(_BS4_LIB)
+
+class VersionNumber(object):
+    def __init__(self, ver_string):
+        super(VersionNumber, self).__init__()
+        self.ver_string = ver_string
+        self.prerelease = ''
+        if '-' in self.ver_string:
+            i = self.ver_string.find('-')
+            self.prerelease = self.ver_string[i:]
+            ver_string = self.ver_string[:i]
+        self.parts = [int(s) for s in ver_string.split('.')]
+        self.parts.append(self.prerelease)
+        self.major_version = self.parts[0]
+        self.minor_version = self.parts[1]
+        self.bug_fix = self.parts[2]
+
+    def __str__(self):
+        return self.ver_string
+
+    def __lt__(self, other):
+        if isinstance(other, VersionNumber):
+            return self.parts < other.parts
+        else:
+            return str(self) < str(other)
 
 
 def plugin_loaded():
@@ -25,6 +43,11 @@ def plugin_loaded():
 
     from package_control import events
     ver = events.install('Focus')
+    if not ver:
+        ver = events.post_upgrade('Focus')
+        if not ver:
+            return
 
-    if ver == '2.0.0':
+    ver = VersionNumber(ver)
+    if ver.major_version >= 2 and ver.minor_version == 0:
         sublime.run_command('migrate_focus_settings')

@@ -10,7 +10,14 @@ import urllib
 logger = logging.getLogger(__name__)
 logger.setLevel('DEBUG')
 
-from bs4 import BeautifulSoup
+try:
+    from bs4 import BeautifulSoup
+    BS4_AVAILABLE = True
+except ImportError:
+    BS4_AVAILABLE = False
+    logger.warning(
+        'Beautiful Soup 4 is not available. Some features will be unavailable.'
+        ' Run "Package Control: Satisfy Dependencies" to install it.')
 
 import sublime
 
@@ -226,6 +233,9 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
         Parses the contents of the documentation page and returns them as a
         dictionary.
         """
+        if not BS4_AVAILABLE:
+            return None
+
         wiki = get_focus_wiki_setting()
         url = self.get_url()
         if not url.startswith(wiki):
@@ -607,6 +617,9 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
         dictionary.
 
         """
+        if not BS4_AVAILABLE:
+            return None
+
         url = self.get_url()
 
         logger.info('Scraping %s for documentation for %s',
