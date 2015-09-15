@@ -134,6 +134,10 @@ class MigrateFocusSettingsCommand(sublime_plugin.ApplicationCommand):
 
         elif new_key == 'show_doc_method':
             v = copy.deepcopy(self.SHOW_DOC_METHOD)
+            if isinstance(v, tuple):
+                v = v[0]
+            logger.debug("v=%s", v)
+            logger.debug(type(v))
             if not existing_value:
                 v['focus_function'] = 'source'
                 v['fs_function'] = 'source'
