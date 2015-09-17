@@ -7,7 +7,6 @@ import shutil
 import subprocess
 
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
 
 from .metaclasses import MiniPluginMeta
 from ..tools.focus import (
@@ -21,7 +20,6 @@ from ..tools.focus import (
 from ..tools.general import (
     get_env,
     merge_paths,
-    read_file,
     create_folder
 )
 from ..tools.settings import (
@@ -90,7 +88,7 @@ class Ring(object, metaclass=MiniPluginMeta):
 
     @classmethod
     def get_ring(cls, path):
-        logger.debug(".get_ring: getting ring for %s", path)
+        logger.debug("getting ring for %s", path)
         r = None
         ring_info = parse_ring_path(path)
         if not (ring_info[0] and ring_info[1]):
@@ -105,17 +103,17 @@ class Ring(object, metaclass=MiniPluginMeta):
             ring_info = list(ring_info)
             ring_info.append(path)
             ring_info = tuple(ring_info)
-            logger.debug(".get_ring: ring_info = %s", ring_info)
+            logger.debug("ring_info = %s", ring_info)
 
             for c in cls.get_plugins():
-                logger.debug(".get_ring: checking classes")
+                logger.debug("checking classes")
                 try:
                     r = c(*ring_info)
                 except InvalidRingError:
                     # logger.exception(".get_ring: InvalidRingError exception")
                     continue
                 except Exception:
-                    logger.exception(".get_ring: Other exception")
+                    logger.exception("Other exception")
                     continue
                 else:
                     break
@@ -724,7 +722,6 @@ class HomeCareRing(Ring):
 
         if (alias in self.alias_lookup.keys()):
             alias_entry = self.alias_lookup[alias]
-            logger.debug(alias_entry)
             return self.get_file_path(
                 os.path.join('PgmSource', alias_entry[0],
                              alias_entry[1] + '.focus'))

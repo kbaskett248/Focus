@@ -4,7 +4,6 @@ import re
 
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
 
 import sublime
 import sublime_plugin
@@ -55,7 +54,7 @@ def boolean_query_context_per_selection(view, operator, operand, match_all,
     else:
         return None
 
-    logger.debug("direction = ", direction)
+    logger.debug("direction = %s", direction)
 
     # Loop through the selections and store 1 for a match or 0 for non-matches.
     match_list = []
@@ -101,7 +100,7 @@ class QueryContextCommand(sublime_plugin.EventListener):
             return False
 
         self.compute_disable_string()
-        print('querying context for EnableTranslatorIndent')
+        logger.debug('querying context for EnableTranslatorIndent')
         args = list(args)
         args.append(self.check_selection_translator_indent)
         return boolean_query_context_per_selection(view, *args)
@@ -114,11 +113,9 @@ class QueryContextCommand(sublime_plugin.EventListener):
         elif isinstance(st, list) and st:
             self.disable_for_certain_strings = True
             s = r"^\s*({0})$".format('|'.join(st))
-            # print(s)
             self.disable_pattern = re.compile(s)
         elif isinstance(st, str) and st:
             self.disable_for_certain_strings = True
-            # print(st)
             self.disable_pattern = re.compile(st)
 
     def check_selection_translator_indent(self, view, selection):
@@ -165,11 +162,11 @@ class QueryContextCommand(sublime_plugin.EventListener):
                                'source.focus, source.fs') <= 0:
             return False
 
-        print('querying context for InMethodDoc')
+        logger.debug('querying context for InMethodDoc')
 
         args = list(args)
         args.append(self.check_selection_in_method_doc)
-        print(args)
+        logger.debug('args=%s', args)
         return boolean_query_context_per_selection(view, *args)
 
     def check_selection_in_method_doc(self, view, selection):
@@ -187,16 +184,11 @@ class QueryContextCommand(sublime_plugin.EventListener):
             if view.score_selector(p, 'comment') <= 0:
                 return False
 
-        print('still checking 1')
-
         ring_view = get_view(view)
         if ring_view is None:
             return False
 
-        print('still checking 2')
-
         cb = ring_view.get_codeblock(points[0])
-        print(cb.documentation_region)
         if cb.documentation_region.contains(selection):
             return True
         else:
@@ -266,11 +258,10 @@ class IndentNewLineCommand(sublime_plugin.TextCommand):
             preceding_line = sublime.Region(self.view.line(point).begin(),
                                             point)
             preceding_line_string = self.view.substr(preceding_line)
-            # print(preceding_line_string)
 
             for match in INDENTATION_PATTERN.finditer(
                     preceding_line_string[::-1]):
-                print(match.groups())
+                logger.debug('match.groups()=%s', match.groups())
                 current_point = point - match.span(0)[1]
 
                 if match.group(1) is not None:
@@ -317,9 +308,6 @@ class IndentNewLineCommand(sublime_plugin.TextCommand):
 
                     line_score -= 1
                     self.append_operator(operator)
-
-                # print(line_score)
-                # print(self.operation_stack)
 
                 if line_score > 0:
                     line_indentation = (current_point + 1 -
