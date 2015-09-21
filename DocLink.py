@@ -47,9 +47,9 @@ from .tools.settings import (
 CSS = """
 p { padding-left: 1em; padding-top: 0em; padding-bottom: 0em;
     margin-top: 0.3em; margin-bottom: 0.3em; }
-.content { margin: 1em; }
-h1 { font-size: 1.5em; }
-h2 { font-size: 1.2em; padding-left: 1em; }
+.content { margin: 1em; font-size: 10ex }
+h1 { font-size: 15ex; }
+h2 { font-size: 12ex; padding-left: 1em; }
 .divider { padding: 1px; margin: 2em 3em; background-color: #888888; }
 """
 
@@ -322,7 +322,7 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
 
     POPUP_DOC_TEMPLATE = (
         '''<div class="content">
-            <h1 class="keyword">{function}</h1>
+            <h1 class="support function">{function}</h1>
             <p>{overview}</p>
             <p><a href="open_source" class="comment">(Open source)</a></p>
             <p><span class="string">Usage:</span> <span class="value">{usage}</span></p>
@@ -337,7 +337,7 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
 
     CODE_EXAMPLES_TEMPLATE = '''
         <div class="divider"></div>
-        <h2 class="keyword">Code Examples</h2>
+        <h2 class="support function">Code Examples</h2>
         <p>{examples}</p>
         '''
 
@@ -669,7 +669,7 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
 
     POPUP_DOC_TEMPLATE = (
         '''<div class="content">
-            <h1 class="keyword">{function} {name}</h1>
+            <h1 class="support function">{function} {name}</h1>
             <p><a href="open_source" class="comment">(Open source)</a></p>
             <p><span class="string">Group:</span> <span class="value">{group}</span></p>
             <p><span class="string">Precondition:</span> <span class="value">{precondition}</span></p>
@@ -681,13 +681,13 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
 
     COMMENT_TEMPLATE = '''
         <div class="divider"></div>
-        <h2 class="keyword">Comments</h2>
+        <h2 class="support function">Comments</h2>
         <p>{comments}</p>
         '''
 
     CODE_EXAMPLES_TEMPLATE = '''
         <div class="divider"></div>
-        <h2 class="keyword">Code Examples</h2>
+        <h2 class="support function">Code Examples</h2>
         <p>{examples}</p>
         '''
 
