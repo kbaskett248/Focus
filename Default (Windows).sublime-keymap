@@ -4,7 +4,10 @@
         "command": "build",
         "args": {
             "variant": "Translate",
-        }
+        },
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus, source.fs, source.xml", "match_all": true }
+        ]
     },
 
     // Fold selected subroutine
