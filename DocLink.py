@@ -44,7 +44,14 @@ from .tools.settings import (
 )
 
 
-css = ''
+CSS = """
+p { padding-left: 1em; padding-top: 0em; padding-bottom: 0em;
+    margin-top: 0.3em; margin-bottom: 0.3em; }
+.content { margin: 1em; }
+h1 { font-size: 1.5em; }
+h2 { font-size: 1.2em; padding-left: 1em; }
+.divider { padding: 1px; margin: 2em 3em; background-color: #888888; }
+"""
 
 
 def plugin_loaded():
@@ -52,31 +59,12 @@ def plugin_loaded():
         c.add_possible_selector()
     FSFunctionDocLink.load_doc_cache()
     FocusFunctionDocLink.load_doc_cache()
-    init_css()
 
 
 def plugin_unloaded():
     for c in EntitySelector.get_defined_classes(globals()):
         c.remove_possible_selector()
     imp.reload(sys.modules[__name__])
-
-
-def init_css():
-    """ Load up desired CSS """
-    global css
-
-    logger.debug("initializing css")
-
-    settings = sublime.load_settings('Focus Package.sublime-settings')
-    css_file = settings.get('documentation_css',
-                            'Packages/Focus/resources/css/dark.css')
-    try:
-        css = sublime.load_resource(css_file).replace('\r', '')
-    except:
-        css = ''
-
-    settings.clear_on_change('reload')
-    settings.add_on_change('reload', init_css)
 
 
 def get_set_reg_ex(upper_or_lower, set_number):
@@ -199,7 +187,7 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
             self.doc_already_shown = True
         elif show_doc_setting == 'popup':
             doc = self.format_documentation_for_popup(doc)
-            self.show_doc_in_popup(doc)
+            self.show_doc_in_popup(doc, additional_style=CSS)
             self.doc_already_shown = True
 
     def enable_highlight(self):
@@ -255,7 +243,7 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
 
     def parse_page_content(self, content):
         d = dict()
-        soup = BeautifulSoup(content)
+        soup = BeautifulSoup(content, "html.parser")
         content = soup.find('div', class_='mw-content-ltr')
 
         first_div = content.div
@@ -333,31 +321,31 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
                 "{examples}\n").format(**doc)
 
     POPUP_DOC_TEMPLATE = (
-        '''<style>{css}</style>
-        <div class="content">
-            <h1 class="header">{function}</h1>
+        '''<div class="content">
+            <h1 class="keyword">{function}</h1>
             <p>{overview}</p>
-            <p><a href="open_source" class="copy-link">(Open source)</a></p>
-            <p><span class="key">Usage:</span> <span class="value">{usage}</span></p>
-            <p><span class="key">Runtime Arg:</span> <span class="value">{runtime arg}</span></p>
-            <p><span class="key">Translation Args:</span> <span class="value">{translation args}</span></p>
-            <p><span class="key">Precondition:</span> <span class="value">{precondition}</span></p>
-            <p><span class="key">Return:</span> <span class="value">{return}</span></p>
-            <p><span class="key">Side Effect:</span> <span class="value">{side effect}</span></p>
+            <p><a href="open_source" class="comment">(Open source)</a></p>
+            <p><span class="string">Usage:</span> <span class="value">{usage}</span></p>
+            <p><span class="string">Runtime Arg:</span> <span class="value">{runtime arg}</span></p>
+            <p><span class="string">Translation Args:</span> <span class="value">{translation args}</span></p>
+            <p><span class="string">Precondition:</span> <span class="value">{precondition}</span></p>
+            <p><span class="string">Return:</span> <span class="value">{return}</span></p>
+            <p><span class="string">Side Effect:</span> <span class="value">{side effect}</span></p>
             <p>{extra info}</p>
         '''
     )
 
     CODE_EXAMPLES_TEMPLATE = '''
         <div class="divider"></div>
-        <h2 class="subheader">Code Examples</h2>
+        <h2 class="keyword">Code Examples</h2>
         <p>{examples}</p>
         '''
 
     def format_documentation_for_popup(self, doc):
-        global css
-        doc['css'] = css
         template = self.POPUP_DOC_TEMPLATE
+        if doc['extra info']:
+            doc['extra info'] = doc['extra info'].replace('\r', '').replace(
+                '\n', '<br />')
         if doc['examples']:
             template += self.CODE_EXAMPLES_TEMPLATE
             doc['examples'] = doc['examples'].replace('\r', '').replace(
@@ -489,7 +477,7 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
             self.doc_already_shown = True
         elif show_doc_setting == 'popup':
             doc = self.format_documentation_for_popup(doc)
-            self.show_doc_in_popup(doc)
+            self.show_doc_in_popup(doc, additional_style=CSS)
             self.doc_already_shown = True
 
     def get_url(self):
@@ -631,7 +619,7 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
             return None
         else:
             d = dict()
-            soup = BeautifulSoup(f)
+            soup = BeautifulSoup(f, "html.parser")
             content = soup.find('div', class_='mw-content-ltr')
 
             tab = content.table
@@ -680,33 +668,30 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
                 "{examples}\n").format(**doc)
 
     POPUP_DOC_TEMPLATE = (
-        '''<style>{css}</style>
-        <div class="content">
-            <h1 class="header">{function} {name}</h1>
-            <p><a href="open_source" class="copy-link">(Open source)</a></p>
-            <p><span class="key">Group:</span> <span class="value">{group}</span></p>
-            <p><span class="key">Precondition:</span> <span class="value">{precondition}</span></p>
-            <p><span class="key">Argument:</span> <span class="value">{argument}</span></p>
-            <p><span class="key">Return:</span> <span class="value">{return}</span></p>
-            <p><span class="key">Side Effect:</span> <span class="value">{side effect}</span></p>
+        '''<div class="content">
+            <h1 class="keyword">{function} {name}</h1>
+            <p><a href="open_source" class="comment">(Open source)</a></p>
+            <p><span class="string">Group:</span> <span class="value">{group}</span></p>
+            <p><span class="string">Precondition:</span> <span class="value">{precondition}</span></p>
+            <p><span class="string">Argument:</span> <span class="value">{argument}</span></p>
+            <p><span class="string">Return:</span> <span class="value">{return}</span></p>
+            <p><span class="string">Side Effect:</span> <span class="value">{side effect}</span></p>
         '''
     )
 
     COMMENT_TEMPLATE = '''
         <div class="divider"></div>
-        <h2 class="subheader">Comments</h2>
+        <h2 class="keyword">Comments</h2>
         <p>{comments}</p>
         '''
 
     CODE_EXAMPLES_TEMPLATE = '''
         <div class="divider"></div>
-        <h2 class="subheader">Code Examples</h2>
+        <h2 class="keyword">Code Examples</h2>
         <p>{examples}</p>
         '''
 
     def format_documentation_for_popup(self, doc):
-        global css
-        doc['css'] = css
         template = self.POPUP_DOC_TEMPLATE
         if doc['comments']:
             template += self.COMMENT_TEMPLATE
@@ -1034,7 +1019,9 @@ class AliasDocLink(DocLink):
     def find_and_show(self, view_or_file, file_name):
         if view_or_file is None:
             return False
+
         span = view_or_file.find_alias_definition(self.search_string)
+
         if span is not None:
             region = sublime.Region(span[0], span[1])
             self.show_doc_in_file(file_name, region)
