@@ -241,6 +241,22 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
+							<string>meta.named-member.name.fs</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>Magic Named Member Call</string>
+					<key>match</key>
+					<string>@@([A-Za-z0-9]+)</string>
+					<key>name</key>
+					<string>meta.named-member.fs entity.name.subroutine.fs</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
 							<string>meta.function.listset.number.upper.fs</string>
 						</dict>
 					</dict>

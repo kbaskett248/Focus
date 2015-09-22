@@ -21,7 +21,6 @@ patterns:
   - include: '#blank-line-error'
   - include: '#errant-bracket'
 
-
 - comment: List Member Keyword
   name: meta.list.fs
   begin: '^ *((:List) +([^\n\t]+?)) *$'
@@ -87,6 +86,12 @@ repository:
     - include: '#control_flow'
 
     - include: '#illegal-spaces'
+
+    - comment: Magic Named Member Call
+      name: meta.named-member.fs entity.name.subroutine.fs
+      match: '@@([A-Za-z0-9]+)'
+      captures:
+        '1': {name: meta.named-member.name.fs}
 
     - comment: Magic Upper Listset Function
       name: meta.function.listset.upper.fs support.function.fs
