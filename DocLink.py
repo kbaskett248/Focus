@@ -1242,11 +1242,11 @@ class LocalDocLink(DocLink, Highlight):
         try:
             locals_section = ring_view.get_translator_sections(
                 'Locals', include_end_space=False)[-1][0]
-            locals_section = sublime.Region(locals_section[0],
-                                            locals_section[1])
+            locals_section = sublime.Region(*locals_section)
         except IndexError:
             start = ring_view.get_translator_sections(
-                'Magic')[0].begin()-1
+                'Magic')[0][0][0]-1
+            logger.debug('start = %s', start)
             locals_section = sublime.Region(start, start)
             create_locals_section = True
 
