@@ -1,0 +1,1 @@
+The pop-up message displayed by DocLink (for Focus and FS Documentation) now uses the StyledPopup package. Now, the pop-up will match your color scheme.
