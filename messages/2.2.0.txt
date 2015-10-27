@@ -1,0 +1,3 @@
+- Completions were added for @IndexLookup operators. Just start typing oneof in a list to insert "oneof".
+- Improved support for string lists. Just type ` and the right side (') will be inserted automatically. 
+  Other behavior will be more like that of brackets and parentheses as well.
