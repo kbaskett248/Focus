@@ -1,0 +1,11 @@
+{
+        "scope": "source.focus meta.control.flow.list.fs",
+        "completions":
+        [
+                { "trigger": "contains\tIndex Operator", "contents": "\"contains\"" },
+                { "trigger": "equals\tIndex Operator", "contents": "\"equals\"" },
+                { "trigger": "oneof\tIndex Operator", "contents": "\"oneof\"" },
+                { "trigger": "range\tIndex Operator", "contents": "\"range\"" },
+                { "trigger": "startswith\tIndex Operator", "contents": "\"startswith\"" },
+	]
+}
