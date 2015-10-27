@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 from .metaclasses import MiniPluginMeta
 from .compatibility import FSCompatibility, FocusCompatibility
 from .rings import get_ring, get_backup_ring
-from ..tools.general import read_file
+from ..tools.general import read_file, read_file_iter
 
 
 def get_ring_file(file_name):
@@ -179,7 +179,6 @@ class RingFile(object, metaclass=MiniPluginMeta):
         for l in self.get_lines_iterator():
             line_start = line_end
             line_end = line_start + len(l)
-            # print('%s, %s, %s' % (line_start, line_end, l))
 
             if (line_start <= start) and (line_end >= start):
                 capture = True
@@ -211,11 +210,8 @@ class RingFile(object, metaclass=MiniPluginMeta):
         """
         Creates an iterator that returns the lines of a file or view.
         """
-
-        with open(self.file_name, 'r') as f:
-            for line in f:
-                if (not skip_blanks) or (line != '\n'):
-                    yield line
+        for line in read_file_iter(self.file_name, skip_blanks):
+            yield line
 
     def get_lines_from_iterator(self, point, reverse=False, skip_blanks=False):
         """

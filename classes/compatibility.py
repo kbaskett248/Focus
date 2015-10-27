@@ -140,7 +140,7 @@ class FSCompatibility(metaclass=abc.ABCMeta):
         return string_search(self.get_contents(),
                              reg_ex,
                              match_group=2,
-                             flags=re.MULTILINE)[0]
+                             flags=re.MULTILINE).span
 
     MEMBER_REGION_REGEX = re.compile(r"(#[A-Za-z]+|:[A-Za-z]+) *(.+)?$")
 
@@ -372,7 +372,7 @@ class FocusCompatibility(FSCompatibility):
         if name is None:
             return None
 
-        reg_ex = r"^[ \t]*:Name[ \t]+(?P<local>{name})\b".format(name=name)
+        reg_ex = r"^[ \t]*:Name[ \t]+(?P<local>{name})\s".format(name=name)
 
         for t_span, t_string in self.get_translator_sections('Locals'):
             span = string_search(t_string,

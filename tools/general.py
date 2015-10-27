@@ -1,13 +1,17 @@
 # Contains general purpose tools used by many modules
 
-import collections
+from collections import OrderedDict, namedtuple
 import errno
+import logging
 import os
 import re
 import sys
 
 
-class LimitedSizeDict(collections.OrderedDict):
+logger = logging.getLogger(__name__)
+
+
+class LimitedSizeDict(OrderedDict):
     """
     A dictionary with a limited number of slots. Items are removed in the order
     they were added.
@@ -37,18 +41,48 @@ class LimitedSizeDict(collections.OrderedDict):
         self._check_size_limit()
 
 
-def read_file(fileName, filter_out_empty_lines=True):
+MatchResult = namedtuple("MatchResult", ['span', 'string'])
+
+
+def read_file(filename, filter_out_empty_lines=True):
     """
     Reads in a file, returning each line in a list. Optionally removes empty
     lines.
 
     """
-    elements = []
-    with open(fileName, 'r') as f:
+    return [line for line in read_file_iter(filename, filter_out_empty_lines)]
+
+
+def read_file_iter(filename, filter_out_empty_lines=True):
+    """Iterates over the lines in a file."""
+    with open(filename, 'r') as f:
         for line in f:
             if ((line != '\n') or not filter_out_empty_lines):
-                elements.append(line.replace('\n', ''))
-    return elements
+                yield line.replace('\n', '')
+
+
+def _get_match(reg_ex, string, op, flags=0):
+    if isinstance(reg_ex, str):
+        return getattr(re, op)(reg_ex, string, flags)
+    elif hasattr(reg_ex, op):
+        return getattr(reg_ex, op)(string)
+    else:
+        raise TypeError('reg_ex must be a regular expression string or a '
+                        'regular expression object')
+
+
+def _get_match_iter(reg_ex, string, flags=0):
+    if isinstance(reg_ex, str):
+        return re.finditer(reg_ex, string, flags)
+    elif hasattr(reg_ex, 'match'):
+        return reg_ex.finditer(string)
+    else:
+        raise TypeError('reg_ex must be a regular expression string or a '
+                        'regular expression object')
+
+
+def _update_span(span, base_point=0):
+    return (span[0] + base_point, span[1] + base_point)
 
 
 def string_match(string, reg_ex, match_group=1, base_point=0, flags=0):
@@ -68,27 +102,20 @@ def string_match(string, reg_ex, match_group=1, base_point=0, flags=0):
             match function.
 
     """
-    if isinstance(reg_ex, str):
-        match = re.match(reg_ex, string, flags)
-    elif hasattr(reg_ex, 'match'):
-        match = reg_ex.match(string)
-    else:
-        return (None, None)
+    match = _get_match(reg_ex, string, 'match', flags)
 
     if match is None:
-        return (None, None)
+        return MatchResult(None, None)
 
     if isinstance(match_group, int) or isinstance(match_group, str):
-        span = match.span(match_group)
-        span = (base_point + span[0], base_point + span[1])
+        span = _update_span(match.span(match_group), base_point)
 
-        return (span, match.group(match_group))
+        return MatchResult(span, match.group(match_group))
     else:
         results = []
         for i in match_group:
-            span = match.span(i)
-            span = (base_point + span[0], base_point + span[1])
-            results.append((span, match.group(i)))
+            span = _update_span(match.span(i), base_point)
+            results.append(MatchResult(span, match.group(i)))
         return results
 
 
@@ -109,27 +136,20 @@ def string_search(string, reg_ex, match_group=1, base_point=0, flags=0):
             match function.
 
     """
-    if isinstance(reg_ex, str):
-        match = re.search(reg_ex, string, flags)
-    elif hasattr(reg_ex, 'search'):
-        match = reg_ex.search(string)
-    else:
-        return (None, None)
+    match = _get_match(reg_ex, string, 'search', flags)
 
     if match is None:
-        return (None, None)
+        return MatchResult(None, None)
 
     if isinstance(match_group, int) or isinstance(match_group, str):
-        span = match.span(match_group)
-        span = (base_point + span[0], base_point + span[1])
+        span = _update_span(match.span(match_group), base_point)
 
-        return (span, match.group(match_group))
+        return MatchResult(span, match.group(match_group))
     else:
         results = []
         for i in match_group:
-            span = match.span(i)
-            span = (base_point + span[0], base_point + span[1])
-            results.append((span, match.group(i)))
+            span = _update_span(match.span(i), base_point)
+            results.append(MatchResult(span, match.group(i)))
         return results
 
 
@@ -160,12 +180,7 @@ def extract_entity(reg_ex, string, point, base_point=0, match_group=0,
 
     span = match_string = prev_match = None
 
-    if isinstance(reg_ex, str):
-        match_iter = re.finditer(reg_ex, string, flags)
-    elif hasattr(reg_ex, 'finditer'):
-        match_iter = reg_ex.finditer(string)
-    else:
-        return (None, None)
+    match_iter = _get_match_iter(reg_ex, string, flags)
 
     for match in match_iter:
         span = match.span(match_group)
@@ -186,14 +201,14 @@ def extract_entity(reg_ex, string, point, base_point=0, match_group=0,
                 break
 
     if span and match_string:
-        span = (base_point + span[0], base_point + span[1])
-        return (span, match_string)
+        span = _update_span(span, base_point)
+        return MatchResult(span, match_string)
     elif prev_match:
         span, match_string = prev_match
-        span = (base_point + span[0], base_point + span[1])
-        return (span, match_string)
+        span = _update_span(span, base_point)
+        return MatchResult(span, match_string)
     else:
-        return (None, None)
+        return MatchResult(None, None)
 
 
 def add_to_path(path):
@@ -202,7 +217,7 @@ def add_to_path(path):
     """
     if path not in sys.path:
         sys.path.append(path)
-        print("Added %s to sys.path." % path)
+        logger.info("Added %s to sys.path.", path)
 
 
 def get_env(environ_name):
