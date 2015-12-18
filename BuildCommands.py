@@ -543,6 +543,24 @@ class FormatRingFileCommand(RingExecCommand):
         return False
 
 
+class CodeExecutionTreeCommand(RingExecCommand):
+
+    def run(self, edit, exec_cmd, **kwargs):
+        self.exec_cmd = exec_cmd
+        self.kwargs = kwargs
+
+        cmd = os.path.join('PgmSource', 'Hha',
+                           'HhaZt.DisplayFunctionTree.P.focus')
+
+        self.kwargs['shell_cmd'] = self.ring.get_shell_cmd(
+            target_ring=self.target_ring, partial_path=cmd,
+            parameters=self.file_name)
+        self.kwargs['quiet'] = True
+
+    def is_enabled(self, *args, file_name=None, **kwargs):
+        return self.ring_file is not None
+
+
 class RunRingFileCommand(RingRunCommand):
     """
     Runs the current file if it is runnable.

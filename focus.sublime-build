@@ -32,6 +32,13 @@
             "exec_cmd": "enhanced_exec",
             "startup_info": false,
             "translate_all": true
-        }
+        },
+
+        {   "name": "Code Execution Tree",
+            "target": "window_code_execution_tree",
+            "exec_cmd": "enhanced_exec",
+            "encoding": "ascii",
+            "startup_info": false
+        },
     ]
 }
