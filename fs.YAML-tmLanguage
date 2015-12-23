@@ -282,9 +282,9 @@ repository:
     #   - include: '#code-region'
     - comment: Too many spaces in a conditional
       name: invalid.illegal.spaces.fs
-      match: (?<=\S)\ {2,}(?=[^\s/])
+      match: (?<=\S)\ {2,}(?!=//)
     - comment: legal space
-      match: (?<=\S)\ (?=[^\s/])
+      match: (?<=\S)\ (?!=(\s|//))
     - include: '#code-region'
     - include: '#blank-line-error'
     - include: '#errant-bracket'

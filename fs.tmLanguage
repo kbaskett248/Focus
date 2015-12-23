@@ -457,7 +457,7 @@
 					<key>comment</key>
 					<string>Too many spaces in a conditional</string>
 					<key>match</key>
-					<string>(?&lt;=\S)\ {2,}(?=[^\s/])</string>
+					<string>(?&lt;=\S)\ {2,}(?!=//)</string>
 					<key>name</key>
 					<string>invalid.illegal.spaces.fs</string>
 				</dict>
@@ -465,7 +465,7 @@
 					<key>comment</key>
 					<string>legal space</string>
 					<key>match</key>
-					<string>(?&lt;=\S)\ (?=[^\s/])</string>
+					<string>(?&lt;=\S)\ (?!=(\s|//))</string>
 				</dict>
 				<dict>
 					<key>include</key>
