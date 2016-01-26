@@ -673,21 +673,31 @@ class HomeCareRing(Ring):
     """docstring for HomeCareRing"""
 
     def get_alias_list_path(self):
-        if not self.system_path:
-            return None
+        """
+        Function: get_alias_list_path
+        Summary: Determines an appropriate path to the Alias List File for
+            the current ring.
+        Returns: The path to the Alias List File if it exists. Otherwise None.
+        """
+        for path, file_ in itertools.product(
+                [self.system_path, self.server_path],
+                ['AliasList.mtIo', 'AliasList0.mtIo']):
+            if not (path and file_):
+                continue
+            alias_list_path = os.path.join(path, 'System', 'Translators',
+                                           file_)
+            if os.path.isfile(alias_list_path):
+                return alias_list_path
 
-        alias_list_path = os.path.join(
-            self.system_path, 'Translators', 'AliasList.mtIo')
-        if not os.path.isfile(alias_list_path):
-            alias_list_path = os.path.join(
-                self.system_path, 'Translators', 'AliasList0.mtIo')
-            if not os.path.isfile(alias_list_path):
-                alias_list_path = None
-
-        return alias_list_path
+        return None
 
     @property
     def alias_lookup(self):
+        """
+        Function: alias_lookup
+        Summary: Property storing the alias lookup dictionary for the ring.
+        Returns: The alias lookup dictionary
+        """
         try:
             return self._alias_lookup
         except AttributeError:
@@ -696,7 +706,10 @@ class HomeCareRing(Ring):
             return self._alias_lookup
 
     def load_aliases(self):
-        """Loads the alias lookup dictionary for the ring."""
+        """
+        Function: load_aliases
+        Summary: Loads the alias list into a dictionary
+        """
         self._alias_lookup = dict()
 
         if self.alias_list_path is None:
