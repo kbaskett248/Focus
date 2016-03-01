@@ -279,8 +279,9 @@ class UnitTestFocusFileCommand(FocusUnitTestCommand):
     def build_unit_test_file_contents(self, results_file):
         file_contents = sublime.load_resource(
             'Packages/Focus/resources/Unit Test Template.focus')
+        file_contents = file_contents.replace(os.linesep, '\n')
         file_contents += self.build_main_code_member(results_file)
-        file_contents += os.linesep + self.read_and_filter_view()
+        file_contents += '\n' + self.read_and_filter_view()
         return file_contents
 
     def read_and_filter_view(self):
@@ -363,7 +364,7 @@ class UnitTestFocusFileCommand(FocusUnitTestCommand):
             if include_lines:
                 lines.append(l)
 
-        return os.linesep.join(lines)
+        return '\n'.join(lines)
 
     def build_main_code_member(self, results_file):
         test_lines = []
@@ -385,7 +386,6 @@ class UnitTestFocusFileCommand(FocusUnitTestCommand):
                                             tests="\n".join(test_lines),
                                             results_file=results_file)
 
-        contents = contents.replace('\n', os.linesep)
         return contents
 
     def write_to_unit_test_file(self, contents):
@@ -399,7 +399,7 @@ class UnitTestFocusFileCommand(FocusUnitTestCommand):
             'PgmSource',
             first_folder,
             '{0}.UnitTest.P.focus'.format(match.group(1)))
-        with open(unit_test_file_name, 'w', newline='') as f:
+        with open(unit_test_file_name, 'w') as f:
             f.write(contents)
         return unit_test_file_name
 
