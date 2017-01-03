@@ -60,8 +60,7 @@ class FocusFunctionTrigger(CompletionTrigger):
                 'meta.function.arguments.translate-time.focus')
 
     def selection_check(self, prefix, locs):
-        """
-        Return a list of completion types for the current locations.
+        """Return a list of completion types for the current locations.
 
         If no completion types are handled for the current locations by this
         trigger, return an empty list.

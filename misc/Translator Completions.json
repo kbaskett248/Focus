@@ -1151,6 +1151,7 @@
                     "OnAfterFirstRender": {},
                     "OnEntry": {},
                     "OnExit": {},
+                    "OnWindowResize": {},
                     "ReqLegend": {
                         "completion_types": ["Translator"],
                         "completions": ["1","\"\"","leftA"]

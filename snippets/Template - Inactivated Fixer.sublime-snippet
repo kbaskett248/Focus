@@ -45,5 +45,5 @@ IF{A@@HhaZtMaintUtilities.Start()@NV;
     <!-- <tabTrigger>hello</tabTrigger> -->
     <!-- Optional: Set a scope to limit where the snippet will trigger -->
     <scope>source.focus</scope>
-    <description>Focus Tools: Template - Fixer</description>
+    <description>Focus Tools: Template - Retired Fixer</description>
 </snippet>

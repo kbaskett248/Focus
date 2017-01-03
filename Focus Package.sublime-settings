@@ -288,7 +288,9 @@
         "Find Message": "Hha\\HhaInterface.FindMessage.S.focus",
         "Super Task Browser": "Hha\\HhaTask.Redo.S.focus",
         "Manage Source Code": "Foc\\FocSource.Process.S.focus",
-        "Object Locker": "Hha\\HhaZt.ObjectLocker.S.focus"
+        "Object Locker": "Hha\\HhaZt.ObjectLocker.S.focus",
+        "DevWarning Log Parser": "Hha\\HhaZt.DevWarningLogParser.S.focus",
+        "Code Test Runner": "Hha\\HhaZtCodeTest.TestRunner.S.focus"
     },
 
     // 

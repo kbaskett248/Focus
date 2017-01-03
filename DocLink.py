@@ -1,4 +1,5 @@
 import functools
+import html
 import imp
 import json
 import logging
@@ -343,15 +344,16 @@ class FocusFunctionDocLink(DocLink, PreemptiveHighlight):
 
     def format_documentation_for_popup(self, doc):
         template = self.POPUP_DOC_TEMPLATE
-        if doc['extra info']:
-            doc['extra info'] = doc['extra info'].replace('\r', '').replace(
+        escaped_doc = {k: html.escape(v) for k, v in doc.items()}
+        if escaped_doc['extra info']:
+            escaped_doc['extra info'] = escaped_doc['extra info'].replace('\r', '').replace(
                 '\n', '<br />')
-        if doc['examples']:
+        if escaped_doc['examples']:
             template += self.CODE_EXAMPLES_TEMPLATE
-            doc['examples'] = doc['examples'].replace('\r', '').replace(
+            escaped_doc['examples'] = escaped_doc['examples'].replace('\r', '').replace(
                 '\n', '<br />')
         template += '</div>'
-        return template.format(**doc)
+        return template.format(**escaped_doc)
 
     def popup_navigate(self, href):
         """ Execute link callback """
@@ -693,16 +695,17 @@ class FSFunctionDocLink(DocLink, Highlight, StatusIdentifier):
 
     def format_documentation_for_popup(self, doc):
         template = self.POPUP_DOC_TEMPLATE
-        if doc['comments']:
+        escaped_doc = {k: html.escape(v) for k, v in doc.items()}
+        if escaped_doc['comments']:
             template += self.COMMENT_TEMPLATE
-            doc['comments'] = doc['comments'].replace('\n\r', '\n').replace(
+            escaped_doc['comments'] = escaped_doc['comments'].replace('\n\r', '\n').replace(
                 '\n', '<br />')
-        if doc['examples']:
+        if escaped_doc['examples']:
             template += self.CODE_EXAMPLES_TEMPLATE
-            doc['examples'] = doc['examples'].replace('\n\r', '\n').replace(
+            escaped_doc['examples'] = escaped_doc['examples'].replace('\n\r', '\n').replace(
                 '\n', '<br />')
         template += '</div>'
-        return template.format(**doc)
+        return template.format(**escaped_doc)
 
     def popup_navigate(self, href):
         """ Execute link callback """
@@ -1031,9 +1034,13 @@ class AliasDocLink(DocLink):
 
     def mt_file_or_view_iter(self):
         """
-        Generator that yields an MTView object or MTRingFile object along
-        with the file name for each file that needs to be checked.
-
+        Function: mt_file_or_view_iter
+        Summary: Generator that yields an MTView object or MTRingFile object
+            along with the file name for each file that needs to be checked.
+        Examples:
+            for view_or_file, file_name in self.mt_file_or_view_iter():
+                print(file_name)
+        Returns: A generator yielding all possible locations for the alias
         """
         ring_view = get_view(self.view)
         if ring_view is None:
