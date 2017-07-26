@@ -23,6 +23,7 @@ SETTINGS_INFO = (
     ('get_documentation_sections', 'documentation_sections',
      ["Purpose", "Arguments", "Preconditions", "Local Variables",
       "Data Structures", "Side Effects", "Returns", "Additional Notes"]),
+    ('get_documentation_indent', 'documentation_indent', '     '),
     ('get_focus_function_doc_url_overrides_setting',
      'focus_function_doc_url_overrides', {}),
     ('get_default_ring', 'default_ring', None),

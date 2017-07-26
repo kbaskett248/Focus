@@ -8,6 +8,7 @@ from ..tools.sublime import (
 from ..tools.settings import (
     get_documentation_sections,
     get_default_separators,
+    get_documentation_indent
 )
 
 
@@ -404,7 +405,6 @@ class CodeBlockDoc(object):
 
         header_match_object = re.compile(r'\s*//\s*:Doc\s*([a-zA-Z ]+?)\s*$')
         none_match_object = re.compile(r'//\s*None\s*$', re.MULTILINE)
-        body_prefix = '//     '
 
         def __init__(self, documentation, region=None, section=None):
             self.documentation = documentation
@@ -412,6 +412,7 @@ class CodeBlockDoc(object):
             self.separators = get_default_separators()
             self.separator_width = max(len(self.separators['alpha']),
                                        len(self.separators['numeric']))
+            self.body_prefix = '//' + get_documentation_indent()
 
             if region is not None:
                 self.region = region
@@ -507,14 +508,14 @@ class CodeBlockDoc(object):
                 a = self.documentation.snippet_counter
 
                 updated_content = '//:Doc {0}\n{1}${{{2}:None}}'.format(
-                    self.section, CodeBlockDoc.Region.body_prefix, a)
+                    self.section, self.body_prefix, a)
 
                 if not self.required:
                     updated_content = '${{{0}:{1}}}'.format(b,
                                                             updated_content)
             else:
                 updated_content = '//:Doc {0}\n{1}None'.format(
-                    self.section, CodeBlockDoc.Region.body_prefix)
+                    self.section, self.body_prefix)
 
             return updated_content
 
@@ -559,8 +560,6 @@ class CodeBlockDoc(object):
         special parsing and updating.
         """
 
-        body_prefix = '//     '
-
         def __init__(self, documentation, region=None, section=None):
             super(CodeBlockDoc.ArgumentsRegion, self).__init__(documentation,
                                                                region,
@@ -571,7 +570,7 @@ class CodeBlockDoc(object):
         def parse_doc(self):
             if self.current_body is not None:
                 # get initial indentation
-                indent = CodeBlockDoc.Region.body_prefix
+                indent = self.body_prefix
                 indent_match = re.search(
                     r"(//\s*)[|\{]?([A-Z]|\d{1,2})\s*[-=:.]\s*",
                     self.current_body)
@@ -617,7 +616,7 @@ class CodeBlockDoc(object):
                             self.documentation.snippet_counter)
 
                 updated_arg_text.append('{0}{1}{2}{3}'.format(
-                    CodeBlockDoc.Region.body_prefix, var, sep, content))
+                    self.body_prefix, var, sep, content))
             else:
                 updated_arg_text = self.format_list(arguments_in_use,
                                                     documented_args,
@@ -626,7 +625,7 @@ class CodeBlockDoc(object):
             # Add the arguments that are no longer used
             for arg, sep, content in documented_args.values():
                 updated_arg_text.append(
-                    CodeBlockDoc.Region.body_prefix + arg + sep +
+                    self.body_prefix + arg + sep +
                     '**Unused** ' + content)
 
             # Return the updated doc.
@@ -640,7 +639,8 @@ class CodeBlockDoc(object):
             return updated_content
 
         def format_list(self, l, documented_args, use_snippets,
-                        indent=body_prefix):
+                        indent=None):
+            indent = indent if indent is not None else self.body_prefix
             updated_arg_text = list()
             length = len(l)
             # print(documented_args)
@@ -753,7 +753,7 @@ class CodeBlockDoc(object):
                         content = '${{{0}:{1}}}'.format(
                             self.documentation.snippet_counter, content)
                 updated_var_text.append(
-                    CodeBlockDoc.Region.body_prefix + var + sep + content)
+                    self.body_prefix + var + sep + content)
 
             # Store the regenerated documentation
             self.updated_header = '//:Doc {0}'.format(self.section)
@@ -828,7 +828,7 @@ class CodeBlockDoc(object):
                             self.documentation.snippet_counter, content)
 
                 updated_set_text.append(
-                    CodeBlockDoc.Region.body_prefix + listset + sep + content)
+                    self.body_prefix + listset + sep + content)
 
             self.updated_header = '//:Doc ' + self.section
             if len(updated_set_text) == 0:

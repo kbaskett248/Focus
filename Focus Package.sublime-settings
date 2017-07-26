@@ -64,6 +64,10 @@
         "numeric_separator": ".  "
     },
 
+    // Defines the indentation of documentation lines below the documentation header for 
+    // new and updated documentation.
+    "documentation_indent": "     ",
+
     // DocLink Settings
     // The following settings are used to specify the wikis to use when querying for Focus and FS
     // documentation.

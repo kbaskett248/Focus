@@ -1,0 +1,4 @@
+- A setting was added to configure the hanging indent of function documentation. 
+  To modify this setting, open Preferences -> Package Settings -> Focus -> Settings. Then copy the documentation_indent
+  setting to your User settings.
+- The Settings and Keybindings menu items were updated to use the newer dual pane view.
