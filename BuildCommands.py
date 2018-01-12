@@ -81,6 +81,7 @@ class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
         except KeyError:
             path = self.ring.system_path
         finally:
+            path += ';' + os.environ["PATH"]
             new_kwargs['path'] = path
 
         logger.debug("kwargs=%s", new_kwargs)
