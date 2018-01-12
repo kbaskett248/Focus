@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from contextlib import contextmanager
 import functools
 import logging
 import os
@@ -29,6 +30,16 @@ logger = logging.getLogger(__name__)
 logger.setLevel('DEBUG')
 
 APPLICATION_PATTERN = re.compile(r"[A-Z][a-z]{1,2}")
+
+
+@contextmanager
+def modify_path(path):
+    if path:
+        old_path = os.environ["PATH"]
+        os.environ["PATH"] = os.path.expandvars(path)
+    yield
+    if path:
+        os.environ["PATH"] = old_path
 
 
 class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
@@ -193,64 +204,56 @@ class RingRunCommand(RingExecCommand):
             startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
         # Set temporary PATH to locate executable in cmd
-        if path:
-            old_path = os.environ["PATH"]
-            # The user decides in the build system whether he wants to append
-            # $PATH or tuck it at the front: "$PATH;C:\\new\\path",
-            # "C:\\new\\path;$PATH"
-            os.environ["PATH"] = os.path.expandvars(path)
+        with modify_path(path):
+            proc_env = os.environ.copy()
+            proc_env.update(env)
+            for k, v in proc_env.items():
+                proc_env[k] = os.path.expandvars(v)
 
-        proc_env = os.environ.copy()
-        proc_env.update(env)
-        for k, v in proc_env.items():
-            proc_env[k] = os.path.expandvars(v)
-
-        if shell_cmd:
-            if '<result_file>' in shell_cmd:
-                if not self.results_file_path:
-                    self.create_results_file()
-                shell_cmd = shell_cmd.replace('<result_file>',
-                                              self.results_file_path)
-
-            if sys.platform == "win32":
-                # Use shell=True on Windows, so shell_cmd is passed through
-                # with the correct escaping
-                subprocess.Popen(shell_cmd, startupinfo=startupinfo,
-                                 env=proc_env, shell=True)
-            elif sys.platform == "darwin":
-                # Use a login shell on OSX, otherwise the users expected env
-                # vars won't be setup
-                subprocess.Popen(["/bin/bash", "-l", "-c", shell_cmd],
-                                 startupinfo=startupinfo, env=proc_env,
-                                 shell=False)
-            elif sys.platform == "linux":
-                # Explicitly use /bin/bash on Linux, to keep Linux and OSX as
-                # similar as possible. A login shell is explicitly not used for
-                # linux, as it's not required
-                subprocess.Popen(["/bin/bash", "-c", shell_cmd],
-                                 startupinfo=startupinfo, env=proc_env,
-                                 shell=False)
-        else:
-            if isinstance(cmd, str):
+            if shell_cmd:
                 if '<result_file>' in shell_cmd:
                     if not self.results_file_path:
                         self.create_results_file()
-                    cmd = cmd.replace('<result_file>', self.results_file_path)
+                    shell_cmd = shell_cmd.replace('<result_file>',
+                                                  self.results_file_path)
+
+                if sys.platform == "win32":
+                    # Use shell=True on Windows, so shell_cmd is passed through
+                    # with the correct escaping
+                    subprocess.Popen(shell_cmd, startupinfo=startupinfo,
+                                     env=proc_env, shell=True)
+                elif sys.platform == "darwin":
+                    # Use a login shell on OSX, otherwise the users expected env
+                    # vars won't be setup
+                    subprocess.Popen(["/bin/bash", "-l", "-c", shell_cmd],
+                                     startupinfo=startupinfo, env=proc_env,
+                                     shell=False)
+                elif sys.platform == "linux":
+                    # Explicitly use /bin/bash on Linux, to keep Linux and OSX as
+                    # similar as possible. A login shell is explicitly not used for
+                    # linux, as it's not required
+                    subprocess.Popen(["/bin/bash", "-c", shell_cmd],
+                                     startupinfo=startupinfo, env=proc_env,
+                                     shell=False)
             else:
-                updated_cmd = []
-                for a in cmd:
-                    if '<result_file>' in a:
+                if isinstance(cmd, str):
+                    if '<result_file>' in cmd:
                         if not self.results_file_path:
                             self.create_results_file()
-                        a.replace('<result_file>', self.results_file_path)
-                    updated_cmd.append(a)
-                cmd = updated_cmd
+                        cmd = cmd.replace('<result_file>', self.results_file_path)
+                else:
+                    updated_cmd = []
+                    for a in cmd:
+                        if '<result_file>' in a:
+                            if not self.results_file_path:
+                                self.create_results_file()
+                            a.replace('<result_file>', self.results_file_path)
+                        updated_cmd.append(a)
+                    cmd = updated_cmd
 
-            # Old style build system, just do what it asks
-            subprocess.Popen(cmd, env=proc_env, shell=shell)
+                # Old style build system, just do what it asks
+                subprocess.Popen(cmd, env=proc_env, shell=shell)
 
-        if path:
-            os.environ["PATH"] = old_path
 
     def create_results_file(self):
         """
