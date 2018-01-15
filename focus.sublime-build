@@ -10,6 +10,7 @@
         {   "name": "Translate",
             "target": "window_translate_ring_file",
             "exec_cmd": "enhanced_exec",
+            "path": "$RING_PATH\\System;$PATH",
             "encoding": "ascii",
             "startup_info": false
         },
@@ -17,12 +18,14 @@
         {   "name": "Format",
             "target": "window_format_ring_file",
             "exec_cmd": "enhanced_exec",
+            "path": "$RING_PATH\\System;$PATH",
             "encoding": "ascii",
             "startup_info": false
         },
 
         {   "name": "Run",
             "target": "window_run_ring_file",
+            "path": "$RING_PATH\\System;$PATH",
             "startup_info": false
         },
 
@@ -30,6 +33,7 @@
             "target": "window_translate_ring_file",
             "encoding": "ascii",
             "exec_cmd": "enhanced_exec",
+            "path": "$RING_PATH\\System;$PATH",
             "startup_info": false,
             "translate_all": true
         },
@@ -37,6 +41,7 @@
         {   "name": "Code Execution Tree",
             "target": "window_code_execution_tree",
             "exec_cmd": "enhanced_exec",
+            "path": "$RING_PATH\\System;$PATH",
             "encoding": "ascii",
             "startup_info": false
         },
