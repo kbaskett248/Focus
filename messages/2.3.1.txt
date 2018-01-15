@@ -1,0 +1,3 @@
+Improvements to the handling of PATH in build commands. 
+The PATH is no longer totally overwritten. Instead, the Ring/System
+path is prepended to the existing path.
