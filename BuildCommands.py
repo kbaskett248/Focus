@@ -196,6 +196,8 @@ class RingRunCommand(RingExecCommand):
             startupinfo = subprocess.STARTUPINFO()
             startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
+        env['RING_PATH'] = self.ring.path
+
         with updated_environ(env):
             proc_env = os.environ.copy()
             if path:
@@ -231,23 +233,24 @@ class RingRunCommand(RingExecCommand):
 
     @staticmethod
     def launch_shell_command(shell_cmd, startupinfo, env):
+        logger.debug("env:%s", env)
         if sys.platform == "win32":
             # Use shell=True on Windows, so shell_cmd is passed through
             # with the correct escaping
             subprocess.Popen(shell_cmd, startupinfo=startupinfo,
-                             env=proc_env, shell=True)
+                             env=env, shell=True)
         elif sys.platform == "darwin":
             # Use a login shell on OSX, otherwise the users expected env
             # vars won't be setup
             subprocess.Popen(["/bin/bash", "-l", "-c", shell_cmd],
-                             startupinfo=startupinfo, env=proc_env,
+                             startupinfo=startupinfo, env=env,
                              shell=False)
         elif sys.platform == "linux":
             # Explicitly use /bin/bash on Linux, to keep Linux and OSX as
             # similar as possible. A login shell is explicitly not used for
             # linux, as it's not required
             subprocess.Popen(["/bin/bash", "-c", shell_cmd],
-                             startupinfo=startupinfo, env=proc_env,
+                             startupinfo=startupinfo, env=env,
                              shell=False)
 
 
