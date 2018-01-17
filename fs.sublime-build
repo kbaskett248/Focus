@@ -9,6 +9,7 @@
 
         {   "name": "Translate",
             "target": "window_translate_ring_file",
+            "path": "$RING_PATH\\System;$PATH",
             "encoding": "ascii",
             "exec_cmd": "enhanced_exec",
             "startup_info": false
@@ -16,11 +17,13 @@
 
         {   "name": "Run",
             "target": "window_run_ring_file",
+            "path": "$RING_PATH\\System;$PATH",
             "startup_info": false
         },
 
         {   "name": "Translate All",
             "target": "window_translate_ring_file",
+            "path": "$RING_PATH\\System;$PATH",
             "encoding": "ascii",
             "exec_cmd": "enhanced_exec",
             "startup_info": false,
