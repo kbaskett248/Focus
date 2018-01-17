@@ -145,19 +145,8 @@ class LaunchFocusUtilityCommand(RingCommand):
                 'Cannot launch %s in %s' % (utility, ring.id))
             return
 
-        sublime.run_command('app_run_ring_file', {'file_name': full_path})
-        # if ring.run_file_nice(partial_path=partial_path):
-        #     sublime.status_message(
-        #         'Launching {0} in {1}'.format(utility, ring.name))
-        #     logger.debug('Successful')
-        # elif (utility == 'Edit Object'):
-        #     partial_path = os.path.join('PgmObject', 'Foc',
-        #                                 'FocObj.Ee.S.mps')
-        #     if ring.run_file_nice(partial_path=partial_path):
-        #         sublime.status_message(
-        #             'Launching {0} in {1}'.format(utility, ring.ring))
-        #         logger.debug('Successful')
-
+        sublime.run_command('app_run_ring_file', {'file_name': full_path,
+                                                  'path': '$RING_PATH\\System;$PATH'})
 
     def choose_utility(self, ring, **kwargs):
         """Displays a quick list for choosing a utility."""

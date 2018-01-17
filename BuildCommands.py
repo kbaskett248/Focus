@@ -27,7 +27,7 @@ from .tools.settings import (
 )
 
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
+# logger.setLevel('INFO')
 
 APPLICATION_PATTERN = re.compile(r"[A-Z][a-z]{1,2}")
 
@@ -228,11 +228,11 @@ class RingRunCommand(RingExecCommand):
                     updated_cmd.append(a)
                 cmd = updated_cmd
 
-            # Old style build system, just do what it asks
             subprocess.Popen(cmd, env=proc_env, shell=shell)
 
     @staticmethod
     def launch_shell_command(shell_cmd, startupinfo, env):
+        logger.debug("shell_cmd: %s", shell_cmd)
         logger.debug("env:%s", env)
         if sys.platform == "win32":
             # Use shell=True on Windows, so shell_cmd is passed through
