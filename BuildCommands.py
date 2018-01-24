@@ -35,11 +35,16 @@ APPLICATION_PATTERN = re.compile(r"[A-Z][a-z]{1,2}")
 @contextmanager
 def updated_environ(env):
     old_env = os.environ.copy()
-    os.environ.update(env)
+    for k, v in env.items():
+        os.environ[k] = v
     try:
         yield
     finally:
-        os.environ = old_env
+        for k in env.keys():
+            try:
+                os.environ[k] = old_env[k]
+            except KeyError:
+                del os.environ[k]
 
 
 class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
