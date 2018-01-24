@@ -1,0 +1,60 @@
+<snippet>
+    <content><![CDATA[
+//:Doc Purpose
+//     External Page Set for $1
+//:Doc Additional Notes
+//     
+
+
+//------------------------------------------------------------------------------
+#Translation
+  :Options
+    Result                        MSFile
+
+  :Product
+    Type                          ExternalPageSet
+
+
+//------------------------------------------------------------------------------
+#Preamble
+  :Options
+    Type                          Program
+
+
+//------------------------------------------------------------------------------
+#ScreenRecord
+$0
+
+
+//------------------------------------------------------------------------------
+#ScreenComponent
+
+
+//------------------------------------------------------------------------------
+#ScreenPage
+  :ContainerPage                  Name
+    :Container                    TaskPage
+      :Container                  TaskBlock
+        Label                     "Label"
+        VAlign                    "Top"
+        Align                     "Center"
+        
+      :EndContainer               TaskBlock
+    :EndContainer                 TaskPage
+
+
+//------------------------------------------------------------------------------
+#Locals
+
+
+//------------------------------------------------------------------------------
+#Magic
+
+
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <!-- <tabTrigger>hello</tabTrigger> -->
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.focus</scope>
+    <description>Focus Tools: Empty External Page Set Template</description>
+</snippet>
