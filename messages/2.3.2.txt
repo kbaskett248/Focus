@@ -1,0 +1,1 @@
+Fixes an issue that caused DocLink to sometimes find the wrong alias definition.

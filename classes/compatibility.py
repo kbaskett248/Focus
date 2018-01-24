@@ -136,7 +136,7 @@ class FSCompatibility(metaclass=abc.ABCMeta):
         pass
 
     def find_member(self, name):
-        reg_ex = r"^ *:(Code|List) +({name})\b".format(name=name)
+        reg_ex = r"^ *:(Code|List) +({name})\b *$".format(name=name)
         return string_search(self.get_contents(),
                              reg_ex,
                              match_group=2,
@@ -356,7 +356,7 @@ class FocusCompatibility(FSCompatibility):
             return None
 
         reg_ex = (r"^([ \t]*:|:EntryPoint[ \t]+(?P<subroutine>\S+)\s+)"
-                  r"Alias[ \t]+(?P<alias>{name})\b").format(name=name)
+                  r"Alias[ \t]+(?P<alias>{name})\b *$").format(name=name)
 
         match = re.search(reg_ex, self.get_contents(), re.MULTILINE)
         if match is None:
