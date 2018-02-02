@@ -9,7 +9,7 @@ import sys
 import urllib
 
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
+# logger.setLevel('DEBUG')
 
 try:
     from bs4 import BeautifulSoup
