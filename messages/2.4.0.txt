@@ -1,0 +1,1 @@
+Adds syntax highlighting for named variables
