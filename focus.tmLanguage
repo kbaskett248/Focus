@@ -255,6 +255,43 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>begin</key>
+					<string>^(var:) *</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>Named Variable Declaration</string>
+					<key>end</key>
+					<string>$</string>
+					<key>name</key>
+					<string>meta.variable.other.local.named.declaration</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#named-local</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>\ </string>
+						</dict>
+						<dict>
+							<key>comment</key>
+							<string>Invalid Named Variable</string>
+							<key>match</key>
+							<string>[^A-Za-z][A-Za-z0-9]*</string>
+							<key>name</key>
+							<string>invalid.illegal.named-variable</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
 					<key>include</key>
 					<string>#code-region</string>
 				</dict>
@@ -455,6 +492,10 @@
 				<dict>
 					<key>include</key>
 					<string>#errant-bracket</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#named-local</string>
 				</dict>
 			</array>
 		</dict>
@@ -771,20 +812,20 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(@(\{)|(\{)(?=\})|(\{))</string>
+					<string>@(\{)|(\{(?=\}))|(\{)</string>
 					<key>beginCaptures</key>
 					<dict>
-						<key>2</key>
+						<key>1</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.list.begin.fs</string>
 						</dict>
-						<key>3</key>
+						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.list.begin.fs meta.empty-list.fs</string>
 						</dict>
-						<key>5</key>
+						<key>3</key>
 						<dict>
 							<key>name</key>
 							<string>punctuation.definition.list.begin.fs</string>
@@ -1570,6 +1611,15 @@
 					<string>#control_flow</string>
 				</dict>
 			</array>
+		</dict>
+		<key>named-local</key>
+		<dict>
+			<key>comment</key>
+			<string>Named Variable</string>
+			<key>match</key>
+			<string>[A-Za-z][A-Za-z0-9]*</string>
+			<key>name</key>
+			<string>meta.variable.other.local.named.declaration.instance constant.numeric</string>
 		</dict>
 		<key>object_attribute</key>
 		<dict>

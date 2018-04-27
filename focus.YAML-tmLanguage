@@ -135,6 +135,18 @@ repository:
       '3': {name: meta.value.keyword.focus entity.name.subroutine.fs}
     end: ;
     patterns:
+    - comment: Named Variable Declaration
+      name: meta.variable.other.local.named.declaration
+      begin: '^(var:) *'
+      beginCaptures:
+        '1': {name: keyword.other}
+      end: '$'
+      patterns:
+      - include: '#named-local'
+      - match: '\ '
+      - comment: Invalid Named Variable
+        match: '[^A-Za-z][A-Za-z0-9]*'
+        name: invalid.illegal.named-variable
     - include: '#code-region'
 
   code-region:
@@ -221,6 +233,9 @@ repository:
 
     - include: '#errant-bracket'
 
+    # This needs to be at the end so it doesn't find anything else it shouldn't
+    - include: '#named-local'
+
   control_flow:
     patterns:
     - comment: "Conditional: IF{},@IF{}"
@@ -288,11 +303,11 @@ repository:
 
     - comment: "Build List: {},@{}"
       name: meta.control.flow.list.fs
-      begin: '(@(\{)|(\{)(?=\})|(\{))'
+      begin: '@(\{)|(\{(?=\}))|(\{)'
       beginCaptures:
-        '2': {name: punctuation.definition.list.begin.fs}
-        '3': {name: punctuation.definition.list.begin.fs meta.empty-list.fs}
-        '5': {name: punctuation.definition.list.begin.fs}
+        '1': {name: punctuation.definition.list.begin.fs}
+        '2': {name: punctuation.definition.list.begin.fs meta.empty-list.fs}
+        '3': {name: punctuation.definition.list.begin.fs}
       end: (((?<=[^@]\{)\})|\})
       endCaptures:
         '1': {name: punctuation.definition.list.end.fs}
@@ -707,3 +722,8 @@ repository:
     comment: Starting a new code block before the previous one is finished
     name: invalid.illegal.block-start.fs
     match: ':(Code|List)\s*.*'
+
+  named-local:
+    comment: Named Variable
+    match: '[A-Za-z][A-Za-z0-9]*'
+    name: meta.variable.other.local.named.declaration.instance constant.numeric
