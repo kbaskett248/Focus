@@ -1,0 +1,51 @@
+<snippet>
+    <content><![CDATA[
+//------------------------------------------------------------------------------
+//:Doc Purpose
+//     None
+//:Doc Additional Notes
+//     None
+
+
+//------------------------------------------------------------------------------
+#Translation
+  :Options
+    Result                        MSFile
+  :Product
+    Type                          WebRoutine
+
+
+//------------------------------------------------------------------------------
+#Preamble
+  :Options
+    Type                          WebRoutine
+
+
+//------------------------------------------------------------------------------
+#WebRoutine
+  :Program
+    Arrangement                   MainArrangement
+
+  :Arrangement                    MainArrangement
+    Direction                     Vertical
+    Units                         Percentage
+    StyleSheet                    {"Hha","HhaWeb.Styles.Hha.WS"}
+    :ArrangedItem
+      Size                        Remainder
+      Type                        Panel
+      Panel                       MainPanel
+
+
+//------------------------------------------------------------------------------
+#WebComponent
+  :VerticalPanel                  MainPanel
+    :PanelItem
+      DirectText                  "Hello World!"
+
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <!-- <tabTrigger>hello</tabTrigger> -->
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.focus</scope>
+    <description>Focus Tools: Empty Web Routine Template</description>
+</snippet>

@@ -71,7 +71,7 @@
     // DocLink Settings
     // The following settings are used to specify the wikis to use when querying for Focus and FS
     // documentation.
-    "focus_wiki": "http://stxwiki/wiki10/",
+    "focus_wiki": "http://stxwiki/wiki11/",
     "fs_wiki": "http://stxwiki/magicfs6/",
 
     // This controls where documentation is shown for DocLink. The options are:
@@ -245,7 +245,8 @@
         ":List",
         ":Object",
         ":Source",
-        ":Name"
+        ":Name",
+        ":PaletteEntry"
     ],
 
 
