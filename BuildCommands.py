@@ -201,7 +201,7 @@ class RingRunCommand(RingExecCommand):
 
         # Hide the console window on Windows
         startupinfo = None
-        if startup_info and os.name == "nt":
+        if os.name == "nt":
             startupinfo = subprocess.STARTUPINFO()
             startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
