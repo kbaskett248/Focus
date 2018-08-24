@@ -22,7 +22,7 @@
 
         {   "name": "Run",
             "target": "window_run_ring_file",
-            // "path": "$RING_PATH\\System;$PATH"
+            "path": "$RING_PATH\\System;$PATH"
         },
 
         {   "name": "Translate All",
