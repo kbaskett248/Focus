@@ -295,6 +295,10 @@
 					<key>include</key>
 					<string>#code-region</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#named-local</string>
+				</dict>
 			</array>
 		</dict>
 		<key>code-region</key>
@@ -493,10 +497,6 @@
 					<key>include</key>
 					<string>#errant-bracket</string>
 				</dict>
-				<dict>
-					<key>include</key>
-					<string>#named-local</string>
-				</dict>
 			</array>
 		</dict>
 		<key>comment</key>
@@ -608,6 +608,10 @@
 				<dict>
 					<key>include</key>
 					<string>#code-region</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#named-local</string>
 				</dict>
 			</array>
 		</dict>
@@ -736,6 +740,10 @@
 							<key>include</key>
 							<string>#code-region</string>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>#named-local</string>
+						</dict>
 					</array>
 				</dict>
 				<dict>
@@ -768,6 +776,10 @@
 						<dict>
 							<key>include</key>
 							<string>#code-region</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#named-local</string>
 						</dict>
 					</array>
 				</dict>
@@ -807,6 +819,10 @@
 						<dict>
 							<key>include</key>
 							<string>#code-region</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#named-local</string>
 						</dict>
 					</array>
 				</dict>
@@ -861,6 +877,10 @@
 						<dict>
 							<key>include</key>
 							<string>#code-region</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#named-local</string>
 						</dict>
 					</array>
 				</dict>
@@ -1136,7 +1156,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^ *(:(Index|IndexKey)) +([\w.]+) *$\n?</string>
+			<string>^ *(:(Index|IndexKey)) +(\w[\w._\- ]*?) *$\n?</string>
 			<key>name</key>
 			<string>meta.keyword.object.focus</string>
 		</dict>
@@ -1468,7 +1488,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?&lt;=FileBatchesWhile\()([\w._-]+)(,[^\n()\t]+)</string>
+					<string>(?&lt;=FileBatchesWhile\()(\w[\w._\- ]*?)(,[^\n()\t]+)</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -1490,19 +1510,19 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=OID\(|RID\(|RIDs\(|OIDs\()[\w._-]+</string>
+					<string>(?&lt;=OID\(|RID\(|RIDs\(|RIDsAscending\(|OIDs\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=CallStructuredImport\(|CallStructuredCreate\(|CallStructuredCopyLocal\(|CallStructuredExport\(|CallStructuredExportTxn\(|CallStructuredFlush\(|CallStructuredSubmit\(|CallStructuredPurge\()[\w._-]+</string>
+					<string>(?&lt;=CallStructuredImport\(|CallStructuredCreate\(|CallStructuredCopyLocal\(|CallStructuredExport\(|CallStructuredExportTxn\(|CallStructuredFlush\(|CallStructuredSubmit\(|CallStructuredPurge\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=ObjectLong\(|ProcessLong\()[\w._-]+</string>
+					<string>(?&lt;=ObjectLong\(|ProcessLong\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
@@ -1516,7 +1536,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?&lt;=CallStructuredImportAdditional\()([\w._-]+),[\w._-]+</string>
+					<string>(?&lt;=CallStructuredImportAdditional\()(\w[\w._\- ]*),[\w._-]+</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -1528,7 +1548,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?&lt;=Field\(|Key\(|FieldExternal\(|KeyExternal\(|ElementLabel\()([aqt]\!)?[\w._-]+</string>
+					<string>(?&lt;=Field\(|Key\(|FieldExternal\(|KeyExternal\(|ElementLabel\()([aqt]\!)?\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
@@ -1542,67 +1562,67 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?&lt;=File\(|Record\(|Records\(|FileCx\(|RecordCx\(|RecordsCx\(|Object\(|Objects\(|ObjectClass\()([aqt]\!)?[\w._-]+</string>
+					<string>(?&lt;=File\(|Record\(|Records\(|FileCx\(|RecordCx\(|RecordsCx\(|Object\(|Objects\(|ObjectClass\()([aqt]\!)?\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=LockSystemInfo\(|LockParams\(|LockValue\()[\w._-]+</string>
+					<string>(?&lt;=LockSystemInfo\(|LockParams\(|LockValue\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=IndexLookup\(|Index\(|IndexEntry\(|IndexLookupCx\(|IndexLookupResults\(|IndexEntries\()[\w._-]+</string>
+					<string>(?&lt;=IndexLookup\(|Index\(|IndexEntry\(|IndexLookupCx\(|IndexLookupResults\(|IndexEntries\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=FullyInMemory\(|AsMemoryOnly\()[\w._-]+</string>
+					<string>(?&lt;=FullyInMemory\(|AsMemoryOnly\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=NextURN\()[\w._-]+</string>
+					<string>(?&lt;=NextURN\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=NoDuplicateCheck\()[\w._-]+</string>
+					<string>(?&lt;=NoDuplicateCheck\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=ToOID\(|ToOIDCx\()[\w._-]+</string>
+					<string>(?&lt;=ToOID\(|ToOIDCx\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=RecordsChanged\(|RecordChanged\(|ObjectChanged\(|RecordCreated\(|RecordsCreated\()[\w._-]+</string>
+					<string>(?&lt;=RecordsChanged\(|RecordChanged\(|ObjectChanged\(|RecordCreated\(|RecordsCreated\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=RecordTag\()[\w._-]+</string>
+					<string>(?&lt;=RecordTag\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=ObjectSnapshot\(|SnapshotExists\()[\w._-]+</string>
+					<string>(?&lt;=ObjectSnapshot\(|SnapshotExists\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=FlushWithTxn\()[\w._-]+</string>
+					<string>(?&lt;=FlushWithTxn\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>
@@ -1617,7 +1637,7 @@
 			<key>comment</key>
 			<string>Named Variable</string>
 			<key>match</key>
-			<string>[A-Za-z][A-Za-z0-9]*</string>
+			<string>\b[A-Za-z][A-Za-z0-9]*</string>
 			<key>name</key>
 			<string>meta.variable.other.local.named.declaration.instance constant.numeric</string>
 		</dict>
@@ -1639,7 +1659,7 @@
 			<key>comment</key>
 			<string>M-AT Attribute</string>
 			<key>match</key>
-			<string>^ *(Name|File|Class|Record|Index|Pointer) +([\w.]+) *$\n?</string>
+			<string>^ *(Name|File|Class|Record|Index|Pointer) +(\w[\w._\- ]*?) *$\n?</string>
 			<key>name</key>
 			<string>meta.attribute.object.focus</string>
 		</dict>
@@ -1659,7 +1679,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^ *(:(Object|Record|File|Field|Key|Element)) +([\w.]+) *$\n?</string>
+			<string>^ *(:(Object|Record|File|Field|Key|Element)) +(\w[\w._\- ]*?) *$\n?</string>
 			<key>name</key>
 			<string>meta.keyword.object.focus</string>
 		</dict>
@@ -1950,7 +1970,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=SortRecords\()[\w._-]+</string>
+					<string>(?&lt;=SortRecords\()\w[\w._\- ]*?</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>

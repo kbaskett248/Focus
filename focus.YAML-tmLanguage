@@ -148,6 +148,8 @@ repository:
         match: '[^A-Za-z][A-Za-z0-9]*'
         name: invalid.illegal.named-variable
     - include: '#code-region'
+    # This needs to be at the end so it doesn't find anything else it shouldn't
+    - include: '#named-local'
 
   code-region:
     patterns:
@@ -233,9 +235,6 @@ repository:
 
     - include: '#errant-bracket'
 
-    # This needs to be at the end so it doesn't find anything else it shouldn't
-    - include: '#named-local'
-
   control_flow:
     patterns:
     - comment: "Conditional: IF{},@IF{}"
@@ -276,6 +275,8 @@ repository:
         '0': {name: punctuation.definition.loop.end.fs}
       patterns:
       - include: '#code-region'
+      # This needs to be at the end so it doesn't find anything else it shouldn't
+      - include: '#named-local'
 
     - comment: "Pass-through: []"
       name: meta.control.flow.pass-through.fs
@@ -287,6 +288,8 @@ repository:
         '0': {name: punctuation.definition.pass-through.end.fs}
       patterns:
       - include: '#code-region'
+      # This needs to be at the end so it doesn't find anything else it shouldn't
+      - include: '#named-local'
 
     - comment: "Concatenation: (),@()"
       name: meta.control.flow.concatenate.fs
@@ -300,6 +303,8 @@ repository:
       - name: punctuation.definition.separator.comma.fs 
         match: ","
       - include: '#code-region'
+      # This needs to be at the end so it doesn't find anything else it shouldn't
+      - include: '#named-local'
 
     - comment: "Build List: {},@{}"
       name: meta.control.flow.list.fs
@@ -316,6 +321,8 @@ repository:
       - name: punctuation.definition.separator.comma.fs
         match: ","
       - include: '#code-region'
+      # This needs to be at the end so it doesn't find anything else it shouldn't
+      - include: '#named-local'
 
   conditional-line:
     comment: "A condition and action within a DO loop or IF statement"
@@ -343,6 +350,8 @@ repository:
     - comment: legal space
       match: (?<=\S)\ (?!(\s|//))
     - include: '#code-region'
+    # This needs to be at the end so it doesn't find anything else it shouldn't
+    - include: '#named-local'
 
   datadef_translator:
     comment: Translator - #Datadef
@@ -488,7 +497,7 @@ repository:
       '0': {name: support.function.focus}
     patterns:
     - name: variable.parameter.object.focus
-      match: (?<=SortRecords\()[\w._-]+
+      match: (?<=SortRecords\()\w[\w._\- ]*?
     - match: ',[AD](?=\))'
     - include: '#code-region'
 
@@ -506,7 +515,7 @@ repository:
     - match: '(?<=CallSub\(|CallList\(|CodeMemberNumber\(|BatchesToStackWhile\()([^\n()\t]+)'
       captures:
         '1': {name: entity.name.subroutine.fs}
-    - match: '(?<=FileBatchesWhile\()([\w._-]+)(,[^\n()\t]+)'
+    - match: '(?<=FileBatchesWhile\()(\w[\w._\- ]*?)(,[^\n()\t]+)'
       captures:
         '1': {name: variable.parameter.object.focus}
         '2': {name: entity.name.subroutine.fs}
@@ -517,62 +526,62 @@ repository:
     - name: variable.other.state.focus
       match: (?<=(Get|Put)StateVariable\()[\w._-]+
     - name: variable.parameter.object.focus
-      match: (?<=OID\(|RID\(|RIDs\(|OIDs\()[\w._-]+
+      match: (?<=OID\(|RID\(|RIDs\(|RIDsAscending\(|OIDs\()\w[\w._\- ]*
     - name: variable.parameter.object.focus
-      match: (?<=CallStructuredImport\(|CallStructuredCreate\(|CallStructuredCopyLocal\(|CallStructuredExport\(|CallStructuredExportTxn\(|CallStructuredFlush\(|CallStructuredSubmit\(|CallStructuredPurge\()[\w._-]+
+      match: (?<=CallStructuredImport\(|CallStructuredCreate\(|CallStructuredCopyLocal\(|CallStructuredExport\(|CallStructuredExportTxn\(|CallStructuredFlush\(|CallStructuredSubmit\(|CallStructuredPurge\()\w[\w._\- ]*
     - name: variable.parameter.object.focus
-      match: (?<=ObjectLong\(|ProcessLong\()[\w._-]+
-    - match: (?<=CallStructuredImportAdditional\()([\w._-]+),[\w._-]+
+      match: (?<=ObjectLong\(|ProcessLong\()\w[\w._\- ]*
+    - match: (?<=CallStructuredImportAdditional\()(\w[\w._\- ]*),[\w._-]+
       captures:
         '1': {name: variable.parameter.object.focus}
     - name: variable.parameter.object.focus
-      match: (?<=Field\(|Key\(|FieldExternal\(|KeyExternal\(|ElementLabel\()([aqt]\!)?[\w._-]+
+      match: (?<=Field\(|Key\(|FieldExternal\(|KeyExternal\(|ElementLabel\()([aqt]\!)?\w[\w._\- ]*
       captures:
         '1': {name: markup.bold}
     - name: variable.parameter.object.focus
-      match: (?<=File\(|Record\(|Records\(|FileCx\(|RecordCx\(|RecordsCx\(|Object\(|Objects\(|ObjectClass\()([aqt]\!)?[\w._-]+
+      match: (?<=File\(|Record\(|Records\(|FileCx\(|RecordCx\(|RecordsCx\(|Object\(|Objects\(|ObjectClass\()([aqt]\!)?\w[\w._\- ]*
       captures:
         '1': {name: markup.bold}
     - name: variable.parameter.object.focus
-      match: (?<=LockSystemInfo\(|LockParams\(|LockValue\()[\w._-]+
+      match: (?<=LockSystemInfo\(|LockParams\(|LockValue\()\w[\w._\- ]*
     - name: variable.parameter.object.focus
-      match: (?<=IndexLookup\(|Index\(|IndexEntry\(|IndexLookupCx\(|IndexLookupResults\(|IndexEntries\()[\w._-]+
+      match: (?<=IndexLookup\(|Index\(|IndexEntry\(|IndexLookupCx\(|IndexLookupResults\(|IndexEntries\()\w[\w._\- ]*
     - name: variable.parameter.object.focus
-      match: (?<=FullyInMemory\(|AsMemoryOnly\()[\w._-]+
+      match: (?<=FullyInMemory\(|AsMemoryOnly\()\w[\w._\- ]*
     - name: variable.parameter.object.focus
-      match: (?<=NextURN\()[\w._-]+
+      match: (?<=NextURN\()\w[\w._\- ]*
     - name: variable.parameter.object.focus
-      match: (?<=NoDuplicateCheck\()[\w._-]+
+      match: (?<=NoDuplicateCheck\()\w[\w._\- ]*
     - name: variable.parameter.object.focus
-      match: (?<=ToOID\(|ToOIDCx\()[\w._-]+
+      match: (?<=ToOID\(|ToOIDCx\()\w[\w._\- ]*
     - name: variable.parameter.object.focus
-      match: (?<=RecordsChanged\(|RecordChanged\(|ObjectChanged\(|RecordCreated\(|RecordsCreated\()[\w._-]+
+      match: (?<=RecordsChanged\(|RecordChanged\(|ObjectChanged\(|RecordCreated\(|RecordsCreated\()\w[\w._\- ]*
     - name: variable.parameter.object.focus
-      match: (?<=RecordTag\()[\w._-]+
+      match: (?<=RecordTag\()\w[\w._\- ]*
     - name: variable.parameter.object.focus
-      match: (?<=ObjectSnapshot\(|SnapshotExists\()[\w._-]+
+      match: (?<=ObjectSnapshot\(|SnapshotExists\()\w[\w._\- ]*
     - name: variable.parameter.object.focus
-      match: (?<=FlushWithTxn\()[\w._-]+
+      match: (?<=FlushWithTxn\()\w[\w._\- ]*
     - include: '#control_flow'
 
   object_attribute:
     comment: M-AT Attribute
     name: meta.attribute.object.focus
-    match: ^ *(Name|File|Class|Record|Index|Pointer) +([\w.]+) *$\n?
+    match: ^ *(Name|File|Class|Record|Index|Pointer) +(\w[\w._\- ]*?) *$\n?
     captures:
       '1': {name: keyword.other.attribute.focus}
       '2': {name: meta.value.attribute.focus variable.parameter.object.focus}
 
   object_keyword:
     name: meta.keyword.object.focus
-    match: ^ *(:(Object|Record|File|Field|Key|Element)) +([\w.]+) *$\n?
+    match: ^ *(:(Object|Record|File|Field|Key|Element)) +(\w[\w._\- ]*?) *$\n?
     captures:
       '1': {name: keyword.other.keyword.focus}
       '3': {name: meta.value.keyword.focus variable.parameter.object.focus}
 
   index_keyword:
     name: meta.keyword.object.focus
-    match: ^ *(:(Index|IndexKey)) +([\w.]+) *$\n?
+    match: ^ *(:(Index|IndexKey)) +(\w[\w._\- ]*?) *$\n?
     captures:
       '1': {name: keyword.other.keyword.focus}
       '3': {name: meta.value.keyword.focus variable.parameter.object.focus}
@@ -725,5 +734,5 @@ repository:
 
   named-local:
     comment: Named Variable
-    match: '[A-Za-z][A-Za-z0-9]*'
+    match: '\b[A-Za-z][A-Za-z0-9]*'
     name: meta.variable.other.local.named.declaration.instance constant.numeric
