@@ -2,48 +2,42 @@
     "target": "window_translate_ring_file",
     "selector": "source.focus",
     "encoding": "ascii",
-    "exec_cmd": "enhanced_exec",
-    "startup_info": false,
+    // "exec_cmd": "enhanced_exec",
 
     "variants": [
 
         {   "name": "Translate",
             "target": "window_translate_ring_file",
-            "exec_cmd": "enhanced_exec",
-            "path": "$RING_PATH\\System;$PATH",
-            "encoding": "ascii",
-            "startup_info": false
+            // "exec_cmd": "enhanced_exec",
+            // "path": "$RING_PATH\\System;$PATH",
+            "encoding": "ascii"
         },
 
         {   "name": "Format",
             "target": "window_format_ring_file",
-            "exec_cmd": "enhanced_exec",
-            "path": "$RING_PATH\\System;$PATH",
-            "encoding": "ascii",
-            "startup_info": false
+            // "exec_cmd": "enhanced_exec",
+            // "path": "$RING_PATH\\System;$PATH",
+            "encoding": "ascii"
         },
 
         {   "name": "Run",
             "target": "window_run_ring_file",
-            "path": "$RING_PATH\\System;$PATH",
-            "startup_info": false
+            // "path": "$RING_PATH\\System;$PATH"
         },
 
         {   "name": "Translate All",
             "target": "window_translate_ring_file",
             "encoding": "ascii",
-            "exec_cmd": "enhanced_exec",
-            "path": "$RING_PATH\\System;$PATH",
-            "startup_info": false,
+            // "exec_cmd": "enhanced_exec",
+            // "path": "$RING_PATH\\System;$PATH",
             "translate_all": true
         },
 
         {   "name": "Code Execution Tree",
             "target": "window_code_execution_tree",
-            "exec_cmd": "enhanced_exec",
-            "path": "$RING_PATH\\System;$PATH",
-            "encoding": "ascii",
-            "startup_info": false
+            // "exec_cmd": "enhanced_exec",
+            // "path": "$RING_PATH\\System;$PATH",
+            "encoding": "ascii"
         },
     ]
 }

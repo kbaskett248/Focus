@@ -27,7 +27,7 @@ from .tools.settings import (
 )
 
 logger = logging.getLogger(__name__)
-# logger.setLevel('INFO')
+logger.setLevel('DEBUG')
 
 APPLICATION_PATTERN = re.compile(r"[A-Z][a-z]{1,2}")
 
@@ -92,8 +92,6 @@ class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
             new_kwargs[k] = v
 
         keys = new_kwargs.keys()
-        if 'startup_info' not in keys:
-            new_kwargs['startup_info'] = False
         if 'encoding' not in keys:
             new_kwargs['encoding'] = 'ascii'
 
@@ -107,9 +105,17 @@ class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
         self.determine_ring()
 
     def post_run_callback(self, *args, **kwargs):
-        if 'env' not in self.kwargs.keys():
-            self.kwargs['env'] = {}
-        self.kwargs['env']['RING_PATH'] = self.ring.path
+        # if 'env' not in self.kwargs.keys():
+        #     self.kwargs['env'] = {}
+        # self.kwargs['env']['RING_PATH'] = self.ring.path
+        system_path = os.path.join(self.ring.path, 'System')
+        try:
+            self.kwargs['path'] = '{system_path};{path}'.format(
+                system_path=system_path,
+                path=self.kwargs['path'])
+        except KeyError:
+            self.kwargs['path'] = '{system_path};$PATH'.format(
+                system_path=system_path)
 
         try:
             shell_cmd = self.kwargs['shell_cmd']
@@ -117,7 +123,7 @@ class RingExecCommand(sublime_plugin.TextCommand, metaclass=CallbackCmdMeta):
             logger.warning('no shell_cmd defined')
             return
         else:
-            logger.debug("post_run_callback: self.exec_cmd")
+            logger.debug("post_run_callback: self.exec_cmd: %s", self.exec_cmd)
             if isinstance(shell_cmd, str):
                 self.replace_variables()
                 self.window.run_command(self.exec_cmd, self.kwargs)
@@ -177,8 +183,6 @@ class RingRunCommand(RingExecCommand):
         self.run_async(**self.kwargs)
 
     def run_async(self, cmd=None, shell_cmd=None, env={},
-                  # startup_info is an option in build systems
-                  startup_info=True,
                   # "path" is an option in build systems
                   path="",
                   # "shell" is an option in build systems
@@ -274,7 +278,7 @@ class RingRunCommand(RingExecCommand):
 
 class TranslateRingFileCommand(RingExecCommand):
 
-    def run(self, edit, exec_cmd, translate_all=False, **kwargs):
+    def run(self, edit, exec_cmd='exec', translate_all=False, **kwargs):
         logger.debug("File Version: running translate_ring_file")
 
         self.exec_cmd = exec_cmd
@@ -503,7 +507,7 @@ class TranslateRingFileCommand(RingExecCommand):
 
 class FormatRingFileCommand(RingExecCommand):
 
-    def run(self, edit, exec_cmd, **kwargs):
+    def run(self, edit, exec_cmd='exec', **kwargs):
         self.exec_cmd = exec_cmd
         self.kwargs = kwargs
 
@@ -553,7 +557,7 @@ class FormatRingFileCommand(RingExecCommand):
 
 class CodeExecutionTreeCommand(RingExecCommand):
 
-    def run(self, edit, exec_cmd, **kwargs):
+    def run(self, edit, exec_cmd='exec', **kwargs):
         self.exec_cmd = exec_cmd
         self.kwargs = kwargs
 
