@@ -517,7 +517,7 @@ repository:
     - name: variable.other.state.focus
       match: (?<=(Get|Put)StateVariable\()[\w._-]+
     - name: variable.parameter.object.focus
-      match: (?<=OID\(|RID\(|RIDs\(|OIDs\()[\w._-]+
+      match: (?<=OID\(|RID\(|RIDs\(|RIDsAscending\(|OIDs\()[\w._-]+
     - name: variable.parameter.object.focus
       match: (?<=CallStructuredImport\(|CallStructuredCreate\(|CallStructuredCopyLocal\(|CallStructuredExport\(|CallStructuredExportTxn\(|CallStructuredFlush\(|CallStructuredSubmit\(|CallStructuredPurge\()[\w._-]+
     - name: variable.parameter.object.focus

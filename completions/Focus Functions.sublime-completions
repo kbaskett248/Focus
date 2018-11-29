@@ -325,6 +325,7 @@
                 { "trigger": "@ListRecordHxStoreEvents", "contents": "@ListRecordHxStoreEvents()" },
                 { "trigger": "@ListRecordHxStoreRIDs", "contents": "@ListRecordHxStoreRIDs()" },
                 { "trigger": "@ListRIDs", "contents": "@ListRIDs(${1:Object.Record})" },
+                { "trigger": "@ListRIDsAscending", "contents": "@ListRIDsAscending(${1:Object.Record})" },
                 { "trigger": "@ListRIDsRT", "contents": "@ListRIDsRT()" },
                 { "trigger": "@LoadExternalPageSet", "contents": "@LoadExternalPageSet()" },
                 { "trigger": "@LockLongMulti", "contents": "@LockLongMulti()" },
