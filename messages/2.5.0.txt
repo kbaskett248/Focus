@@ -1,1 +1,10 @@
 Add support for ListRIDsAscending
+
+Update doc link to v11 wiki links.
+
+Removed unnecessary doc link overrides for Index functions since the basic URL ends up in the right place due to an 
+automatic redirect.
+
+Added link overrides (and autocomplete) for QueryLongLockMulti and LongLockStillOwnedMulti, which are the only other 
+functions in http://ptdoc.ptct.com/mwiki/index.php/Category:Functions that are currently used in the code and didn't 
+already have an entry for doc link override and autocomplete.
