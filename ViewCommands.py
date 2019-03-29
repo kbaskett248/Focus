@@ -523,7 +523,7 @@ class InsertBreakCommand(FocusViewCommand):
 
     Counter = 0
 
-    def run(self, edit):
+    def run(self, edit, web_break=False):
         """Inserts a break at the current insertion points."""
         view = self.view
 
@@ -539,6 +539,8 @@ class InsertBreakCommand(FocusViewCommand):
         if '.' in filename:
             object_name = filename.split('.')[0] + ' '
 
+        file_data = {'file': filename, 'object': object_name}
+
         region_snippets = []
 
         user_selection = view.sel()
@@ -553,20 +555,30 @@ class InsertBreakCommand(FocusViewCommand):
             else:
                 subroutine = ' '
 
-            label = break_label.format(file=filename,
-                                       object=object_name,
-                                       subroutine=subroutine,
-                                       row=row,
-                                       col=col,
-                                       counter=self.get_counter())
+            label_data = {'row': row, 'col': col, 'subroutine': subroutine}
+            label_data.update(file_data)
 
-            region_snippets.append((sel, '@Break(%s)' % label))
+            region_snippets.append(
+                (sel, self.format_snippet(web_break, break_label, label_data)))
 
         insert_compound_snippet(view, edit, user_selection, region_snippets)
 
-    def get_counter(self):
-        InsertBreakCommand.Counter += 1
-        return InsertBreakCommand.Counter
+    @classmethod
+    def format_snippet(cls, web_break, break_label, label_data):
+        """Format the @Break snippet."""
+        label_data['counter'] = cls.get_counter()
+        try:
+            label = break_label.format(**label_data)
+        except Exception:
+            label = '${1:message}'
+            logger.exception('Break label formatted incorrectly')
+        function = '@WebBreak({})' if web_break else '@Break({})'
+        return function.format(label)
+
+    @classmethod
+    def get_counter(cls):
+        cls.Counter += 1
+        return cls.Counter
 
 
 class ListEntitiesCommand(RingViewCommand):

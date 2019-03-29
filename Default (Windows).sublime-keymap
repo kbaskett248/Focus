@@ -35,6 +35,14 @@
             { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
         ]
     },
+    {   "keys": ["alt+shift+b"], 
+        "command": "insert_break", 
+        "args": {"web_break": true},
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "source.focus", "match_all": true },
+            { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
+        ]
+    },
 
     // Pressing Home on a comment line
     // At the beginning of a line
