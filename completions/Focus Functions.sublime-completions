@@ -1,539 +1,3929 @@
 {
-        "scope": "meta.keyword.code.focus meta.subroutine.fs - comment - string - meta.subroutine.header, source.focus meta.value - comment - string - meta.translator.magic",
-        "completions":
-        [
-                { "trigger": "@AcquireMutexesForUI", "contents": "@AcquireMutexesForUI()" },
-                { "trigger": "@AcquireMutexesForUpdate", "contents": "@AcquireMutexesForUpdate()" },
-                { "trigger": "@AcquireMutexForUI", "contents": "@AcquireMutexForUI(${1:Object.Record},${2:60})" },
-                { "trigger": "@AcquireMutexForUIQuiet", "contents": "@AcquireMutexForUIQuiet(${1:Object.Record},${2:60})" },
-                { "trigger": "@AcquireMutexForUpdate", "contents": "@AcquireMutexForUpdate(${1:Object.Record},${2:60})" },
-                { "trigger": "@AfterRID", "contents": "@AfterRID(${1:Object.Record})" },
-                { "trigger": "@AnyRecords", "contents": "@AnyRecords(${1:Object.Record})" },
-                { "trigger": "@ApplyIndexPattern", "contents": "@ApplyIndexPattern()" },
-                { "trigger": "@ApplyStyle", "contents": "@ApplyStyle()" },
-                { "trigger": "@AssociateMutexWithTxn", "contents": "@AssociateMutexWithTxn(${1:Object.Record})" },
-                { "trigger": "@AssociateStructuredFlushWithTxn", "contents": "@AssociateStructuredFlushWithTxn(${1:Object})" },
-                { "trigger": "@BeginTxn", "contents": "@BeginTxn()" },
-                { "trigger": "@Break", "contents": "@Break(${1:Label})" },
-                { "trigger": "@BreakReset", "contents": "@BreakReset()" },
-                { "trigger": "@BuildGraph", "contents": "@BuildGraph()" },
-                { "trigger": "@BuildGraphFile", "contents": "@BuildGraphFile()" },
-                { "trigger": "@BuildGraphReport", "contents": "@BuildGraphReport()" },
-                { "trigger": "@CallChildProcess", "contents": "@CallChildProcess()" },
-                { "trigger": "@CallChildProcessSimple", "contents": "@CallChildProcessSimple()" },
-                { "trigger": "@CallChildScreen", "contents": "@CallChildScreen()" },
-                { "trigger": "@CallChildScreenUnstructured", "contents": "@CallChildScreenUnstructured()" },
-                { "trigger": "@CallDataDefIcon", "contents": "@CallDataDefIcon()" },
-                { "trigger": "@CallDataDefList", "contents": "@CallDataDefList()" },
-                { "trigger": "@CallDataDefSub", "contents": "@CallDataDefSub()" },
-                { "trigger": "@CallExternalSub", "contents": "@CallExternalSub(${1:Hha},${2:File},${3:Subroutine})" },
-                { "trigger": "@CallIcon", "contents": "@CallIcon(${1:Icon})" },
-                { "trigger": "@CallList", "contents": "@CallList(${1:List})" },
-                { "trigger": "@CallMastFunction", "contents": "@CallMastFunction(${1:Function})" },
-                { "trigger": "@CallProgram", "contents": "@CallProgram()" },
-                { "trigger": "@CallScreenCancelLogic", "contents": "@CallScreenCancelLogic()" },
-                { "trigger": "@CallScreenNewObjectLogic", "contents": "@CallScreenNewObjectLogic()" },
-                { "trigger": "@CallScreenSaveLogic", "contents": "@CallScreenSaveLogic()" },
-                { "trigger": "@CallSearch", "contents": "@CallSearch()" },
-                { "trigger": "@CallSearchRecords", "contents": "@CallSearchRecords()" },
-                { "trigger": "@CallStackedScreen", "contents": "@CallStackedScreen()" },
-                { "trigger": "@CallStructuredCopyLocal", "contents": "@CallStructuredCopyLocal(${1:Object})" },
-                { "trigger": "@CallStructuredCreate", "contents": "@CallStructuredCreate(${1:Object})" },
-                { "trigger": "@CallStructuredExportTxn", "contents": "@CallStructuredExportTxn(${1:Object})" },
-                { "trigger": "@CallStructuredFlush", "contents": "@CallStructuredFlush(${1:Object})" },
-                { "trigger": "@CallStructuredImport", "contents": "@CallStructuredImport(${1:Object})" },
-                { "trigger": "@CallStructuredImportAdditional", "contents": "@CallStructuredImportAdditional(${1:Object},${2:Import Name})" },
-                { "trigger": "@CallStructuredPurge", "contents": "@CallStructuredPurge(${1:Object})" },
-                { "trigger": "@CallStructuredSubmit", "contents": "@CallStructuredSubmit(${1:Object})" },
-                { "trigger": "@CallSub", "contents": "@CallSub(${1:Sub})" },
-                { "trigger": "@CallTool", "contents": "@CallTool(${1:Tool})" },
-                { "trigger": "@CallWinHelp", "contents": "@CallWinHelp()" },
-                { "trigger": "@CaptureWindowBitmap", "contents": "@CaptureWindowBitmap()" },
-                { "trigger": "@CaptureWindowMetafile", "contents": "@CaptureWindowMetafile()" },
-                { "trigger": "@CDFunction", "contents": "@CDFunction()" },
-                { "trigger": "@CheckCodeBaseForUpdate", "contents": "@CheckCodeBaseForUpdate()" },
-                { "trigger": "@CheckRequired", "contents": "@CheckRequired()" },
-                { "trigger": "@ClearInitialSort", "contents": "@ClearInitialSort()" },
-                { "trigger": "@ClearObjectDirtyFlags", "contents": "@ClearObjectDirtyFlags(${1:Object})" },
-                { "trigger": "@ClearObjectDirtyFlagsRT", "contents": "@ClearObjectDirtyFlagsRT()" },
-                { "trigger": "@ClearUserInput", "contents": "@ClearUserInput()" },
-                { "trigger": "@ClickCellName", "contents": "@ClickCellName()" },
-                { "trigger": "@ClickCol", "contents": "@ClickCol()" },
-                { "trigger": "@ClickHK", "contents": "@ClickHK()" },
-                { "trigger": "@ClickParent", "contents": "@ClickParent()" },
-                { "trigger": "@ClickParentName", "contents": "@ClickParentName()" },
-                { "trigger": "@ClickRow", "contents": "@ClickRow()" },
-                { "trigger": "@ClickUD", "contents": "@ClickUD()" },
-                { "trigger": "@ClickValue", "contents": "@ClickValue()" },
-                { "trigger": "@CloneObject", "contents": "@CloneObject(${1:Object})" },
-                { "trigger": "@CloneRecords", "contents": "@CloneRecords(${1:Object.Record})" },
-                { "trigger": "@CloseDirectoryForDirectories", "contents": "@CloseDirectoryForDirectories()" },
-                { "trigger": "@CloseDirectoryForFiles", "contents": "@CloseDirectoryForFiles()" },
-                { "trigger": "@CloseFileForReading", "contents": "@CloseFileForReading()" },
-                { "trigger": "@CloseFileForWriting", "contents": "@CloseFileForWriting()" },
-                { "trigger": "@CloseForRecordsSince", "contents": "@CloseForRecordsSince()" },
-                { "trigger": "@CloseIndex", "contents": "@CloseIndex(${1:Object.Index})" },
-                { "trigger": "@CloseIndexForIntersect", "contents": "@CloseIndexForIntersect(${1:Object.Index})" },
-                { "trigger": "@CloseIndexForIntersectRT", "contents": "@CloseIndexForIntersectRT()" },
-                { "trigger": "@CloseIndexRT", "contents": "@CloseIndexRT()" },
-                { "trigger": "@CloseMastConnection", "contents": "@CloseMastConnection()" },
-                { "trigger": "@CloseReportSession", "contents": "@CloseReportSession()" },
-                { "trigger": "@CloseSet", "contents": "@CloseSet()" },
-                { "trigger": "@CodeMemberNumber", "contents": "@CodeMemberNumber(${1:Subroutine})" },
-                { "trigger": "@CommitTxn", "contents": "@CommitTxn()" },
-                { "trigger": "@CommitTxnNotify", "contents": "@CommitTxnNotify()" },
-                { "trigger": "@CompareObjectSnapshot", "contents": "@CompareObjectSnapshot(${1:Object})" },
-                { "trigger": "@ConsoleProcess", "contents": "@ConsoleProcess()" },
-                { "trigger": "@ConvertListToOID", "contents": "@ConvertListToOID()" },
-                { "trigger": "@ConvertMTextToPlainText", "contents": "@ConvertMTextToPlainText()" },
-                { "trigger": "@ConvertMTextToPlainTextWithoutTabs", "contents": "@ConvertMTextToPlainTextWithoutTabs()" },
-                { "trigger": "@ConvertOIDToList", "contents": "@ConvertOIDToList()" },
-                { "trigger": "@CopyFile", "contents": "@CopyFile()" },
-                { "trigger": "@CopyFileClear", "contents": "@CopyFileClear()" },
-                { "trigger": "@CopyFiles", "contents": "@CopyFiles()" },
-                { "trigger": "@CopyRecordsRT", "contents": "@CopyRecordsRT()" },
-                { "trigger": "@CreateDirectory", "contents": "@CreateDirectory()" },
-                { "trigger": "@CreateFile", "contents": "@CreateFile()" },
-                { "trigger": "@CreateFileClear", "contents": "@CreateFileClear()" },
-                { "trigger": "@CreateObject", "contents": "@CreateObject(${1:Object})" },
-                { "trigger": "@CreateObjectRT", "contents": "@CreateObjectRT()" },
-                { "trigger": "@CreateRecord", "contents": "@CreateRecord(${1:Object.Record})" },
-                { "trigger": "@CreateRecordAsIfImported", "contents": "@CreateRecordAsIfImported(${1:Object.Record})" },
-                { "trigger": "@CreateRecordNoDuplicateCheck", "contents": "@CreateRecordNoDuplicateCheck(${1:Object.Record})" },
-                { "trigger": "@CreateRecordRT", "contents": "@CreateRecordRT()" },
-                { "trigger": "@CreateRIDList", "contents": "@CreateRIDList(${1:Object.Record})" },
-                { "trigger": "@CreateSetRecord", "contents": "@CreateSetRecord()" },
-                { "trigger": "@CreateTempFile", "contents": "@CreateTempFile()" },
-                { "trigger": "@CreateTempFileClear", "contents": "@CreateTempFileClear()" },
-                { "trigger": "@CSProxySendReceive", "contents": "@CSProxySendReceive()" },
-                { "trigger": "@CSProxySetPort", "contents": "@CSProxySetPort()" },
-                { "trigger": "@CurrentCell", "contents": "@CurrentCell()" },
-                { "trigger": "@CurrentReportKeyPage", "contents": "@CurrentReportKeyPage()" },
-                { "trigger": "@CurrentReportPage", "contents": "@CurrentReportPage()" },
-                { "trigger": "@DataTypeWidthCalc", "contents": "@DataTypeWidthCalc()" },
-                { "trigger": "@DeleteDirectory", "contents": "@DeleteDirectory()" },
-                { "trigger": "@DeleteFile", "contents": "@DeleteFile()" },
-                { "trigger": "@DeleteIndexEntries", "contents": "@DeleteIndexEntries(${1:Object.Index})" },
-                { "trigger": "@DeleteIndexEntriesRT", "contents": "@DeleteIndexEntriesRT()" },
-                { "trigger": "@DeleteLogFile", "contents": "@DeleteLogFile()" },
-                { "trigger": "@DeleteRecords", "contents": "@DeleteRecords(${1:Object.Record})" },
-                { "trigger": "@DeleteRecordsRT", "contents": "@DeleteRecordsRT()" },
-                { "trigger": "@DirtyData", "contents": "@DirtyData()" },
-                { "trigger": "@DisableGoverningMutex", "contents": "@DisableGoverningMutex(${1:Object.Record})" },
-                { "trigger": "@DisableGoverningMutexRT", "contents": "@DisableGoverningMutexRT()" },
-                { "trigger": "@DiscardTxn", "contents": "@DiscardTxn()" },
-                { "trigger": "@DisplayHelp", "contents": "@DisplayHelp()" },
-                { "trigger": "@DisplayIcon", "contents": "@DisplayIcon()" },
-                { "trigger": "@DisplayNavBar", "contents": "@DisplayNavBar()" },
-                { "trigger": "@EmbeddedSearchSelectedRIDs", "contents": "@EmbeddedSearchSelectedRIDs()" },
-                { "trigger": "@EnumeratePrinters", "contents": "@EnumeratePrinters()" },
-                { "trigger": "@ExitChildReturnData", "contents": "@ExitChildReturnData()" },
-                { "trigger": "@ExitChildReturnSelectedData", "contents": "@ExitChildReturnSelectedData()" },
-                { "trigger": "@ExitProcess", "contents": "@ExitProcess()" },
-                { "trigger": "@ExportObject", "contents": "@ExportObject(${1:Object})" },
-                { "trigger": "@ExportObjectRT", "contents": "@ExportObjectRT()" },
-                { "trigger": "@ExtractEmbeddedRecords", "contents": "@ExtractEmbeddedRecords()" },
-                { "trigger": "@ExtractEmbeddedRecordsRT", "contents": "@ExtractEmbeddedRecordsRT()" },
-                { "trigger": "@Field", "contents": "@Field(${1:Object.Field})" },
-                { "trigger": "@FieldList", "contents": "@FieldList()" },
-                { "trigger": "@FieldRT", "contents": "@FieldRT()" },
-                { "trigger": "@FileAttributes", "contents": "@FileAttributes()" },
-                { "trigger": "@FileAttributesGMT", "contents": "@FileAttributesGMT()" },
-                { "trigger": "@FileEnterEditor", "contents": "@FileEnterEditor()" },
-                { "trigger": "@FileEnterViewer", "contents": "@FileEnterViewer()" },
-                { "trigger": "@FileExitEditor", "contents": "@FileExitEditor()" },
-                { "trigger": "@FileExitViewer", "contents": "@FileExitViewer()" },
-                { "trigger": "@FileFullyInMemory", "contents": "@FileFullyInMemory(${1:Object.File})"},
-                { "trigger": "@FilenameToInternal", "contents": "@FilenameToInternal()" },
-                { "trigger": "@FindRID", "contents": "@FindRID(${1:Object.Record})" },
-                { "trigger": "@FirstRID", "contents": "@FirstRID(${1:Object.Record})" },
-                { "trigger": "@FlushDataDefSet", "contents": "@FlushDataDefSet()" },
-                { "trigger": "@FlushIcon", "contents": "@FlushIcon()" },
-                { "trigger": "@FlushObject", "contents": "@FlushObject(${1:Object})" },
-                { "trigger": "@FlushObjectClass", "contents": "@FlushObjectClass(${1:Object})" },
-                { "trigger": "@FlushObjectClassRT", "contents": "@FlushObjectClassRT()" },
-                { "trigger": "@FlushObjectRT", "contents": "@FlushObjectRT()" },
-                { "trigger": "@FlushObjects", "contents": "@FlushObjects(${1:Object})" },
-                { "trigger": "@FlushObjectSnapshot", "contents": "@FlushObjectSnapshot(${1:Object})" },
-                { "trigger": "@FlushRecords", "contents": "@FlushRecords(${1:Object.Record})" },
-                { "trigger": "@FlushRecordsRT", "contents": "@FlushRecordsRT()" },
-                { "trigger": "@FlushRIDList", "contents": "@FlushRIDList(${1:Object.Record})" },
-                { "trigger": "@ForceError", "contents": "@ForceError()" },
-                { "trigger": "@ForcePageBreak", "contents": "@ForcePageBreak()" },
-                { "trigger": "@ForcePageRedraw", "contents": "@ForcePageRedraw()" },
-                { "trigger": "@FormatDisplayText", "contents": "@FormatDisplayText()" },
-                { "trigger": "@FormIndexRecords", "contents": "@FormIndexRecords(${1:Object.Index})" },
-                { "trigger": "@FormIndexRecordsRT", "contents": "@FormIndexRecordsRT()" },
-                { "trigger": "@GetAllTimeZones", "contents": "@GetAllTimeZones()" },
-                { "trigger": "@GetBodyButtonState", "contents": "@GetBodyButtonState()" },
-                { "trigger": "@GetBodyGroupState", "contents": "@GetBodyGroupState()" },
-                { "trigger": "@GetCount", "contents": "@GetCount()" },
-                { "trigger": "@GetCurrentBodyButtons", "contents": "@GetCurrentBodyButtons()" },
-                { "trigger": "@GetCurrentComponent", "contents": "@GetCurrentComponent()" },
-                { "trigger": "@GetCurrentDateTime", "contents": "@GetCurrentDateTime()" },
-                { "trigger": "@GetCurrentDateTimeForZone", "contents": "@GetCurrentDateTimeForZone()" },
-                { "trigger": "@GetCurrentElement", "contents": "@GetCurrentElement()" },
-                { "trigger": "@GetCurrentFooter", "contents": "@GetCurrentFooter()" },
-                { "trigger": "@GetCurrentOID", "contents": "@GetCurrentOID(${1:Object})" },
-                { "trigger": "@GetCurrentPage", "contents": "@GetCurrentPage()" },
-                { "trigger": "@GetCurrentRID", "contents": "@GetCurrentRID(${1:Object.Record})" },
-                { "trigger": "@GetCurrentTimeZone", "contents": "@GetCurrentTimeZone()" },
-                { "trigger": "@GetDateTimeFromLocal", "contents": "@GetDateTimeFromLocal()" },
-                { "trigger": "@GetDestinationPage", "contents": "@GetDestinationPage()" },
-                { "trigger": "@GetDomainUser", "contents": "@GetDomainUser()" },
-                { "trigger": "@GetElementLabel", "contents": "@GetElementLabel(${1:Object.Field})" },
-                { "trigger": "@GetElementLabelPointedTo", "contents": "@GetElementLabelPointedTo()" },
-                { "trigger": "@GetField", "contents": "@GetField(${1:Object.Field})" },
-                { "trigger": "@GetFieldExternal", "contents": "@GetFieldExternal(${1:Object.Field})" },
-                { "trigger": "@GetFieldRT", "contents": "@GetFieldRT()" },
-                { "trigger": "@GetFooterButtonState", "contents": "@GetFooterButtonState()" },
-                { "trigger": "@GetFooterGroupState", "contents": "@GetFooterGroupState()" },
-                { "trigger": "@GetGraphPixel", "contents": "@GetGraphPixel()" },
-                { "trigger": "@GetInitialArgument", "contents": "@GetInitialArgument()" },
-                { "trigger": "@GetKey", "contents": "@GetKey(${1:Object.Key})" },
-                { "trigger": "@GetKeyExternal", "contents": "@GetKeyExternal(${1:Object.Key})" },
-                { "trigger": "@GetKeyRT", "contents": "@GetKeyRT()" },
-                { "trigger": "@GetLastRecordChosen", "contents": "@GetLastRecordChosen()" },
-                { "trigger": "@GetLastTimeStamp", "contents": "@GetLastTimeStamp()" },
-                { "trigger": "@GetLastTimeStampForFile", "contents": "@GetLastTimeStampForFile(${1:Object.File})" },
-                { "trigger": "@GetLastTimeStampForObject", "contents": "@GetLastTimeStampForObject(${1:Object})" },
-                { "trigger": "@GetLastTimeStampForObjects", "contents": "@GetLastTimeStampForObjects(${1:Object})" },
-                { "trigger": "@GetLastTimeStampRT", "contents": "@GetLastTimeStampRT()" },
-                { "trigger": "@GetLocal", "contents": "@GetLocal(${1:Local})" },
-                { "trigger": "@GetLocalFromDateTime", "contents": "@GetLocalFromDateTime()" },
-                { "trigger": "@GetLockPathFile", "contents": "@GetLockPathFile()" },
-                { "trigger": "@GetLongLockInfoRT", "contents": "@GetLongLockInfoRT()" },
-                { "trigger": "@GetMax", "contents": "@GetMax()" },
-                { "trigger": "@GetMean", "contents": "@GetMean()" },
-                { "trigger": "@GetMenuButtonState", "contents": "@GetMenuButtonState()" },
-                { "trigger": "@GetMenuGroupState", "contents": "@GetMenuGroupState()" },
-                { "trigger": "@GetMin", "contents": "@GetMin()" },
-                { "trigger": "@GetMutexSystemInfo", "contents": "@GetMutexSystemInfo(${1:Object.Record})" },
-                { "trigger": "@GetNextDirectory", "contents": "@GetNextDirectory()" },
-                { "trigger": "@GetNextFile", "contents": "@GetNextFile()" },
-                { "trigger": "@GetNextLogEvents", "contents": "@GetNextLogEvents()" },
-                { "trigger": "@GetNextLogEventsRT", "contents": "@GetNextLogEventsRT()" },
-                { "trigger": "@GetObjectLongLockParams", "contents": "@GetObjectLongLockParams(${1:Object.Lock})" },
-                { "trigger": "@GetObjectLongLockSystemInfo", "contents": "@GetObjectLongLockSystemInfo(${1:Object.Lock})" },
-                { "trigger": "@GetObjectLongLockValue", "contents": "@GetObjectLongLockValue(${1:Object.Lock})" },
-                { "trigger": "@GetOID", "contents": "@GetOID()" },
-                { "trigger": "@GetParentProcessID", "contents": "@GetParentProcessID()" },
-                { "trigger": "@GetPreviousPage", "contents": "@GetPreviousPage()" },
-                { "trigger": "@GetPriorLogEvents", "contents": "@GetPriorLogEvents()" },
-                { "trigger": "@GetPriorLogEventsRT", "contents": "@GetPriorLogEventsRT()" },
-                { "trigger": "@GetProcessID", "contents": "@GetProcessID()" },
-                { "trigger": "@GetProcessLongLockParams", "contents": "@GetProcessLongLockParams(${1:Object.Lock})" },
-                { "trigger": "@GetProcessLongLockSystemInfo", "contents": "@GetProcessLongLockSystemInfo(${1:Object.Lock})" },
-                { "trigger": "@GetProcessLongLockValue", "contents": "@GetProcessLongLockValue(${1:Object.Lock})" },
-                { "trigger": "@GetQueuedProcessMessage", "contents": "@GetQueuedProcessMessage()" },
-                { "trigger": "@GetRecord", "contents": "@GetRecord(${1:Object.Record})" },
-                { "trigger": "@GetRecordAsOf", "contents": "@GetRecordAsOf(${1:Object.Record})" },
-                { "trigger": "@GetRecordAsOfRT", "contents": "@GetRecordAsOfRT()" },
-                { "trigger": "@GetRecordEffectiveOn", "contents": "@GetRecordEffectiveOn(${1:Object.Record})" },
-                { "trigger": "@GetRecordEffectiveOnRT", "contents": "@GetRecordEffectiveOnRT()" },
-                { "trigger": "@GetReportParam", "contents": "@GetReportParam()" },
-                { "trigger": "@GetRoot", "contents": "@GetRoot()" },
-                { "trigger": "@GetSearchSeed", "contents": "@GetSearchSeed()" },
-                { "trigger": "@GetSelectedRIDs", "contents": "@GetSelectedRIDs()" },
-                { "trigger": "@GetServerName", "contents": "@GetServerName()" },
-                { "trigger": "@GetServerNameRT", "contents": "@GetServerNameRT()" },
-                { "trigger": "@GetSortIndicator", "contents": "@GetSortIndicator()" },
-                { "trigger": "@GetStateVariable", "contents": "@GetStateVariable(${1:StateVar})" },
-                { "trigger": "@GetSum", "contents": "@GetSum()" },
-                { "trigger": "@GetSystemVariable", "contents": "@GetSystemVariable(${1:SystemVar})" },
-                { "trigger": "@GetTimeOffsetForGmt", "contents": "@GetTimeOffsetForGmt()" },
-                { "trigger": "@GetTimeOffsetForLocal", "contents": "@GetTimeOffsetForLocal()" },
-                { "trigger": "@GetTimeZoneDescription", "contents": "@GetTimeZoneDescription()" },
-                { "trigger": "@GetTimeZoneDltLabel", "contents": "@GetTimeZoneDltLabel()" },
-                { "trigger": "@GetTimeZoneDltOffset", "contents": "@GetTimeZoneDltOffset()" },
-                { "trigger": "@GetTimeZoneName", "contents": "@GetTimeZoneName()" },
-                { "trigger": "@GetTimeZoneStdLabel", "contents": "@GetTimeZoneStdLabel()" },
-                { "trigger": "@GetTimeZoneStdOffset", "contents": "@GetTimeZoneStdOffset()" },
-                { "trigger": "@GetTypeIndexPattern", "contents": "@GetTypeIndexPattern()" },
-                { "trigger": "@GetTypeJustification", "contents": "@GetTypeJustification()" },
-                { "trigger": "@GetUserInput", "contents": "@GetUserInput()" },
-                { "trigger": "@GetWindowFontSizeUsed", "contents": "@GetWindowFontSizeUsed()" },
-                { "trigger": "@GiveProcessFocus", "contents": "@GiveProcessFocus()" },
-                { "trigger": "@GotoComponent", "contents": "@GotoComponent()" },
-                { "trigger": "@GotoElement", "contents": "@GotoElement()" },
-                { "trigger": "@GotoPage", "contents": "@GotoPage()" },
-                { "trigger": "@Hang", "contents": "@Hang()" },
-                { "trigger": "@HideWorkingIndicator", "contents": "@HideWorkingIndicator()" },
-                { "trigger": "@ImportFile", "contents": "@ImportFile(${1:Object.File})" },
-                { "trigger": "@ImportFileBatchesToStackWhile", "contents": "@ImportFileBatchesToStackWhile(${1:Subroutine})" },
-                { "trigger": "@ImportFileBatchesToStackWhileRT", "contents": "@ImportFileBatchesToStackWhileRT()" },
-                { "trigger": "@ImportFileBatchesWhile", "contents": "@ImportFileBatchesWhile(${1:Object.File},${2:Subroutine})" },
-                { "trigger": "@ImportFileBatchesWhileRT", "contents": "@ImportFileBatchesWhileRT()" },
-                { "trigger": "@ImportFileCx", "contents": "@ImportFileCx(${1:Object.File})" },
-                { "trigger": "@ImportFileHxAsOf", "contents": "@ImportFileHxAsOf(${1:Object.File})" },
-                { "trigger": "@ImportFileHxStore", "contents": "@ImportFileHxStore()" },
-                { "trigger": "@ImportFileRT", "contents": "@ImportFileRT()" },
-                { "trigger": "@ImportFileToOID", "contents": "@ImportFileToOID(${1:Object.File})" },
-                { "trigger": "@ImportFileToOIDCx", "contents": "@ImportFileToOIDCx(${1:Object.File})" },
-                { "trigger": "@ImportHxAsOfRT", "contents": "@ImportHxAsOfRT()" },
-                { "trigger": "@ImportRecord", "contents": "@ImportRecord(${1:Object.Record})" },
-                { "trigger": "@ImportRecordCx", "contents": "@ImportRecordCx(${1:Object.Record})" },
-                { "trigger": "@ImportRecordEffectiveOn", "contents": "@ImportRecordEffectiveOn(${1:Object.Record})" },
-                { "trigger": "@ImportRecordEffectiveOnCx", "contents": "@ImportRecordEffectiveOnCx(${1:Object.Record})" },
-                { "trigger": "@ImportRecordEffectiveOnRT", "contents": "@ImportRecordEffectiveOnRT()" },
-                { "trigger": "@ImportRecordHxAsOf", "contents": "@ImportRecordHxAsOf(${1:Object.Record})" },
-                { "trigger": "@ImportRecordRT", "contents": "@ImportRecordRT()" },
-                { "trigger": "@ImportRecords", "contents": "@ImportRecords(${1:Object.Record})" },
-                { "trigger": "@ImportRecordsConditional", "contents": "@ImportRecordsConditional(${1:Object.Record},${2:Subroutine})" },
-                { "trigger": "@ImportRecordsConditionalCx", "contents": "@ImportRecordsConditionalCx(${1:Object.Record},${2:Subroutine})" },
-                { "trigger": "@ImportRecordsConditionalRT", "contents": "@ImportRecordsConditionalRT()" },
-                { "trigger": "@ImportRecordsCx", "contents": "@ImportRecordsCx(${1:Object.Record})" },
-                { "trigger": "@ImportRecordsHxAsOf", "contents": "@ImportRecordsHxAsOf(${1:Object.Record})" },
-                { "trigger": "@ImportRecordsRT", "contents": "@ImportRecordsRT()" },
-                { "trigger": "@ImportRecordsSince", "contents": "@ImportRecordsSince(${1:Object.Record})" },
-                { "trigger": "@ImportRecordsSinceRT", "contents": "@ImportRecordsSinceRT()" },
-                { "trigger": "@ImportRecordsToOID", "contents": "@ImportRecordsToOID(${1:Object.Record})" },
-                { "trigger": "@ImportRecordsToOIDCx", "contents": "@ImportRecordsToOIDCx(${1:Object.Record})" },
-                { "trigger": "@ImportRecordToOID", "contents": "@ImportRecordToOID(${1:Object.Record})" },
-                { "trigger": "@ImportRecordToOIDCx", "contents": "@ImportRecordToOIDCx(${1:Object.Record})" },
-                { "trigger": "@IndexKey", "contents": "@IndexKey(${1:Object.Index.Key})" },
-                { "trigger": "@IndexKeyExternal", "contents": "@IndexKeyExternal(${1:Object.Index.Key})" },
-                { "trigger": "@IndexKeyRT", "contents": "@IndexKeyRT()" },
-                { "trigger": "@IndexLookup", "contents": "@IndexLookup(${1:Object.Index})" },
-                { "trigger": "@IndexLookupCx", "contents": "@IndexLookupCx(${1:Object.Index})" },
-                { "trigger": "@IndexLookupIntoArray", "contents": "@IndexLookupIntoArray(${1:Object.Index})" },
-                { "trigger": "@IndexLookupResults", "contents": "@IndexLookupResults(${1:Object.Index})" },
-                { "trigger": "@IndexLookupRT", "contents": "@IndexLookupRT()" },
-                { "trigger": "@IndexOID", "contents": "@IndexOID()" },
-                { "trigger": "@IndexRecordPhysicalInfo", "contents": "@IndexRecordPhysicalInfo()" },
-                { "trigger": "@InsertIndexEntries", "contents": "@InsertIndexEntries(${1:Object.Index})" },
-                { "trigger": "@InsertIndexEntriesRT", "contents": "@InsertIndexEntriesRT()" },
-                { "trigger": "@Key", "contents": "@Key(${1:Object.Key})" },
-                { "trigger": "@KeyList", "contents": "@KeyList()" },
-                { "trigger": "@LastRID", "contents": "@LastRID(${1:Object.Record})" },
-                { "trigger": "@LastServerKey", "contents": "@LastServerKey(${1:Object.Key})" },
-                { "trigger": "@LastServerKeyRT", "contents": "@LastServerKeyRT()" },
-                { "trigger": "@LaunchConsoleProcess", "contents": "@LaunchConsoleProcess()" },
-                { "trigger": "@LaunchParentProcess", "contents": "@LaunchParentProcess()" },
-                { "trigger": "@LaunchRemoteDebugger", "contents": "@LaunchRemoteDebugger()" },
-                { "trigger": "@ListChangedRecords", "contents": "@ListChangedRecords(${1:Object})" },
-                { "trigger": "@ListChangedRecordsRT", "contents": "@ListChangedRecordsRT()" },
-                { "trigger": "@ListCurrentElementHxStoreValues", "contents": "@ListCurrentElementHxStoreValues()" },
-                { "trigger": "@ListDataTypes", "contents": "@ListDataTypes()" },
-                { "trigger": "@ListDirectories", "contents": "@ListDirectories()" },
-                { "trigger": "@ListFiles", "contents": "@ListFiles()" },
-                { "trigger": "@ListMemberNumber", "contents": "@ListMemberNumber(${1:List})" },
-                { "trigger": "@ListMutexesAcquired", "contents": "@ListMutexesAcquired(${1:Object.Record},${2:60})" },
-                { "trigger": "@ListOIDs", "contents": "@ListOIDs(${1:Object})" },
-                { "trigger": "@ListOIDsRT", "contents": "@ListOIDsRT()" },
-                { "trigger": "@ListProcesses", "contents": "@ListProcesses()" },
-                { "trigger": "@ListRecordHxStoreEvents", "contents": "@ListRecordHxStoreEvents()" },
-                { "trigger": "@ListRecordHxStoreRIDs", "contents": "@ListRecordHxStoreRIDs()" },
-                { "trigger": "@ListRIDs", "contents": "@ListRIDs(${1:Object.Record})" },
-                { "trigger": "@ListRIDsAscending", "contents": "@ListRIDsAscending(${1:Object.Record})" },
-                { "trigger": "@ListRIDsRT", "contents": "@ListRIDsRT()" },
-                { "trigger": "@LoadExternalPageSet", "contents": "@LoadExternalPageSet()" },
-                { "trigger": "@LockLongMulti", "contents": "@LockLongMulti()" },
-                { "trigger": "@LockLongRT", "contents": "@LockLongRT()" },
-                { "trigger": "@LockObjectLong", "contents": "@LockObjectLong(${1:Object.LongLock})" },
-                { "trigger": "@LockObjectShort", "contents": "@LockObjectShort(${1:Object.ShortLock})" },
-                { "trigger": "@LockObjectShortCx", "contents": "@LockObjectShortCx(${1:Object.Lock})" },
-                { "trigger": "@LockProcessLong", "contents": "@LockProcessLong(${1:Object.ProcessLock})" },
-                { "trigger": "@LockProcessShort", "contents": "@LockProcessShort(${1:Object.ProcessLock})" },
-                { "trigger": "@LockProcessShortCx", "contents": "@LockProcessShortCx(${1:Object.ProcessLock})" },
-                { "trigger": "@LockShortRT", "contents": "@LockShortRT()" },
-                { "trigger": "@Log", "contents": "@Log()" },
-                { "trigger": "@LogEventKey", "contents": "@LogEventKey()" },
-                { "trigger": "@LogEventKeyExternal", "contents": "@LogEventKeyExternal()" },
-                { "trigger": "@LongLockStillOwnedMulti", "contents": "@LongLockStillOwnedMulti()" },
-                { "trigger": "@LongLockStillOwnedRT", "contents": "@LongLockStillOwnedRT()" },
-                { "trigger": "@ManageIconsRT", "contents": "@ManageIconsRT()" },
-                { "trigger": "@MarkFileForAbolishment", "contents": "@MarkFileForAbolishment()" },
-                { "trigger": "@MarkObjectAsMemoryOnly", "contents": "@MarkObjectAsMemoryOnly(${1:Object})" },
-                { "trigger": "@MaxClientKey", "contents": "@MaxClientKey(${1:Object.Key})" },
-                { "trigger": "@MaxClientKeyRT", "contents": "@MaxClientKeyRT()" },
-                { "trigger": "@Message", "contents": "@Message()" },
-                { "trigger": "@MoreIndexEntries", "contents": "@MoreIndexEntries(${1:Object.Index})" },
-                { "trigger": "@MoreRID", "contents": "@MoreRID(${1:Object.Record})" },
-                { "trigger": "@MouseClickInProcess", "contents": "@MouseClickInProcess()" },
-                { "trigger": "@MoveRecordAfter", "contents": "@MoveRecordAfter(${1:Object.Record})" },
-                { "trigger": "@MoveRecordBefore", "contents": "@MoveRecordBefore(${1:Object.Record})" },
-                { "trigger": "@MutexAcquired", "contents": "@MutexAcquired(${1:Object.Record})" },
-                { "trigger": "@NextIndexEntry", "contents": "@NextIndexEntry(${1:Object.Index})" },
-                { "trigger": "@NextIndexEntryRT", "contents": "@NextIndexEntryRT()" },
-                { "trigger": "@NextIntersectOID", "contents": "@NextIntersectOID(${1:Object.Index})" },
-                { "trigger": "@NextIntersectOIDRT", "contents": "@NextIntersectOIDRT()" },
-                { "trigger": "@NextRID", "contents": "@NextRID(${1:Object.Record})" },
-                { "trigger": "@NextSetRecord", "contents": "@NextSetRecord()" },
-                { "trigger": "@NextURN", "contents": "@NextURN(${1:Object.Key})" },
-                { "trigger": "@ObjectChanged", "contents": "@ObjectChanged(${1:Object})" },
-                { "trigger": "@ObjectLongLockStillOwned", "contents": "@ObjectLongLockStillOwned(${1:Object.Lock})" },
-                { "trigger": "@ObjectSnapshotExists", "contents": "@ObjectSnapshotExists(${1:Object})" },
-                { "trigger": "@ObjectSnapshotRT", "contents": "@ObjectSnapshotRT()" },
-                { "trigger": "@ObjectUpdatedSinceImport", "contents": "@ObjectUpdatedSinceImport(${1:Object})" },
-                { "trigger": "@OID", "contents": "@OID()" },
-                { "trigger": "@OpenDirectoryForDirectories", "contents": "@OpenDirectoryForDirectories()" },
-                { "trigger": "@OpenDirectoryForFiles", "contents": "@OpenDirectoryForFiles()" },
-                { "trigger": "@OpenFileForReading", "contents": "@OpenFileForReading()" },
-                { "trigger": "@OpenFileForWritingAppend", "contents": "@OpenFileForWritingAppend()" },
-                { "trigger": "@OpenFileForWritingReplace", "contents": "@OpenFileForWritingReplace()" },
-                { "trigger": "@OpenForRecordsSince", "contents": "@OpenForRecordsSince(${1:Object.Record})" },
-                { "trigger": "@OpenIndex", "contents": "@OpenIndex(${1:Object.Index})" },
-                { "trigger": "@OpenIndexForIntersect", "contents": "@OpenIndexForIntersect(${1:Object.Index})" },
-                { "trigger": "@OpenIndexForIntersectRT", "contents": "@OpenIndexForIntersectRT()" },
-                { "trigger": "@OpenIndexRT", "contents": "@OpenIndexRT()" },
-                { "trigger": "@OpenMastConnection", "contents": "@OpenMastConnection()" },
-                { "trigger": "@OpenReportSession", "contents": "@OpenReportSession()" },
-                { "trigger": "@OpenSet", "contents": "@OpenSet()" },
-                { "trigger": "@ParentProcess", "contents": "@ParentProcess()" },
-                { "trigger": "@PhysicalFilePath", "contents": "@PhysicalFilePath()" },
-                { "trigger": "@Ping", "contents": "@Ping()" },
-                { "trigger": "@PrintArchDoc", "contents": "@PrintArchDoc()" },
-                { "trigger": "@PrintHTMLDoc", "contents": "@PrintHTMLDoc()" },
-                { "trigger": "@ProcessLongLockStillOwned", "contents": "@ProcessLongLockStillOwned(${1:Object.Lock})" },
-                { "trigger": "@ProcessMessageKey", "contents": "@ProcessMessageKey()" },
-                { "trigger": "@ProcessTimerKey", "contents": "@ProcessTimerKey()" },
-                { "trigger": "@Program", "contents": "@Program()" },
-                { "trigger": "@ProxyModeEnabled", "contents": "@ProxyModeEnabled()" },
-                { "trigger": "@PurgeObject", "contents": "@PurgeObject(${1:Object})" },
-                { "trigger": "@PurgeObjectRT", "contents": "@PurgeObjectRT()" },
-                { "trigger": "@PutField", "contents": "@PutField(${1:Object.Field})" },
-                { "trigger": "@PutFieldRT", "contents": "@PutFieldRT()" },
-                { "trigger": "@PutLocal", "contents": "@PutLocal(${1:LocalVar})" },
-                { "trigger": "@PutRecord", "contents": "@PutRecord(${1:Object.Record})" },
-                { "trigger": "@PutRecordRT", "contents": "@PutRecordRT()" },
-                { "trigger": "@PutRoot", "contents": "@PutRoot()" },
-                { "trigger": "@PutStateVariable", "contents": "@PutStateVariable(${1:StateVar})" },
-                { "trigger": "@PutSystemVariable", "contents": "@PutSystemVariable(${1:SystemVar})" },
-                { "trigger": "@PutUserInput", "contents": "@PutUserInput()" },
-                { "trigger": "@QueryDirectories", "contents": "@QueryDirectories()" },
-                { "trigger": "@QueryFiles", "contents": "@QueryFiles()" },
-                { "trigger": "@QueryLongLockMulti", "contents": "@QueryLongLockMulti()" },
-                { "trigger": "@QueryProcess", "contents": "@QueryProcess()" },
-                { "trigger": "@QueueProcessMessage", "contents": "@QueueProcessMessage()" },
-                { "trigger": "@ReadKey", "contents": "@ReadKey()" },
-                { "trigger": "@ReadKeyIPC", "contents": "@ReadKeyIPC()" },
-                { "trigger": "@ReadProcessMessage", "contents": "@ReadProcessMessage()" },
-                { "trigger": "@ReadRID", "contents": "@ReadRID(${1:Object.Record})" },
-                { "trigger": "@RecordChanged", "contents": "@RecordChanged(${1:Object.Record})" },
-                { "trigger": "@RecordCreated", "contents": "@RecordCreated(${1:Object.Record})" },
-                { "trigger": "@RecordsChanged", "contents": "@RecordsChanged(${1:Object.Record})" },
-                { "trigger": "@RecordsChangedRT", "contents": "@RecordsChangedRT()" },
-                { "trigger": "@RecordsFullyInMemory", "contents": "@RecordsFullyInMemory(${1:Object.Record})"},
-                { "trigger": "@RecordTag", "contents": "@RecordTag(${1:Object.Record})" },
-                { "trigger": "@ReleaseForeignLongLockRT", "contents": "@ReleaseForeignLongLockRT()" },
-                { "trigger": "@ReleaseForeignObjectLongLock", "contents": "@ReleaseForeignObjectLongLock(${1:Object.Lock})" },
-                { "trigger": "@ReleaseForeignProcessLongLock", "contents": "@ReleaseForeignProcessLongLock(${1:Object.Lock})" },
-                { "trigger": "@ReleaseMutex", "contents": "@ReleaseMutex(${1:Object.Record})" },
-                { "trigger": "@ReleaseMutexes", "contents": "@ReleaseMutexes()" },
-                { "trigger": "@RenameDirectory", "contents": "@RenameDirectory()" },
-                { "trigger": "@RenameFile", "contents": "@RenameFile()" },
-                { "trigger": "@RenderWindowBitmap", "contents": "@RenderWindowBitmap()" },
-                { "trigger": "@RenewAllForUpdateMutexes", "contents": "@RenewAllForUpdateMutexes()" },
-                { "trigger": "@RenewMutexesForUI", "contents": "@RenewMutexesForUI()" },
-                { "trigger": "@RenewMutexesForUpdate", "contents": "@RenewMutexesForUpdate()" },
-                { "trigger": "@RenewMutexesInTxn", "contents": "@RenewMutexesInTxn()" },
-                { "trigger": "@RenewMutexForUI", "contents": "@RenewMutexForUI(${1:Object.Record},${2:60})" },
-                { "trigger": "@RenewMutexForUIQuiet", "contents": "@RenewMutexForUIQuiet(${1:Object.Record},${2:60})" },
-                { "trigger": "@RenewMutexForUpdate", "contents": "@RenewMutexForUpdate(${1:Object.Record})" },
-                { "trigger": "@RenewMutexForUpdateQuiet", "contents": "@RenewMutexForUpdateQuiet(${1:Object.Record},${2:60})" },
-                { "trigger": "@ReportBorderExists", "contents": "@ReportBorderExists()" },
-                { "trigger": "@ReportTerminated", "contents": "@ReportTerminated()" },
-                { "trigger": "@ResetEmbeddedSearch", "contents": "@ResetEmbeddedSearch()" },
-                { "trigger": "@RestoreObjectSnapshot", "contents": "@RestoreObjectSnapshot(${1:Object})" },
-                { "trigger": "@RetrieveField", "contents": "@RetrieveField(${1:Object.Field})" },
-                { "trigger": "@RetrieveFieldExternal", "contents": "@RetrieveFieldExternal(${1:Object.Field})" },
-                { "trigger": "@RetrieveFieldRT", "contents": "@RetrieveFieldRT()" },
-                { "trigger": "@RetrieveRecord", "contents": "@RetrieveRecord(${1:Object.Record})" },
-                { "trigger": "@RetrieveRecordCx", "contents": "@RetrieveRecordCx(${1:Object.Record})" },
-                { "trigger": "@RID", "contents": "@RID()" },
-                { "trigger": "@RollUpFile", "contents": "@RollUpFile(${1:Object.File})" },
-                { "trigger": "@RollUpFileRT", "contents": "@RollUpFileRT()" },
-                { "trigger": "@Root", "contents": "@Root()" },
-                { "trigger": "@RootClient", "contents": "@RootClient()" },
-                { "trigger": "@RootRT", "contents": "@RootRT()" },
-                { "trigger": "@RootServer", "contents": "@RootServer()" },
-                { "trigger": "@SaveObjectSnapshot", "contents": "@SaveObjectSnapshot(${1:Object})" },
-                { "trigger": "@SaveProcessState", "contents": "@SaveProcessState()" },
-                { "trigger": "@SearchLogEvents", "contents": "@SearchLogEvents()" },
-                { "trigger": "@SearchLogEventsRT", "contents": "@SearchLogEventsRT()" },
-                { "trigger": "@SelectCDRowSet", "contents": "@SelectCDRowSet()" },
-                { "trigger": "@SelectCDRowSetRT", "contents": "@SelectCDRowSetRT()" },
-                { "trigger": "@SelectCol", "contents": "@SelectCol()" },
-                { "trigger": "@SelectColName", "contents": "@SelectColName()" },
-                { "trigger": "@SelectHK", "contents": "@SelectHK()" },
-                { "trigger": "@SelectRID", "contents": "@SelectRID()" },
-                { "trigger": "@SelectRow", "contents": "@SelectRow()" },
-                { "trigger": "@SelectUD", "contents": "@SelectUD()" },
-                { "trigger": "@SendProcessMessage", "contents": "@SendProcessMessage()" },
-                { "trigger": "@SendProcessPassword", "contents": "@SendProcessPassword()" },
-                { "trigger": "@SetBodyButtonState", "contents": "@SetBodyButtonState()" },
-                { "trigger": "@SetCurrentBodyButtons", "contents": "@SetCurrentBodyButtons()" },
-                { "trigger": "@SetCurrentFooter", "contents": "@SetCurrentFooter()" },
-                { "trigger": "@SetCurrentOID", "contents": "@SetCurrentOID(${1:Object})" },
-                { "trigger": "@SetCurrentRID", "contents": "@SetCurrentRID(${1:Object.Record})" },
-                { "trigger": "@SetCurrentTimeZone", "contents": "@SetCurrentTimeZone()" },
-                { "trigger": "@SetDisplayIgnoreNavInputFlag", "contents": "@SetDisplayIgnoreNavInputFlag()" },
-                { "trigger": "@SetErrorTrapFolder", "contents": "@SetErrorTrapFolder()" },
-                { "trigger": "@SetFooterButtonState", "contents": "@SetFooterButtonState()" },
-                { "trigger": "@SetGraphBkColor", "contents": "@SetGraphBkColor()" },
-                { "trigger": "@SetGraphColor", "contents": "@SetGraphColor()" },
-                { "trigger": "@SetGraphFont", "contents": "@SetGraphFont()" },
-                { "trigger": "@SetImportFlag", "contents": "@SetImportFlag()" },
-                { "trigger": "@SetMenuButtonState", "contents": "@SetMenuButtonState()" },
-                { "trigger": "@SetMenuTopIcon", "contents": "@SetMenuTopIcon()" },
-                { "trigger": "@SetNetworkZone", "contents": "@SetNetworkZone()" },
-                { "trigger": "@SetPalette", "contents": "@SetPalette()" },
-                { "trigger": "@SetReportParam", "contents": "@SetReportParam()" },
-                { "trigger": "@SetSelectedRIDs", "contents": "@SetSelectedRIDs()" },
-                { "trigger": "@SetSortIndicator", "contents": "@SetSortIndicator()" },
-                { "trigger": "@SetTimer", "contents": "@SetTimer()" },
-                { "trigger": "@SetTimeStampAppData", "contents": "@SetTimeStampAppData()" },
-                { "trigger": "@SetTimeStampEnvData", "contents": "@SetTimeStampEnvData()" },
-                { "trigger": "@ShowGraph", "contents": "@ShowGraph()" },
-                { "trigger": "@ShowWorkingIndicator", "contents": "@ShowWorkingIndicator()" },
-                { "trigger": "@ShredFile", "contents": "@ShredFile()" },
-                { "trigger": "@SortRecords", "contents": "@SortRecords(${1:Object.Record},${2:Sort Value},${3:A})" },
-                { "trigger": "@SortRecordsByColumn", "contents": "@SortRecordsByColumn()" },
-                { "trigger": "@TextEditorMode", "contents": "@TextEditorMode()" },
-                { "trigger": "@TextEditorModeRT", "contents": "@TextEditorModeRT()" },
-                { "trigger": "@TextEnterEditor", "contents": "@TextEnterEditor()" },
-                { "trigger": "@TextEnterViewer", "contents": "@TextEnterViewer()" },
-                { "trigger": "@TextExitEditor", "contents": "@TextExitEditor()" },
-                { "trigger": "@TextExitViewer", "contents": "@TextExitViewer()" },
-                { "trigger": "@TextInsert", "contents": "@TextInsert()" },
-                { "trigger": "@TextInsertTop", "contents": "@TextInsertTop()" },
-                { "trigger": "@TextJoin", "contents": "@TextJoin()" },
-                { "trigger": "@TimeStampAppData", "contents": "@TimeStampAppData()" },
-                { "trigger": "@TimeStampDateTime", "contents": "@TimeStampDateTime()" },
-                { "trigger": "@TimeStampDevice", "contents": "@TimeStampDevice()" },
-                { "trigger": "@TimeStampDomainUser", "contents": "@TimeStampDomainUser()" },
-                { "trigger": "@TimeStampEffectiveDateTime", "contents": "@TimeStampEffectiveDateTime()" },
-                { "trigger": "@TimeStampEnvData", "contents": "@TimeStampEnvData()" },
-                { "trigger": "@TimeStampRollUp", "contents": "@TimeStampRollUp()" },
-                { "trigger": "@ToExternal", "contents": "@ToExternal(${1:DataType})" },
-                { "trigger": "@ToExternalReport", "contents": "@ToExternalReport()" },
-                { "trigger": "@ToInternal", "contents": "@ToInternal(${1:DataType})" },
-                { "trigger": "@TreeRoot", "contents": "@TreeRoot()" },
-                { "trigger": "@TriggerCx", "contents": "@TriggerCx()" },
-                { "trigger": "@UnlockLongMulti", "contents": "@UnlockLongMulti()" },
-                { "trigger": "@UnlockLongRT", "contents": "@UnlockLongRT()" },
-                { "trigger": "@UnlockObjectLong", "contents": "@UnlockObjectLong(${1:Object.Lock})" },
-                { "trigger": "@UnlockObjectShort", "contents": "@UnlockObjectShort(${1:Object.Lock})" },
-                { "trigger": "@UnlockObjectShortCx", "contents": "@UnlockObjectShortCx(${1:Object.Lock})" },
-                { "trigger": "@UnlockProcessLong", "contents": "@UnlockProcessLong(${1:Object.ProcessLock})" },
-                { "trigger": "@UnlockProcessShort", "contents": "@UnlockProcessShort(${1:Object.ProcessLock})" },
-                { "trigger": "@UnlockProcessShortCx", "contents": "@UnlockProcessShortCx(${1:Object.ProcessLock})" },
-                { "trigger": "@UnlockShortRT", "contents": "@UnlockShortRT()" },
-                { "trigger": "@UpdateCodeBase", "contents": "@UpdateCodeBase()" },
-                { "trigger": "@UpdateIcon", "contents": "@UpdateIcon()" },
-                { "trigger": "@UpdateIndexEntries", "contents": "@UpdateIndexEntries(${1:Object.Index})" },
-                { "trigger": "@UpdateIndexEntriesRT", "contents": "@UpdateIndexEntriesRT()" },
-                { "trigger": "@UpdateLongLockRT", "contents": "@UpdateLongLockRT()" },
-                { "trigger": "@UpdateObjectLongLock", "contents": "@UpdateObjectLongLock(${1:Object.Lock})" },
-                { "trigger": "@UpdateProcessLongLock", "contents": "@UpdateProcessLongLock(${1:Object.Lock})" },
-                { "trigger": "@UpdateWorkingIndicator", "contents": "@UpdateWorkingIndicator()" },
-                { "trigger": "@Valid", "contents": "@Valid(${1:DataType})" },
-                { "trigger": "@ValidElement", "contents": "@ValidElement(${1:Object.Element})" },
-                { "trigger": "@ValidElementExtToInt", "contents": "@ValidElementExtToInt(${1:Object.Element})" },
-                { "trigger": "@ValidExtToInt", "contents": "@ValidExtToInt(${1:DataType})" },
-                { "trigger": "@WindowDrawn", "contents": "@WindowDrawn()" },
-                { "trigger": "@WriteLogEvent", "contents": "@WriteLogEvent()" },
-                { "trigger": "@WriteLogEventRT", "contents": "@WriteLogEventRT()" },
-        ]
+    "scope": "meta.keyword.code.focus meta.subroutine.fs - comment - string - meta.subroutine.header, source.focus meta.value - comment - string - meta.translator.magic",
+    "completions": [
+        {
+            "trigger": "@AcquireMutexForUI",
+            "contents": "@AcquireMutexForUI(${1:Object.Mutex},${2:optional ownership period override})"
+        },
+        {
+            "trigger": "@AcquireMutexForUIQuiet",
+            "contents": "@AcquireMutexForUIQuiet(${1:Object.Mutex},${2:optional ownership period override})"
+        },
+        {
+            "trigger": "@AcquireMutexForUpdate",
+            "contents": "@AcquireMutexForUpdate(${1:Object.Mutex},${2:optional retry duration override})"
+        },
+        {
+            "trigger": "@AcquireMutexesForUI",
+            "contents": "@AcquireMutexesForUI()"
+        },
+        {
+            "trigger": "@AcquireMutexesForUpdate",
+            "contents": "@AcquireMutexesForUpdate()"
+        },
+        {
+            "trigger": "@ActivateInstanceConversions",
+            "contents": "@ActivateInstanceConversions()"
+        },
+        {
+            "trigger": "@AddIconToCache",
+            "contents": "@AddIconToCache()"
+        },
+        {
+            "trigger": "@AddInstanceConversionToTask",
+            "contents": "@AddInstanceConversionToTask()"
+        },
+        {
+            "trigger": "@AddProgressiveConversionToTask",
+            "contents": "@AddProgressiveConversionToTask()"
+        },
+        {
+            "trigger": "@AddWebPerfLogMilestone",
+            "contents": "@AddWebPerfLogMilestone()"
+        },
+        {
+            "trigger": "@AfterRID",
+            "contents": "@AfterRID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@AnyRecords",
+            "contents": "@AnyRecords(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ApplyIndexPattern",
+            "contents": "@ApplyIndexPattern(${1:Pattern})"
+        },
+        {
+            "trigger": "@ApplyStyle",
+            "contents": "@ApplyStyle()"
+        },
+        {
+            "trigger": "@AssembleRawRecord",
+            "contents": "@AssembleRawRecord()"
+        },
+        {
+            "trigger": "@AssociateHandleWithTxn",
+            "contents": "@AssociateHandleWithTxn()"
+        },
+        {
+            "trigger": "@AssociateMutexWithTxn",
+            "contents": "@AssociateMutexWithTxn(${1:Object.Mutex})"
+        },
+        {
+            "trigger": "@AssociateObjectWithTxn",
+            "contents": "@AssociateObjectWithTxn(${1:Object})"
+        },
+        {
+            "trigger": "@AssociateObjectWithTxnRT",
+            "contents": "@AssociateObjectWithTxnRT()"
+        },
+        {
+            "trigger": "@AssociateStructuredFlushWithTxn",
+            "contents": "@AssociateStructuredFlushWithTxn(${1:Object})"
+        },
+        {
+            "trigger": "@AuthNetGetTransactionDetails",
+            "contents": "@AuthNetGetTransactionDetails()"
+        },
+        {
+            "trigger": "@BarcodeIsSupported",
+            "contents": "@BarcodeIsSupported()"
+        },
+        {
+            "trigger": "@BarcodeRead",
+            "contents": "@BarcodeRead()"
+        },
+        {
+            "trigger": "@BeforeRID",
+            "contents": "@BeforeRID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@BeginTxn",
+            "contents": "@BeginTxn()"
+        },
+        {
+            "trigger": "@BodyRegionActive",
+            "contents": "@BodyRegionActive()"
+        },
+        {
+            "trigger": "@Break",
+            "contents": "@Break(${1:String})"
+        },
+        {
+            "trigger": "@BreakReset",
+            "contents": "@BreakReset()"
+        },
+        {
+            "trigger": "@BuildGraph",
+            "contents": "@BuildGraph(${1:GraphName})"
+        },
+        {
+            "trigger": "@BuildGraphFile",
+            "contents": "@BuildGraphFile(${1:GraphName})"
+        },
+        {
+            "trigger": "@BuildGraphFileClear",
+            "contents": "@BuildGraphFileClear(${1:GraphName})"
+        },
+        {
+            "trigger": "@BuildGraphReport",
+            "contents": "@BuildGraphReport(${1:Graph Name})"
+        },
+        {
+            "trigger": "@BuildIndexRecordConv",
+            "contents": "@BuildIndexRecordConv(${1:ObjectClass.IndexName})"
+        },
+        {
+            "trigger": "@CDFunction",
+            "contents": "@CDFunction()"
+        },
+        {
+            "trigger": "@CSProxyConnect",
+            "contents": "@CSProxyConnect()"
+        },
+        {
+            "trigger": "@CSProxyRegisterServer",
+            "contents": "@CSProxyRegisterServer()"
+        },
+        {
+            "trigger": "@CSProxySendReceive",
+            "contents": "@CSProxySendReceive()"
+        },
+        {
+            "trigger": "@CSProxySetPort",
+            "contents": "@CSProxySetPort()"
+        },
+        {
+            "trigger": "@CSProxySetTimeout",
+            "contents": "@CSProxySetTimeout()"
+        },
+        {
+            "trigger": "@CallChildProcess",
+            "contents": "@CallChildProcess()"
+        },
+        {
+            "trigger": "@CallChildProcessSimple",
+            "contents": "@CallChildProcessSimple()"
+        },
+        {
+            "trigger": "@CallChildScreen",
+            "contents": "@CallChildScreen()"
+        },
+        {
+            "trigger": "@CallChildScreenUnstructured",
+            "contents": "@CallChildScreenUnstructured()"
+        },
+        {
+            "trigger": "@CallChildWebRoutine",
+            "contents": "@CallChildWebRoutine()"
+        },
+        {
+            "trigger": "@CallDataDefIcon",
+            "contents": "@CallDataDefIcon()"
+        },
+        {
+            "trigger": "@CallDataDefList",
+            "contents": "@CallDataDefList()"
+        },
+        {
+            "trigger": "@CallDataDefSub",
+            "contents": "@CallDataDefSub()"
+        },
+        {
+            "trigger": "@CallDistributedProcessingNexter",
+            "contents": "@CallDistributedProcessingNexter()"
+        },
+        {
+            "trigger": "@CallEmailProgram",
+            "contents": "@CallEmailProgram()"
+        },
+        {
+            "trigger": "@CallExternalSub",
+            "contents": "@CallExternalSub(${1:CodeBase},${2:ExternalSubroutineSet},${3:MemberName})"
+        },
+        {
+            "trigger": "@CallExternalSubRT",
+            "contents": "@CallExternalSubRT()"
+        },
+        {
+            "trigger": "@CallIcon",
+            "contents": "@CallIcon(${1:MemberName})"
+        },
+        {
+            "trigger": "@CallList",
+            "contents": "@CallList(${1:MemberName})"
+        },
+        {
+            "trigger": "@CallMastFunction",
+            "contents": "@CallMastFunction(${1:Function})"
+        },
+        {
+            "trigger": "@CallPopoverWebRoutine",
+            "contents": "@CallPopoverWebRoutine()"
+        },
+        {
+            "trigger": "@CallPrintPrefProgram",
+            "contents": "@CallPrintPrefProgram()"
+        },
+        {
+            "trigger": "@CallProgram",
+            "contents": "@CallProgram()"
+        },
+        {
+            "trigger": "@CallProgramStacked",
+            "contents": "@CallProgramStacked()"
+        },
+        {
+            "trigger": "@CallReferencesProgram",
+            "contents": "@CallReferencesProgram()"
+        },
+        {
+            "trigger": "@CallScreenCancelLogic",
+            "contents": "@CallScreenCancelLogic()"
+        },
+        {
+            "trigger": "@CallScreenNewObjectLogic",
+            "contents": "@CallScreenNewObjectLogic()"
+        },
+        {
+            "trigger": "@CallScreenNewRecordLogic",
+            "contents": "@CallScreenNewRecordLogic()"
+        },
+        {
+            "trigger": "@CallScreenSaveLogic",
+            "contents": "@CallScreenSaveLogic()"
+        },
+        {
+            "trigger": "@CallSearch",
+            "contents": "@CallSearch()"
+        },
+        {
+            "trigger": "@CallSearchRecords",
+            "contents": "@CallSearchRecords()"
+        },
+        {
+            "trigger": "@CallSearchUnstructured",
+            "contents": "@CallSearchUnstructured()"
+        },
+        {
+            "trigger": "@CallStackedScreen",
+            "contents": "@CallStackedScreen()"
+        },
+        {
+            "trigger": "@CallStackedWebRoutine",
+            "contents": "@CallStackedWebRoutine()"
+        },
+        {
+            "trigger": "@CallStructuredCopyLocal",
+            "contents": "@CallStructuredCopyLocal(${1:Object class})"
+        },
+        {
+            "trigger": "@CallStructuredCreate",
+            "contents": "@CallStructuredCreate(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@CallStructuredExportTxn",
+            "contents": "@CallStructuredExportTxn(${1:Object class})"
+        },
+        {
+            "trigger": "@CallStructuredFlush",
+            "contents": "@CallStructuredFlush(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@CallStructuredImport",
+            "contents": "@CallStructuredImport(${1:Object class})"
+        },
+        {
+            "trigger": "@CallStructuredImportAdditional",
+            "contents": "@CallStructuredImportAdditional(${1:Object class},${2:Import name})"
+        },
+        {
+            "trigger": "@CallStructuredImportMulti",
+            "contents": "@CallStructuredImportMulti(${1:Object class})"
+        },
+        {
+            "trigger": "@CallStructuredPurge",
+            "contents": "@CallStructuredPurge(${1:Object class})"
+        },
+        {
+            "trigger": "@CallStructuredSubmit",
+            "contents": "@CallStructuredSubmit(${1:Object class})"
+        },
+        {
+            "trigger": "@CallSub",
+            "contents": "@CallSub(${1:MemberName})"
+        },
+        {
+            "trigger": "@CallSuspendProgram",
+            "contents": "@CallSuspendProgram()"
+        },
+        {
+            "trigger": "@CallTool",
+            "contents": "@CallTool(${1:Toolset.Toolname})"
+        },
+        {
+            "trigger": "@CallWinHelp",
+            "contents": "@CallWinHelp()"
+        },
+        {
+            "trigger": "@CallbackAfterClientUpdate",
+            "contents": "@CallbackAfterClientUpdate()"
+        },
+        {
+            "trigger": "@CallbackAfterCurrentCycle",
+            "contents": "@CallbackAfterCurrentCycle()"
+        },
+        {
+            "trigger": "@CanCallChildScreen",
+            "contents": "@CanCallChildScreen()"
+        },
+        {
+            "trigger": "@CaptureIndexNoOpsTxn",
+            "contents": "@CaptureIndexNoOpsTxn()"
+        },
+        {
+            "trigger": "@CaptureWindowBitmap",
+            "contents": "@CaptureWindowBitmap()"
+        },
+        {
+            "trigger": "@CaptureWindowMetafile",
+            "contents": "@CaptureWindowMetafile()"
+        },
+        {
+            "trigger": "@CatchupProgressiveConversion",
+            "contents": "@CatchupProgressiveConversion(${1:StopFunc})"
+        },
+        {
+            "trigger": "@ChallengeCredentials",
+            "contents": "@ChallengeCredentials()"
+        },
+        {
+            "trigger": "@CheckCodeBaseForUpdate",
+            "contents": "@CheckCodeBaseForUpdate()"
+        },
+        {
+            "trigger": "@CheckImportSuccess",
+            "contents": "@CheckImportSuccess()"
+        },
+        {
+            "trigger": "@CheckIndexNoOp",
+            "contents": "@CheckIndexNoOp(${1:Object.Index})"
+        },
+        {
+            "trigger": "@CheckRequired",
+            "contents": "@CheckRequired(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@CheckRequiredAndGrid",
+            "contents": "@CheckRequiredAndGrid(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@CheckRequiredFields",
+            "contents": "@CheckRequiredFields()"
+        },
+        {
+            "trigger": "@CheckRequiredRecords",
+            "contents": "@CheckRequiredRecords()"
+        },
+        {
+            "trigger": "@CleanupDistributedProcessing",
+            "contents": "@CleanupDistributedProcessing()"
+        },
+        {
+            "trigger": "@CleanupProgressiveDistributedProcessingWorkspaces",
+            "contents": "@CleanupProgressiveDistributedProcessingWorkspaces()"
+        },
+        {
+            "trigger": "@ClearInitialSort",
+            "contents": "@ClearInitialSort()"
+        },
+        {
+            "trigger": "@ClearObjectDirtyFlags",
+            "contents": "@ClearObjectDirtyFlags(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@ClearObjectDirtyFlagsRT",
+            "contents": "@ClearObjectDirtyFlagsRT()"
+        },
+        {
+            "trigger": "@ClearUserInput",
+            "contents": "@ClearUserInput()"
+        },
+        {
+            "trigger": "@ClearWebSessionMenus",
+            "contents": "@ClearWebSessionMenus()"
+        },
+        {
+            "trigger": "@ClickCellName",
+            "contents": "@ClickCellName()"
+        },
+        {
+            "trigger": "@ClickCol",
+            "contents": "@ClickCol()"
+        },
+        {
+            "trigger": "@ClickHK",
+            "contents": "@ClickHK()"
+        },
+        {
+            "trigger": "@ClickParent",
+            "contents": "@ClickParent()"
+        },
+        {
+            "trigger": "@ClickParentName",
+            "contents": "@ClickParentName()"
+        },
+        {
+            "trigger": "@ClickRow",
+            "contents": "@ClickRow()"
+        },
+        {
+            "trigger": "@ClickUD",
+            "contents": "@ClickUD()"
+        },
+        {
+            "trigger": "@ClickValue",
+            "contents": "@ClickValue()"
+        },
+        {
+            "trigger": "@CloneObject",
+            "contents": "@CloneObject(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@CloneObjectRT",
+            "contents": "@CloneObjectRT()"
+        },
+        {
+            "trigger": "@CloneRecords",
+            "contents": "@CloneRecords(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@CloseDirectoryEnumFile",
+            "contents": "@CloseDirectoryEnumFile()"
+        },
+        {
+            "trigger": "@CloseDirectoryForDirectories",
+            "contents": "@CloseDirectoryForDirectories()"
+        },
+        {
+            "trigger": "@CloseDirectoryForFiles",
+            "contents": "@CloseDirectoryForFiles()"
+        },
+        {
+            "trigger": "@CloseFileForReading",
+            "contents": "@CloseFileForReading()"
+        },
+        {
+            "trigger": "@CloseFileForWriting",
+            "contents": "@CloseFileForWriting()"
+        },
+        {
+            "trigger": "@CloseFixedWindow",
+            "contents": "@CloseFixedWindow()"
+        },
+        {
+            "trigger": "@CloseForRecordsByTimeSlice",
+            "contents": "@CloseForRecordsByTimeSlice(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@CloseForRecordsSince",
+            "contents": "@CloseForRecordsSince(${1:Object.Record})"
+        },
+        {
+            "trigger": "@CloseIndex",
+            "contents": "@CloseIndex(${1:ObjectClass.IndexName})"
+        },
+        {
+            "trigger": "@CloseIndexForIntersect",
+            "contents": "@CloseIndexForIntersect(${1:Object.Index})"
+        },
+        {
+            "trigger": "@CloseIndexForIntersectRT",
+            "contents": "@CloseIndexForIntersectRT()"
+        },
+        {
+            "trigger": "@CloseIndexRT",
+            "contents": "@CloseIndexRT()"
+        },
+        {
+            "trigger": "@CloseMastConnection",
+            "contents": "@CloseMastConnection()"
+        },
+        {
+            "trigger": "@CloseReportSession",
+            "contents": "@CloseReportSession()"
+        },
+        {
+            "trigger": "@CloseSet",
+            "contents": "@CloseSet()"
+        },
+        {
+            "trigger": "@CodeMemberNumber",
+            "contents": "@CodeMemberNumber(${1:Code member name})"
+        },
+        {
+            "trigger": "@CommitTxn",
+            "contents": "@CommitTxn()"
+        },
+        {
+            "trigger": "@CommitTxnNotify",
+            "contents": "@CommitTxnNotify()"
+        },
+        {
+            "trigger": "@CompareObjectSnapshot",
+            "contents": "@CompareObjectSnapshot(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@ConsoleProcess",
+            "contents": "@ConsoleProcess()"
+        },
+        {
+            "trigger": "@ContinueReportFolio",
+            "contents": "@ContinueReportFolio()"
+        },
+        {
+            "trigger": "@ConvertImageToMText",
+            "contents": "@ConvertImageToMText()"
+        },
+        {
+            "trigger": "@ConvertListToOID",
+            "contents": "@ConvertListToOID()"
+        },
+        {
+            "trigger": "@ConvertMTextToPlainText",
+            "contents": "@ConvertMTextToPlainText()"
+        },
+        {
+            "trigger": "@ConvertMTextToPlainTextWithoutTabs",
+            "contents": "@ConvertMTextToPlainTextWithoutTabs()"
+        },
+        {
+            "trigger": "@ConvertMTextToUnicode",
+            "contents": "@ConvertMTextToUnicode()"
+        },
+        {
+            "trigger": "@ConvertMTextToUnicodeWithoutTabs",
+            "contents": "@ConvertMTextToUnicodeWithoutTabs()"
+        },
+        {
+            "trigger": "@ConvertMTexttoWebRichText",
+            "contents": "@ConvertMTexttoWebRichText()"
+        },
+        {
+            "trigger": "@ConvertOIDToList",
+            "contents": "@ConvertOIDToList()"
+        },
+        {
+            "trigger": "@ConvertPlainTextToMText",
+            "contents": "@ConvertPlainTextToMText()"
+        },
+        {
+            "trigger": "@ConvertUnicodeToMText",
+            "contents": "@ConvertUnicodeToMText()"
+        },
+        {
+            "trigger": "@ConvertWebRichTexttoMText",
+            "contents": "@ConvertWebRichTexttoMText()"
+        },
+        {
+            "trigger": "@CopyFile",
+            "contents": "@CopyFile()"
+        },
+        {
+            "trigger": "@CopyFileClear",
+            "contents": "@CopyFileClear()"
+        },
+        {
+            "trigger": "@CopyFiles",
+            "contents": "@CopyFiles()"
+        },
+        {
+            "trigger": "@CopyProgramToSessionCache",
+            "contents": "@CopyProgramToSessionCache()"
+        },
+        {
+            "trigger": "@CopyRecordsRT",
+            "contents": "@CopyRecordsRT()"
+        },
+        {
+            "trigger": "@CounterFilePath",
+            "contents": "@CounterFilePath(${1:Object.Counter})"
+        },
+        {
+            "trigger": "@CreateCompRef",
+            "contents": "@CreateCompRef()"
+        },
+        {
+            "trigger": "@CreateConversionTask",
+            "contents": "@CreateConversionTask()"
+        },
+        {
+            "trigger": "@CreateDirectory",
+            "contents": "@CreateDirectory()"
+        },
+        {
+            "trigger": "@CreateDirectoryEnumFile",
+            "contents": "@CreateDirectoryEnumFile()"
+        },
+        {
+            "trigger": "@CreateExternalFile",
+            "contents": "@CreateExternalFile(${1:Object.Field})"
+        },
+        {
+            "trigger": "@CreateExternalFileRT",
+            "contents": "@CreateExternalFileRT()"
+        },
+        {
+            "trigger": "@CreateFile",
+            "contents": "@CreateFile()"
+        },
+        {
+            "trigger": "@CreateFileClear",
+            "contents": "@CreateFileClear()"
+        },
+        {
+            "trigger": "@CreateIndexRebuildTask",
+            "contents": "@CreateIndexRebuildTask()"
+        },
+        {
+            "trigger": "@CreateInvalidateProgramLogEntry",
+            "contents": "@CreateInvalidateProgramLogEntry()"
+        },
+        {
+            "trigger": "@CreateObject",
+            "contents": "@CreateObject(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@CreateObjectRT",
+            "contents": "@CreateObjectRT()"
+        },
+        {
+            "trigger": "@CreateProgramLogEntry",
+            "contents": "@CreateProgramLogEntry()"
+        },
+        {
+            "trigger": "@CreateProtoRecord",
+            "contents": "@CreateProtoRecord()"
+        },
+        {
+            "trigger": "@CreateRIDList",
+            "contents": "@CreateRIDList(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@CreateRecord",
+            "contents": "@CreateRecord(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@CreateRecordAsIfImported",
+            "contents": "@CreateRecordAsIfImported(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@CreateRecordNoDuplicateCheck",
+            "contents": "@CreateRecordNoDuplicateCheck(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@CreateRecordRT",
+            "contents": "@CreateRecordRT()"
+        },
+        {
+            "trigger": "@CreateReplaceFileLogEntry",
+            "contents": "@CreateReplaceFileLogEntry()"
+        },
+        {
+            "trigger": "@CreateRunTimeIcon",
+            "contents": "@CreateRunTimeIcon()"
+        },
+        {
+            "trigger": "@CreateRuntimeRecordTable",
+            "contents": "@CreateRuntimeRecordTable()"
+        },
+        {
+            "trigger": "@CreateSetRecord",
+            "contents": "@CreateSetRecord()"
+        },
+        {
+            "trigger": "@CreateSubRef",
+            "contents": "@CreateSubRef(${1:MemberName},${2:ValueToJoinToStack})"
+        },
+        {
+            "trigger": "@CreateTempFile",
+            "contents": "@CreateTempFile()"
+        },
+        {
+            "trigger": "@CreateTempFileClear",
+            "contents": "@CreateTempFileClear()"
+        },
+        {
+            "trigger": "@CreateWebSessionMenu",
+            "contents": "@CreateWebSessionMenu()"
+        },
+        {
+            "trigger": "@CreateWebSessionMenuItem",
+            "contents": "@CreateWebSessionMenuItem()"
+        },
+        {
+            "trigger": "@CurrentCell",
+            "contents": "@CurrentCell()"
+        },
+        {
+            "trigger": "@CurrentReportIndexRecord",
+            "contents": "@CurrentReportIndexRecord(${1:Object.Index})"
+        },
+        {
+            "trigger": "@CurrentReportKeyPage",
+            "contents": "@CurrentReportKeyPage()"
+        },
+        {
+            "trigger": "@CurrentReportPage",
+            "contents": "@CurrentReportPage()"
+        },
+        {
+            "trigger": "@CurrentReportSortIndexRecord",
+            "contents": "@CurrentReportSortIndexRecord(${1:Object.Index})"
+        },
+        {
+            "trigger": "@DataChangedMessage",
+            "contents": "@DataChangedMessage()"
+        },
+        {
+            "trigger": "@DataTypeWidthCalc",
+            "contents": "@DataTypeWidthCalc()"
+        },
+        {
+            "trigger": "@DefineDllFunction",
+            "contents": "@DefineDllFunction()"
+        },
+        {
+            "trigger": "@DeleteDirectory",
+            "contents": "@DeleteDirectory()"
+        },
+        {
+            "trigger": "@DeleteExternalFilePointer",
+            "contents": "@DeleteExternalFilePointer(${1:Object.FieldName})"
+        },
+        {
+            "trigger": "@DeleteExternalFilePointerRT",
+            "contents": "@DeleteExternalFilePointerRT()"
+        },
+        {
+            "trigger": "@DeleteFile",
+            "contents": "@DeleteFile()"
+        },
+        {
+            "trigger": "@DeleteIndexEntries",
+            "contents": "@DeleteIndexEntries(${1:ObjectClass.IndexName})"
+        },
+        {
+            "trigger": "@DeleteIndexEntriesRT",
+            "contents": "@DeleteIndexEntriesRT()"
+        },
+        {
+            "trigger": "@DeleteLogFile",
+            "contents": "@DeleteLogFile(${1:Object.LogFile})"
+        },
+        {
+            "trigger": "@DeleteObjectEnumerationFile",
+            "contents": "@DeleteObjectEnumerationFile()"
+        },
+        {
+            "trigger": "@DeleteProgramFromSessionCache",
+            "contents": "@DeleteProgramFromSessionCache()"
+        },
+        {
+            "trigger": "@DeleteRecords",
+            "contents": "@DeleteRecords(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@DeleteRecordsRT",
+            "contents": "@DeleteRecordsRT()"
+        },
+        {
+            "trigger": "@DeleteRunTimeIcon",
+            "contents": "@DeleteRunTimeIcon()"
+        },
+        {
+            "trigger": "@DeleteRuntimeRecordTable",
+            "contents": "@DeleteRuntimeRecordTable()"
+        },
+        {
+            "trigger": "@DeleteSynchList",
+            "contents": "@DeleteSynchList()"
+        },
+        {
+            "trigger": "@DeserializeObject",
+            "contents": "@DeserializeObject()"
+        },
+        {
+            "trigger": "@DirtyData",
+            "contents": "@DirtyData()"
+        },
+        {
+            "trigger": "@DisableGoverningMutex",
+            "contents": "@DisableGoverningMutex(${1:Object.Mutex})"
+        },
+        {
+            "trigger": "@DisableGoverningMutexRT",
+            "contents": "@DisableGoverningMutexRT()"
+        },
+        {
+            "trigger": "@DisableReportFolio",
+            "contents": "@DisableReportFolio()"
+        },
+        {
+            "trigger": "@DisableServerCurrentRecordCaching",
+            "contents": "@DisableServerCurrentRecordCaching()"
+        },
+        {
+            "trigger": "@DisassembleRawRecord",
+            "contents": "@DisassembleRawRecord()"
+        },
+        {
+            "trigger": "@DiscardConversionCrawler",
+            "contents": "@DiscardConversionCrawler()"
+        },
+        {
+            "trigger": "@DiscardProgressiveConversion",
+            "contents": "@DiscardProgressiveConversion()"
+        },
+        {
+            "trigger": "@DiscardTxn",
+            "contents": "@DiscardTxn()"
+        },
+        {
+            "trigger": "@DisplayCheckBox",
+            "contents": "@DisplayCheckBox()"
+        },
+        {
+            "trigger": "@DisplayHelp",
+            "contents": "@DisplayHelp()"
+        },
+        {
+            "trigger": "@DisplayIcon",
+            "contents": "@DisplayIcon()"
+        },
+        {
+            "trigger": "@DisplayNavBar",
+            "contents": "@DisplayNavBar(${1:Nav bar name})"
+        },
+        {
+            "trigger": "@DisplayRadioButton",
+            "contents": "@DisplayRadioButton()"
+        },
+        {
+            "trigger": "@DisplayScrollBar",
+            "contents": "@DisplayScrollBar(${1:Scroll bar name})"
+        },
+        {
+            "trigger": "@DisplayScrollBarRT",
+            "contents": "@DisplayScrollBarRT()"
+        },
+        {
+            "trigger": "@DisplayToggle",
+            "contents": "@DisplayToggle()"
+        },
+        {
+            "trigger": "@DoesComponentExist",
+            "contents": "@DoesComponentExist()"
+        },
+        {
+            "trigger": "@ElementInfo",
+            "contents": "@ElementInfo()"
+        },
+        {
+            "trigger": "@EmbeddedSearchSelectedRIDs",
+            "contents": "@EmbeddedSearchSelectedRIDs()"
+        },
+        {
+            "trigger": "@EnableServerCurrentRecordCaching",
+            "contents": "@EnableServerCurrentRecordCaching()"
+        },
+        {
+            "trigger": "@EnumerateObjectFiles",
+            "contents": "@EnumerateObjectFiles(${1:RootCallbackMemberName},${2:FileCallbackMemberName})"
+        },
+        {
+            "trigger": "@EnumeratePrinters",
+            "contents": "@EnumeratePrinters()"
+        },
+        {
+            "trigger": "@ExistsInList",
+            "contents": "@ExistsInList(${1:S or I})"
+        },
+        {
+            "trigger": "@ExitChildReturnData",
+            "contents": "@ExitChildReturnData()"
+        },
+        {
+            "trigger": "@ExitChildReturnSelectedData",
+            "contents": "@ExitChildReturnSelectedData()"
+        },
+        {
+            "trigger": "@ExitFullscreen",
+            "contents": "@ExitFullscreen()"
+        },
+        {
+            "trigger": "@ExitProcess",
+            "contents": "@ExitProcess()"
+        },
+        {
+            "trigger": "@ExitProcessTimeout",
+            "contents": "@ExitProcessTimeout()"
+        },
+        {
+            "trigger": "@ExitScreen",
+            "contents": "@ExitScreen()"
+        },
+        {
+            "trigger": "@ExitScreenUnconditional",
+            "contents": "@ExitScreenUnconditional()"
+        },
+        {
+            "trigger": "@ExportObject",
+            "contents": "@ExportObject(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@ExportObjectRT",
+            "contents": "@ExportObjectRT()"
+        },
+        {
+            "trigger": "@ExpungeRenamedServerIndexes",
+            "contents": "@ExpungeRenamedServerIndexes()"
+        },
+        {
+            "trigger": "@ExtractEmbeddedRecords",
+            "contents": "@ExtractEmbeddedRecords(${1:Object.Record of record to be extracted})"
+        },
+        {
+            "trigger": "@ExtractEmbeddedRecordsRT",
+            "contents": "@ExtractEmbeddedRecordsRT()"
+        },
+        {
+            "trigger": "@Field",
+            "contents": "@Field(${1:Object.FieldName})"
+        },
+        {
+            "trigger": "@FieldList",
+            "contents": "@FieldList()"
+        },
+        {
+            "trigger": "@FieldRT",
+            "contents": "@FieldRT()"
+        },
+        {
+            "trigger": "@FileAttributes",
+            "contents": "@FileAttributes()"
+        },
+        {
+            "trigger": "@FileAttributesGMT",
+            "contents": "@FileAttributesGMT()"
+        },
+        {
+            "trigger": "@FileEnterEditor",
+            "contents": "@FileEnterEditor()"
+        },
+        {
+            "trigger": "@FileEnterViewer",
+            "contents": "@FileEnterViewer()"
+        },
+        {
+            "trigger": "@FileExitEditor",
+            "contents": "@FileExitEditor()"
+        },
+        {
+            "trigger": "@FileExitEditorClear",
+            "contents": "@FileExitEditorClear()"
+        },
+        {
+            "trigger": "@FileExitViewer",
+            "contents": "@FileExitViewer()"
+        },
+        {
+            "trigger": "@FileFullyInMemory",
+            "contents": "@FileFullyInMemory(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@FileFullyInMemoryRT",
+            "contents": "@FileFullyInMemoryRT()"
+        },
+        {
+            "trigger": "@FileInfo",
+            "contents": "@FileInfo()"
+        },
+        {
+            "trigger": "@FilenameToInternal",
+            "contents": "@FilenameToInternal()"
+        },
+        {
+            "trigger": "@FinalizeProgressiveConversion",
+            "contents": "@FinalizeProgressiveConversion(${1:StopFunc})"
+        },
+        {
+            "trigger": "@FindRID",
+            "contents": "@FindRID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@FirstRID",
+            "contents": "@FirstRID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@FlushDataDefSet",
+            "contents": "@FlushDataDefSet()"
+        },
+        {
+            "trigger": "@FlushFile",
+            "contents": "@FlushFile(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@FlushIcon",
+            "contents": "@FlushIcon()"
+        },
+        {
+            "trigger": "@FlushObject",
+            "contents": "@FlushObject(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@FlushObjectClass",
+            "contents": "@FlushObjectClass(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@FlushObjectClassRT",
+            "contents": "@FlushObjectClassRT()"
+        },
+        {
+            "trigger": "@FlushObjectRT",
+            "contents": "@FlushObjectRT()"
+        },
+        {
+            "trigger": "@FlushObjectSnapshot",
+            "contents": "@FlushObjectSnapshot(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@FlushObjects",
+            "contents": "@FlushObjects(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@FlushObjectsRT",
+            "contents": "@FlushObjectsRT()"
+        },
+        {
+            "trigger": "@FlushRIDList",
+            "contents": "@FlushRIDList(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@FlushRecords",
+            "contents": "@FlushRecords(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@FlushRecordsRT",
+            "contents": "@FlushRecordsRT()"
+        },
+        {
+            "trigger": "@ForceError",
+            "contents": "@ForceError()"
+        },
+        {
+            "trigger": "@ForcePageBreak",
+            "contents": "@ForcePageBreak()"
+        },
+        {
+            "trigger": "@ForcePageRedraw",
+            "contents": "@ForcePageRedraw()"
+        },
+        {
+            "trigger": "@FormIndexRecords",
+            "contents": "@FormIndexRecords(${1:ObjectClass.IndexName})"
+        },
+        {
+            "trigger": "@FormIndexRecordsRT",
+            "contents": "@FormIndexRecordsRT()"
+        },
+        {
+            "trigger": "@FormatDisplayText",
+            "contents": "@FormatDisplayText()"
+        },
+        {
+            "trigger": "@FormatMeditorTimestamp",
+            "contents": "@FormatMeditorTimestamp()"
+        },
+        {
+            "trigger": "@FreeDllLibrary",
+            "contents": "@FreeDllLibrary()"
+        },
+        {
+            "trigger": "@GenerateAll",
+            "contents": "@GenerateAll()"
+        },
+        {
+            "trigger": "@GenerateBarcode",
+            "contents": "@GenerateBarcode()"
+        },
+        {
+            "trigger": "@GenerateContent",
+            "contents": "@GenerateContent()"
+        },
+        {
+            "trigger": "@GenerateExternalFileVersion",
+            "contents": "@GenerateExternalFileVersion(${1:Object.Field})"
+        },
+        {
+            "trigger": "@GenerateExternalFileVersionRT",
+            "contents": "@GenerateExternalFileVersionRT()"
+        },
+        {
+            "trigger": "@GenerateGuid",
+            "contents": "@GenerateGuid()"
+        },
+        {
+            "trigger": "@GenerateNone",
+            "contents": "@GenerateNone()"
+        },
+        {
+            "trigger": "@GetActiveWebSessionMenu",
+            "contents": "@GetActiveWebSessionMenu()"
+        },
+        {
+            "trigger": "@GetAllTimeZones",
+            "contents": "@GetAllTimeZones()"
+        },
+        {
+            "trigger": "@GetAuthenticatedUser",
+            "contents": "@GetAuthenticatedUser()"
+        },
+        {
+            "trigger": "@GetAuthenticatedUserDetails",
+            "contents": "@GetAuthenticatedUserDetails()"
+        },
+        {
+            "trigger": "@GetBodyButtonState",
+            "contents": "@GetBodyButtonState(${1:Button name})"
+        },
+        {
+            "trigger": "@GetBodyGroupState",
+            "contents": "@GetBodyGroupState()"
+        },
+        {
+            "trigger": "@GetBranchDownValue",
+            "contents": "@GetBranchDownValue()"
+        },
+        {
+            "trigger": "@GetClientName",
+            "contents": "@GetClientName()"
+        },
+        {
+            "trigger": "@GetControlState",
+            "contents": "@GetControlState()"
+        },
+        {
+            "trigger": "@GetConversionCrawlerStatus",
+            "contents": "@GetConversionCrawlerStatus()"
+        },
+        {
+            "trigger": "@GetConversionInfo",
+            "contents": "@GetConversionInfo()"
+        },
+        {
+            "trigger": "@GetConversionState",
+            "contents": "@GetConversionState()"
+        },
+        {
+            "trigger": "@GetCount",
+            "contents": "@GetCount(${1:The display name and cell name which has the corresponding accumulation keyword.})"
+        },
+        {
+            "trigger": "@GetCounterValue",
+            "contents": "@GetCounterValue(${1:Object.Counter})"
+        },
+        {
+            "trigger": "@GetCurrentBodyButtons",
+            "contents": "@GetCurrentBodyButtons()"
+        },
+        {
+            "trigger": "@GetCurrentComponent",
+            "contents": "@GetCurrentComponent()"
+        },
+        {
+            "trigger": "@GetCurrentDateTime",
+            "contents": "@GetCurrentDateTime()"
+        },
+        {
+            "trigger": "@GetCurrentDateTimeForZone",
+            "contents": "@GetCurrentDateTimeForZone()"
+        },
+        {
+            "trigger": "@GetCurrentElement",
+            "contents": "@GetCurrentElement()"
+        },
+        {
+            "trigger": "@GetCurrentFooter",
+            "contents": "@GetCurrentFooter()"
+        },
+        {
+            "trigger": "@GetCurrentOID",
+            "contents": "@GetCurrentOID(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@GetCurrentPage",
+            "contents": "@GetCurrentPage()"
+        },
+        {
+            "trigger": "@GetCurrentRID",
+            "contents": "@GetCurrentRID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@GetCurrentRIDList",
+            "contents": "@GetCurrentRIDList(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@GetCurrentRootRestrictions",
+            "contents": "@GetCurrentRootRestrictions()"
+        },
+        {
+            "trigger": "@GetCurrentTimeZone",
+            "contents": "@GetCurrentTimeZone()"
+        },
+        {
+            "trigger": "@GetCurrentTimeZoneLabel",
+            "contents": "@GetCurrentTimeZoneLabel()"
+        },
+        {
+            "trigger": "@GetCurrentTimeZoneLabelForZone",
+            "contents": "@GetCurrentTimeZoneLabelForZone()"
+        },
+        {
+            "trigger": "@GetCurrentWebComponent",
+            "contents": "@GetCurrentWebComponent()"
+        },
+        {
+            "trigger": "@GetDataModifiedFlag",
+            "contents": "@GetDataModifiedFlag()"
+        },
+        {
+            "trigger": "@GetDateTimeFromGMT",
+            "contents": "@GetDateTimeFromGMT()"
+        },
+        {
+            "trigger": "@GetDateTimeFromLocal",
+            "contents": "@GetDateTimeFromLocal()"
+        },
+        {
+            "trigger": "@GetDestinationComponent",
+            "contents": "@GetDestinationComponent()"
+        },
+        {
+            "trigger": "@GetDestinationPage",
+            "contents": "@GetDestinationPage()"
+        },
+        {
+            "trigger": "@GetDeviceLocation",
+            "contents": "@GetDeviceLocation()"
+        },
+        {
+            "trigger": "@GetDomainUser",
+            "contents": "@GetDomainUser()"
+        },
+        {
+            "trigger": "@GetElementLabel",
+            "contents": "@GetElementLabel(${1:ObjectClass.ElementName or ObjectClass.ElementName.PointedToElementName})"
+        },
+        {
+            "trigger": "@GetElementLabelPointedTo",
+            "contents": "@GetElementLabelPointedTo(${1:ObjectClass.ElementName.PointedToElementName})"
+        },
+        {
+            "trigger": "@GetField",
+            "contents": "@GetField(${1:ObjectClass.FieldName or ObjectClass.Pointer.FieldName})"
+        },
+        {
+            "trigger": "@GetFieldExternal",
+            "contents": "@GetFieldExternal(${1:ObjectClass.FieldName or ObjectClass.Pointer.FieldName})"
+        },
+        {
+            "trigger": "@GetFieldRT",
+            "contents": "@GetFieldRT()"
+        },
+        {
+            "trigger": "@GetFile",
+            "contents": "@GetFile()"
+        },
+        {
+            "trigger": "@GetFileClear",
+            "contents": "@GetFileClear()"
+        },
+        {
+            "trigger": "@GetFileRollUpMetrics",
+            "contents": "@GetFileRollUpMetrics()"
+        },
+        {
+            "trigger": "@GetFileSizes",
+            "contents": "@GetFileSizes()"
+        },
+        {
+            "trigger": "@GetFirstTimeStampForFiles",
+            "contents": "@GetFirstTimeStampForFiles(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@GetFooterButtonState",
+            "contents": "@GetFooterButtonState(${1:Button name})"
+        },
+        {
+            "trigger": "@GetFooterButtonStateRT",
+            "contents": "@GetFooterButtonStateRT()"
+        },
+        {
+            "trigger": "@GetFooterGroupState",
+            "contents": "@GetFooterGroupState(${1:FooterGroup})"
+        },
+        {
+            "trigger": "@GetGraphPixel",
+            "contents": "@GetGraphPixel()"
+        },
+        {
+            "trigger": "@GetHelpChapterInfo",
+            "contents": "@GetHelpChapterInfo()"
+        },
+        {
+            "trigger": "@GetHelpChapterItems",
+            "contents": "@GetHelpChapterItems()"
+        },
+        {
+            "trigger": "@GetHelpChapterTopics",
+            "contents": "@GetHelpChapterTopics()"
+        },
+        {
+            "trigger": "@GetHelpManualChapters",
+            "contents": "@GetHelpManualChapters()"
+        },
+        {
+            "trigger": "@GetHelpManualGlossaryFiles",
+            "contents": "@GetHelpManualGlossaryFiles()"
+        },
+        {
+            "trigger": "@GetHelpManualInfo",
+            "contents": "@GetHelpManualInfo()"
+        },
+        {
+            "trigger": "@GetHelpManualItems",
+            "contents": "@GetHelpManualItems()"
+        },
+        {
+            "trigger": "@GetHelpTopicData",
+            "contents": "@GetHelpTopicData()"
+        },
+        {
+            "trigger": "@GetHelpTopicIndexTerms",
+            "contents": "@GetHelpTopicIndexTerms()"
+        },
+        {
+            "trigger": "@GetHelpTopicInfo",
+            "contents": "@GetHelpTopicInfo()"
+        },
+        {
+            "trigger": "@GetHelpTopicKeywordTerms",
+            "contents": "@GetHelpTopicKeywordTerms()"
+        },
+        {
+            "trigger": "@GetInitialArgument",
+            "contents": "@GetInitialArgument()"
+        },
+        {
+            "trigger": "@GetKey",
+            "contents": "@GetKey(${1:ObjectClass.KeyName})"
+        },
+        {
+            "trigger": "@GetKeyExternal",
+            "contents": "@GetKeyExternal(${1:ObjectClass.KeyName})"
+        },
+        {
+            "trigger": "@GetKeyRT",
+            "contents": "@GetKeyRT()"
+        },
+        {
+            "trigger": "@GetLastLogEvents",
+            "contents": "@GetLastLogEvents()"
+        },
+        {
+            "trigger": "@GetLastProgramLogEntry",
+            "contents": "@GetLastProgramLogEntry()"
+        },
+        {
+            "trigger": "@GetLastRecordChosen",
+            "contents": "@GetLastRecordChosen()"
+        },
+        {
+            "trigger": "@GetLastTimeStamp",
+            "contents": "@GetLastTimeStamp()"
+        },
+        {
+            "trigger": "@GetLastTimeStampForFile",
+            "contents": "@GetLastTimeStampForFile(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@GetLastTimeStampForObject",
+            "contents": "@GetLastTimeStampForObject(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@GetLastTimeStampForObjects",
+            "contents": "@GetLastTimeStampForObjects(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@GetLastTimeStampForObjectsRT",
+            "contents": "@GetLastTimeStampForObjectsRT()"
+        },
+        {
+            "trigger": "@GetLastTimeStampRT",
+            "contents": "@GetLastTimeStampRT()"
+        },
+        {
+            "trigger": "@GetLocal",
+            "contents": "@GetLocal(${1:localVarName})"
+        },
+        {
+            "trigger": "@GetLocalFromDateTime",
+            "contents": "@GetLocalFromDateTime()"
+        },
+        {
+            "trigger": "@GetLockPathFile",
+            "contents": "@GetLockPathFile()"
+        },
+        {
+            "trigger": "@GetLongLockInfoRT",
+            "contents": "@GetLongLockInfoRT()"
+        },
+        {
+            "trigger": "@GetMax",
+            "contents": "@GetMax(${1:The display name and cell name which has the corresponding accumulation keyword.})"
+        },
+        {
+            "trigger": "@GetMean",
+            "contents": "@GetMean(${1:The display name and cell name which has the corresponding accumulation keyword.})"
+        },
+        {
+            "trigger": "@GetMenuButtonState",
+            "contents": "@GetMenuButtonState(${1:Button name})"
+        },
+        {
+            "trigger": "@GetMenuGroupState",
+            "contents": "@GetMenuGroupState(${1:Menu group name.})"
+        },
+        {
+            "trigger": "@GetMin",
+            "contents": "@GetMin(${1:The display name and cell name which has the corresponding accumulation keyword.})"
+        },
+        {
+            "trigger": "@GetMutexSystemInfo",
+            "contents": "@GetMutexSystemInfo(${1:Object.Mutex})"
+        },
+        {
+            "trigger": "@GetNetworkZone",
+            "contents": "@GetNetworkZone()"
+        },
+        {
+            "trigger": "@GetNextDirectory",
+            "contents": "@GetNextDirectory()"
+        },
+        {
+            "trigger": "@GetNextFile",
+            "contents": "@GetNextFile()"
+        },
+        {
+            "trigger": "@GetNextLogEvents",
+            "contents": "@GetNextLogEvents(${1:Object.LogFile})"
+        },
+        {
+            "trigger": "@GetNextLogEventsRT",
+            "contents": "@GetNextLogEventsRT()"
+        },
+        {
+            "trigger": "@GetNumberPadValues",
+            "contents": "@GetNumberPadValues()"
+        },
+        {
+            "trigger": "@GetOID",
+            "contents": "@GetOID()"
+        },
+        {
+            "trigger": "@GetObjectLongLockParams",
+            "contents": "@GetObjectLongLockParams(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@GetObjectLongLockSystemInfo",
+            "contents": "@GetObjectLongLockSystemInfo(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@GetObjectLongLockValue",
+            "contents": "@GetObjectLongLockValue(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@GetPageIcon",
+            "contents": "@GetPageIcon()"
+        },
+        {
+            "trigger": "@GetParentProcessID",
+            "contents": "@GetParentProcessID()"
+        },
+        {
+            "trigger": "@GetPreviousPage",
+            "contents": "@GetPreviousPage()"
+        },
+        {
+            "trigger": "@GetPriorLogEvents",
+            "contents": "@GetPriorLogEvents(${1:Object.LogFile})"
+        },
+        {
+            "trigger": "@GetPriorLogEventsRT",
+            "contents": "@GetPriorLogEventsRT()"
+        },
+        {
+            "trigger": "@GetProcessCredentials",
+            "contents": "@GetProcessCredentials()"
+        },
+        {
+            "trigger": "@GetProcessID",
+            "contents": "@GetProcessID()"
+        },
+        {
+            "trigger": "@GetProcessLongLockParams",
+            "contents": "@GetProcessLongLockParams(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@GetProcessLongLockSystemInfo",
+            "contents": "@GetProcessLongLockSystemInfo(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@GetProcessLongLockValue",
+            "contents": "@GetProcessLongLockValue(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@GetProgressiveConversionStatus",
+            "contents": "@GetProgressiveConversionStatus()"
+        },
+        {
+            "trigger": "@GetProxyInfo",
+            "contents": "@GetProxyInfo()"
+        },
+        {
+            "trigger": "@GetQueuedProcessMessage",
+            "contents": "@GetQueuedProcessMessage()"
+        },
+        {
+            "trigger": "@GetRecord",
+            "contents": "@GetRecord(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@GetRecordAsOf",
+            "contents": "@GetRecordAsOf(${1:Object.Record})"
+        },
+        {
+            "trigger": "@GetRecordAsOfRT",
+            "contents": "@GetRecordAsOfRT()"
+        },
+        {
+            "trigger": "@GetRecordEffectiveOn",
+            "contents": "@GetRecordEffectiveOn(${1:Object.Record})"
+        },
+        {
+            "trigger": "@GetRecordEffectiveOnRT",
+            "contents": "@GetRecordEffectiveOnRT()"
+        },
+        {
+            "trigger": "@GetRecordRT",
+            "contents": "@GetRecordRT()"
+        },
+        {
+            "trigger": "@GetRefreshURL",
+            "contents": "@GetRefreshURL()"
+        },
+        {
+            "trigger": "@GetReportParam",
+            "contents": "@GetReportParam(${1:Parameter})"
+        },
+        {
+            "trigger": "@GetRoot",
+            "contents": "@GetRoot()"
+        },
+        {
+            "trigger": "@GetSearchMode",
+            "contents": "@GetSearchMode()"
+        },
+        {
+            "trigger": "@GetSearchSeed",
+            "contents": "@GetSearchSeed()"
+        },
+        {
+            "trigger": "@GetSelectedRIDs",
+            "contents": "@GetSelectedRIDs()"
+        },
+        {
+            "trigger": "@GetServerName",
+            "contents": "@GetServerName(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@GetServerNameRT",
+            "contents": "@GetServerNameRT()"
+        },
+        {
+            "trigger": "@GetSortIndicator",
+            "contents": "@GetSortIndicator()"
+        },
+        {
+            "trigger": "@GetStateVariable",
+            "contents": "@GetStateVariable(${1:State variable name})"
+        },
+        {
+            "trigger": "@GetSum",
+            "contents": "@GetSum(${1:The display name and cell name which has the corresponding accumulation keyword.})"
+        },
+        {
+            "trigger": "@GetSystemVariable",
+            "contents": "@GetSystemVariable(${1:System variable name})"
+        },
+        {
+            "trigger": "@GetTCPProxyArriveQueueMessage",
+            "contents": "@GetTCPProxyArriveQueueMessage()"
+        },
+        {
+            "trigger": "@GetTimeOffsetForGmt",
+            "contents": "@GetTimeOffsetForGmt()"
+        },
+        {
+            "trigger": "@GetTimeOffsetForLocal",
+            "contents": "@GetTimeOffsetForLocal()"
+        },
+        {
+            "trigger": "@GetTimeZoneDescription",
+            "contents": "@GetTimeZoneDescription()"
+        },
+        {
+            "trigger": "@GetTimeZoneDltLabel",
+            "contents": "@GetTimeZoneDltLabel()"
+        },
+        {
+            "trigger": "@GetTimeZoneDltOffset",
+            "contents": "@GetTimeZoneDltOffset()"
+        },
+        {
+            "trigger": "@GetTimeZoneName",
+            "contents": "@GetTimeZoneName()"
+        },
+        {
+            "trigger": "@GetTimeZoneStdLabel",
+            "contents": "@GetTimeZoneStdLabel()"
+        },
+        {
+            "trigger": "@GetTimeZoneStdOffset",
+            "contents": "@GetTimeZoneStdOffset()"
+        },
+        {
+            "trigger": "@GetTxnHandle",
+            "contents": "@GetTxnHandle()"
+        },
+        {
+            "trigger": "@GetTypeIndexPattern",
+            "contents": "@GetTypeIndexPattern()"
+        },
+        {
+            "trigger": "@GetTypeJustification",
+            "contents": "@GetTypeJustification()"
+        },
+        {
+            "trigger": "@GetUserInput",
+            "contents": "@GetUserInput()"
+        },
+        {
+            "trigger": "@GetWebAssistedEntryArgument",
+            "contents": "@GetWebAssistedEntryArgument()"
+        },
+        {
+            "trigger": "@GetWebBaseUrl",
+            "contents": "@GetWebBaseUrl()"
+        },
+        {
+            "trigger": "@GetWebBrowserFlag",
+            "contents": "@GetWebBrowserFlag()"
+        },
+        {
+            "trigger": "@GetWebCurrentInstance",
+            "contents": "@GetWebCurrentInstance()"
+        },
+        {
+            "trigger": "@GetWebDeviceIdentifiers",
+            "contents": "@GetWebDeviceIdentifiers()"
+        },
+        {
+            "trigger": "@GetWebFileInfo",
+            "contents": "@GetWebFileInfo()"
+        },
+        {
+            "trigger": "@GetWebFormValue",
+            "contents": "@GetWebFormValue(${1:name in\u00a0?name-value pair in the initial URL})"
+        },
+        {
+            "trigger": "@GetWebIndexCurrentInstance",
+            "contents": "@GetWebIndexCurrentInstance()"
+        },
+        {
+            "trigger": "@GetWebInput",
+            "contents": "@GetWebInput()"
+        },
+        {
+            "trigger": "@GetWebInputExt",
+            "contents": "@GetWebInputExt()"
+        },
+        {
+            "trigger": "@GetWebRoot",
+            "contents": "@GetWebRoot()"
+        },
+        {
+            "trigger": "@GetWebRoutineTitle",
+            "contents": "@GetWebRoutineTitle()"
+        },
+        {
+            "trigger": "@GetWebSessionInfo",
+            "contents": "@GetWebSessionInfo()"
+        },
+        {
+            "trigger": "@GetWebStyleHexColor",
+            "contents": "@GetWebStyleHexColor()"
+        },
+        {
+            "trigger": "@GetWebUrlMisCode",
+            "contents": "@GetWebUrlMisCode()"
+        },
+        {
+            "trigger": "@GetWindowFontSizeUsed",
+            "contents": "@GetWindowFontSizeUsed()"
+        },
+        {
+            "trigger": "@GetWindowTitle",
+            "contents": "@GetWindowTitle()"
+        },
+        {
+            "trigger": "@GiveProcessFocus",
+            "contents": "@GiveProcessFocus()"
+        },
+        {
+            "trigger": "@GiveProcessFocusRaw",
+            "contents": "@GiveProcessFocusRaw()"
+        },
+        {
+            "trigger": "@GotoComponent",
+            "contents": "@GotoComponent()"
+        },
+        {
+            "trigger": "@GotoElement",
+            "contents": "@GotoElement()"
+        },
+        {
+            "trigger": "@GotoPage",
+            "contents": "@GotoPage()"
+        },
+        {
+            "trigger": "@GotoWebComponent",
+            "contents": "@GotoWebComponent()"
+        },
+        {
+            "trigger": "@GotoWebLink",
+            "contents": "@GotoWebLink()"
+        },
+        {
+            "trigger": "@GotoWebPage",
+            "contents": "@GotoWebPage()"
+        },
+        {
+            "trigger": "@GridClearStates",
+            "contents": "@GridClearStates(${1:none})"
+        },
+        {
+            "trigger": "@GridGetFocus",
+            "contents": "@GridGetFocus(${1:none})"
+        },
+        {
+            "trigger": "@GridNextRow",
+            "contents": "@GridNextRow(${1:none})"
+        },
+        {
+            "trigger": "@GridPrevRow",
+            "contents": "@GridPrevRow(${1:none})"
+        },
+        {
+            "trigger": "@GridSetCurrentCell",
+            "contents": "@GridSetCurrentCell(${1:none})"
+        },
+        {
+            "trigger": "@Hang",
+            "contents": "@Hang()"
+        },
+        {
+            "trigger": "@HasConversionAlreadyRun",
+            "contents": "@HasConversionAlreadyRun()"
+        },
+        {
+            "trigger": "@Hash",
+            "contents": "@Hash(${1:Hash type},${2:Return format (optional) base16 or base64})"
+        },
+        {
+            "trigger": "@HashFile",
+            "contents": "@HashFile(${1:Hash type},${2:Return format (optional) base16 or base64})"
+        },
+        {
+            "trigger": "@HideAlert",
+            "contents": "@HideAlert()"
+        },
+        {
+            "trigger": "@HideWorkingIndicator",
+            "contents": "@HideWorkingIndicator()"
+        },
+        {
+            "trigger": "@ImageAnnotate",
+            "contents": "@ImageAnnotate(${1:FunctionName})"
+        },
+        {
+            "trigger": "@ImageAppend",
+            "contents": "@ImageAppend()"
+        },
+        {
+            "trigger": "@ImageAppendEnd",
+            "contents": "@ImageAppendEnd()"
+        },
+        {
+            "trigger": "@ImageAppendTop",
+            "contents": "@ImageAppendTop()"
+        },
+        {
+            "trigger": "@ImageData",
+            "contents": "@ImageData()"
+        },
+        {
+            "trigger": "@ImageInsert",
+            "contents": "@ImageInsert()"
+        },
+        {
+            "trigger": "@ImageInsertTop",
+            "contents": "@ImageInsertTop()"
+        },
+        {
+            "trigger": "@ImageJoin",
+            "contents": "@ImageJoin()"
+        },
+        {
+            "trigger": "@ImageUpdate",
+            "contents": "@ImageUpdate()"
+        },
+        {
+            "trigger": "@ImportFile",
+            "contents": "@ImportFile(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@ImportFileBatchesToStackWhile",
+            "contents": "@ImportFileBatchesToStackWhile(${1:CodeMemberName})"
+        },
+        {
+            "trigger": "@ImportFileBatchesToStackWhileRT",
+            "contents": "@ImportFileBatchesToStackWhileRT()"
+        },
+        {
+            "trigger": "@ImportFileBatchesWhile",
+            "contents": "@ImportFileBatchesWhile(${1:ObjectClass.FileName},${2:CodeMemberName})"
+        },
+        {
+            "trigger": "@ImportFileBatchesWhileRT",
+            "contents": "@ImportFileBatchesWhileRT()"
+        },
+        {
+            "trigger": "@ImportFileCx",
+            "contents": "@ImportFileCx(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@ImportFileFromCache",
+            "contents": "@ImportFileFromCache(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@ImportFileHxAsOf",
+            "contents": "@ImportFileHxAsOf(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@ImportFileHxAsOfRT",
+            "contents": "@ImportFileHxAsOfRT()"
+        },
+        {
+            "trigger": "@ImportFileHxStore",
+            "contents": "@ImportFileHxStore()"
+        },
+        {
+            "trigger": "@ImportFileRT",
+            "contents": "@ImportFileRT()"
+        },
+        {
+            "trigger": "@ImportFileToOID",
+            "contents": "@ImportFileToOID(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@ImportFileToOIDCx",
+            "contents": "@ImportFileToOIDCx(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@ImportHxAsOfRT",
+            "contents": "@ImportHxAsOfRT()"
+        },
+        {
+            "trigger": "@ImportRecord",
+            "contents": "@ImportRecord(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordCx",
+            "contents": "@ImportRecordCx(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordEffectiveOn",
+            "contents": "@ImportRecordEffectiveOn(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordEffectiveOnCx",
+            "contents": "@ImportRecordEffectiveOnCx(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordEffectiveOnRT",
+            "contents": "@ImportRecordEffectiveOnRT()"
+        },
+        {
+            "trigger": "@ImportRecordHxAsOf",
+            "contents": "@ImportRecordHxAsOf(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordRT",
+            "contents": "@ImportRecordRT()"
+        },
+        {
+            "trigger": "@ImportRecordToOID",
+            "contents": "@ImportRecordToOID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordToOIDCx",
+            "contents": "@ImportRecordToOIDCx(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecords",
+            "contents": "@ImportRecords(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordsByTimeSlice",
+            "contents": "@ImportRecordsByTimeSlice(${1:ObjectClass.RecordName},${2:MemberName})"
+        },
+        {
+            "trigger": "@ImportRecordsConditional",
+            "contents": "@ImportRecordsConditional(${1:ObjectClass.RecordName},${2:MemberName})"
+        },
+        {
+            "trigger": "@ImportRecordsConditionalCx",
+            "contents": "@ImportRecordsConditionalCx(${1:ObjectClass.RecordName},${2:MemberName})"
+        },
+        {
+            "trigger": "@ImportRecordsConditionalRT",
+            "contents": "@ImportRecordsConditionalRT()"
+        },
+        {
+            "trigger": "@ImportRecordsCx",
+            "contents": "@ImportRecordsCx(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordsEffectiveOn",
+            "contents": "@ImportRecordsEffectiveOn(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordsEffectiveOnCx",
+            "contents": "@ImportRecordsEffectiveOnCx(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordsFromCache",
+            "contents": "@ImportRecordsFromCache(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordsFromCacheCx",
+            "contents": "@ImportRecordsFromCacheCx(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordsHxAsOf",
+            "contents": "@ImportRecordsHxAsOf(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordsRT",
+            "contents": "@ImportRecordsRT()"
+        },
+        {
+            "trigger": "@ImportRecordsSince",
+            "contents": "@ImportRecordsSince(${1:Object.Record},${2:MemberName})"
+        },
+        {
+            "trigger": "@ImportRecordsSinceRT",
+            "contents": "@ImportRecordsSinceRT()"
+        },
+        {
+            "trigger": "@ImportRecordsToOID",
+            "contents": "@ImportRecordsToOID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ImportRecordsToOIDCx",
+            "contents": "@ImportRecordsToOIDCx(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@InWebRoutine",
+            "contents": "@InWebRoutine()"
+        },
+        {
+            "trigger": "@IncrementCounter",
+            "contents": "@IncrementCounter(${1:Object.Counter})"
+        },
+        {
+            "trigger": "@IncrementCounterNotify",
+            "contents": "@IncrementCounterNotify(${1:Object.Counter})"
+        },
+        {
+            "trigger": "@IndexKey",
+            "contents": "@IndexKey(${1:ObjectClass.IndexName.KeyName})"
+        },
+        {
+            "trigger": "@IndexKeyExternal",
+            "contents": "@IndexKeyExternal(${1:ObjectClass.IndexName.KeyName})"
+        },
+        {
+            "trigger": "@IndexKeyRT",
+            "contents": "@IndexKeyRT()"
+        },
+        {
+            "trigger": "@IndexLookup",
+            "contents": "@IndexLookup(${1:ObjectClass.IndexName},${2:Result Return Size})"
+        },
+        {
+            "trigger": "@IndexLookupCx",
+            "contents": "@IndexLookupCx(${1:ObjectClass.IndexName})"
+        },
+        {
+            "trigger": "@IndexLookupIntoArray",
+            "contents": "@IndexLookupIntoArray(${1:ObjectClass.IndexName})"
+        },
+        {
+            "trigger": "@IndexLookupRT",
+            "contents": "@IndexLookupRT(${1:ObjectClass.IndexName},${2:Result Return Size})"
+        },
+        {
+            "trigger": "@IndexLookupResults",
+            "contents": "@IndexLookupResults(${1:ObjectClass.IndexName})"
+        },
+        {
+            "trigger": "@IndexOID",
+            "contents": "@IndexOID()"
+        },
+        {
+            "trigger": "@IndexRecordPhysicalInfo",
+            "contents": "@IndexRecordPhysicalInfo()"
+        },
+        {
+            "trigger": "@InitializeDistributedProcessing",
+            "contents": "@InitializeDistributedProcessing()"
+        },
+        {
+            "trigger": "@InitializeProgramCache",
+            "contents": "@InitializeProgramCache()"
+        },
+        {
+            "trigger": "@InsertBranchDown",
+            "contents": "@InsertBranchDown()"
+        },
+        {
+            "trigger": "@InsertIndexEntries",
+            "contents": "@InsertIndexEntries(${1:ObjectClass.IndexName})"
+        },
+        {
+            "trigger": "@InsertIndexEntriesRT",
+            "contents": "@InsertIndexEntriesRT()"
+        },
+        {
+            "trigger": "@InstantiateCounter",
+            "contents": "@InstantiateCounter(${1:Object.Counter})"
+        },
+        {
+            "trigger": "@IntraObjectIndexPath",
+            "contents": "@IntraObjectIndexPath()"
+        },
+        {
+            "trigger": "@InvokeDllFunction",
+            "contents": "@InvokeDllFunction()"
+        },
+        {
+            "trigger": "@IsWebAssistedEntryForced",
+            "contents": "@IsWebAssistedEntryForced()"
+        },
+        {
+            "trigger": "@JsonDecode",
+            "contents": "@JsonDecode()"
+        },
+        {
+            "trigger": "@JsonEncode",
+            "contents": "@JsonEncode()"
+        },
+        {
+            "trigger": "@Key",
+            "contents": "@Key(${1:ObjectClass.KeyName})"
+        },
+        {
+            "trigger": "@KeyList",
+            "contents": "@KeyList()"
+        },
+        {
+            "trigger": "@KeyRT",
+            "contents": "@KeyRT()"
+        },
+        {
+            "trigger": "@LastAuthenticationError",
+            "contents": "@LastAuthenticationError()"
+        },
+        {
+            "trigger": "@LastRID",
+            "contents": "@LastRID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@LastServerKey",
+            "contents": "@LastServerKey(${1:ObjectClass.KeyName})"
+        },
+        {
+            "trigger": "@LastServerKeyRT",
+            "contents": "@LastServerKeyRT()"
+        },
+        {
+            "trigger": "@LaunchConsoleProcess",
+            "contents": "@LaunchConsoleProcess()"
+        },
+        {
+            "trigger": "@LaunchExternalApp",
+            "contents": "@LaunchExternalApp()"
+        },
+        {
+            "trigger": "@LaunchParentProcess",
+            "contents": "@LaunchParentProcess()"
+        },
+        {
+            "trigger": "@LaunchRemoteDebugger",
+            "contents": "@LaunchRemoteDebugger()"
+        },
+        {
+            "trigger": "@LaunchWebRoutine",
+            "contents": "@LaunchWebRoutine()"
+        },
+        {
+            "trigger": "@ListAllProcesses",
+            "contents": "@ListAllProcesses()"
+        },
+        {
+            "trigger": "@ListChangedRecords",
+            "contents": "@ListChangedRecords(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@ListChangedRecordsRT",
+            "contents": "@ListChangedRecordsRT()"
+        },
+        {
+            "trigger": "@ListConversionCrawlers",
+            "contents": "@ListConversionCrawlers()"
+        },
+        {
+            "trigger": "@ListConversions",
+            "contents": "@ListConversions()"
+        },
+        {
+            "trigger": "@ListCurrentElementHxStoreValues",
+            "contents": "@ListCurrentElementHxStoreValues()"
+        },
+        {
+            "trigger": "@ListDataTypes",
+            "contents": "@ListDataTypes()"
+        },
+        {
+            "trigger": "@ListDirectories",
+            "contents": "@ListDirectories()"
+        },
+        {
+            "trigger": "@ListDistributedProcessingNexters",
+            "contents": "@ListDistributedProcessingNexters()"
+        },
+        {
+            "trigger": "@ListExternalFilePaths",
+            "contents": "@ListExternalFilePaths(${1:Object.FieldName})"
+        },
+        {
+            "trigger": "@ListExternalFilePathsRT",
+            "contents": "@ListExternalFilePathsRT()"
+        },
+        {
+            "trigger": "@ListFiles",
+            "contents": "@ListFiles()"
+        },
+        {
+            "trigger": "@ListGeneratedRequiredComponents",
+            "contents": "@ListGeneratedRequiredComponents()"
+        },
+        {
+            "trigger": "@ListGroupProcesses",
+            "contents": "@ListGroupProcesses()"
+        },
+        {
+            "trigger": "@ListLogFolders",
+            "contents": "@ListLogFolders(${1:Object.LogFile})"
+        },
+        {
+            "trigger": "@ListMemberNumber",
+            "contents": "@ListMemberNumber(${1:List})"
+        },
+        {
+            "trigger": "@ListMutexesAcquired",
+            "contents": "@ListMutexesAcquired(${1:Object.Mutex})"
+        },
+        {
+            "trigger": "@ListOIDs",
+            "contents": "@ListOIDs(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@ListOIDsRT",
+            "contents": "@ListOIDsRT()"
+        },
+        {
+            "trigger": "@ListPointedToObjects",
+            "contents": "@ListPointedToObjects()"
+        },
+        {
+            "trigger": "@ListProcesses",
+            "contents": "@ListProcesses()"
+        },
+        {
+            "trigger": "@ListProgressiveConversions",
+            "contents": "@ListProgressiveConversions()"
+        },
+        {
+            "trigger": "@ListRIDs",
+            "contents": "@ListRIDs(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ListRIDsAscending",
+            "contents": "@ListRIDsAscending(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ListRIDsAscendingRT",
+            "contents": "@ListRIDsAscendingRT()"
+        },
+        {
+            "trigger": "@ListRIDsRT",
+            "contents": "@ListRIDsRT()"
+        },
+        {
+            "trigger": "@ListRecordHxStoreEvents",
+            "contents": "@ListRecordHxStoreEvents()"
+        },
+        {
+            "trigger": "@ListRecordHxStoreRIDs",
+            "contents": "@ListRecordHxStoreRIDs()"
+        },
+        {
+            "trigger": "@ListReorderedRIDsRT",
+            "contents": "@ListReorderedRIDsRT()"
+        },
+        {
+            "trigger": "@ListSecurityPackages",
+            "contents": "@ListSecurityPackages()"
+        },
+        {
+            "trigger": "@LoadDataDefSet",
+            "contents": "@LoadDataDefSet()"
+        },
+        {
+            "trigger": "@LoadDllLibrary",
+            "contents": "@LoadDllLibrary()"
+        },
+        {
+            "trigger": "@LoadExternalPageSet",
+            "contents": "@LoadExternalPageSet()"
+        },
+        {
+            "trigger": "@LoadExternalSubroutineSet",
+            "contents": "@LoadExternalSubroutineSet()"
+        },
+        {
+            "trigger": "@LoadMText",
+            "contents": "@LoadMText()"
+        },
+        {
+            "trigger": "@LoadToolset",
+            "contents": "@LoadToolset(${1:Toolset})"
+        },
+        {
+            "trigger": "@LockLongMulti",
+            "contents": "@LockLongMulti()"
+        },
+        {
+            "trigger": "@LockLongRT",
+            "contents": "@LockLongRT()"
+        },
+        {
+            "trigger": "@LockObjectLong",
+            "contents": "@LockObjectLong(${1:Object.LongLock})"
+        },
+        {
+            "trigger": "@LockObjectShort",
+            "contents": "@LockObjectShort(${1:Object.ShortLock})"
+        },
+        {
+            "trigger": "@LockObjectShortCx",
+            "contents": "@LockObjectShortCx(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@LockProcessLong",
+            "contents": "@LockProcessLong(${1:Object.ProcessLock})"
+        },
+        {
+            "trigger": "@LockProcessShort",
+            "contents": "@LockProcessShort(${1:Object.ProcessLock})"
+        },
+        {
+            "trigger": "@LockProcessShortCx",
+            "contents": "@LockProcessShortCx(${1:Object.ProcessLock})"
+        },
+        {
+            "trigger": "@LockShortRT",
+            "contents": "@LockShortRT()"
+        },
+        {
+            "trigger": "@Log",
+            "contents": "@Log()"
+        },
+        {
+            "trigger": "@LogAppEvent",
+            "contents": "@LogAppEvent()"
+        },
+        {
+            "trigger": "@LogEventKey",
+            "contents": "@LogEventKey(${1:Object.LogFile.KeyName})"
+        },
+        {
+            "trigger": "@LogEventKeyExternal",
+            "contents": "@LogEventKeyExternal(${1:Object.LogFile.KeyName})"
+        },
+        {
+            "trigger": "@LongLockStillOwnedRT",
+            "contents": "@LongLockStillOwnedRT()"
+        },
+        {
+            "trigger": "@ManageIconsRT",
+            "contents": "@ManageIconsRT()"
+        },
+        {
+            "trigger": "@MarkFileForAbolishment",
+            "contents": "@MarkFileForAbolishment()"
+        },
+        {
+            "trigger": "@MarkMissingFields",
+            "contents": "@MarkMissingFields()"
+        },
+        {
+            "trigger": "@MarkMissingRecords",
+            "contents": "@MarkMissingRecords()"
+        },
+        {
+            "trigger": "@MarkObjectAsMemoryOnly",
+            "contents": "@MarkObjectAsMemoryOnly(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@MaxClientKey",
+            "contents": "@MaxClientKey(${1:ObjectClass.KeyName})"
+        },
+        {
+            "trigger": "@MaxClientKeyRT",
+            "contents": "@MaxClientKeyRT()"
+        },
+        {
+            "trigger": "@MenuButtonClickable",
+            "contents": "@MenuButtonClickable()"
+        },
+        {
+            "trigger": "@MenuIconView",
+            "contents": "@MenuIconView(${1:none})"
+        },
+        {
+            "trigger": "@Message",
+            "contents": "@Message(${1:Name of Code Member (optional - See below)})"
+        },
+        {
+            "trigger": "@MoreIndexEntries",
+            "contents": "@MoreIndexEntries(${1:ObjectClass.IndexName})"
+        },
+        {
+            "trigger": "@MoreIndexEntriesRT",
+            "contents": "@MoreIndexEntriesRT()"
+        },
+        {
+            "trigger": "@MoreRID",
+            "contents": "@MoreRID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@MouseClickInProcess",
+            "contents": "@MouseClickInProcess()"
+        },
+        {
+            "trigger": "@MoveRecordAfter",
+            "contents": "@MoveRecordAfter(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@MoveRecordAfterRT",
+            "contents": "@MoveRecordAfterRT()"
+        },
+        {
+            "trigger": "@MoveRecordBefore",
+            "contents": "@MoveRecordBefore(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@MoveRecordBeforeRT",
+            "contents": "@MoveRecordBeforeRT()"
+        },
+        {
+            "trigger": "@MutexAcquired",
+            "contents": "@MutexAcquired(${1:Object.Mutex})"
+        },
+        {
+            "trigger": "@NextDirectoryEnumEntry",
+            "contents": "@NextDirectoryEnumEntry()"
+        },
+        {
+            "trigger": "@NextIndexEntry",
+            "contents": "@NextIndexEntry(${1:ObjectClass.IndexName})"
+        },
+        {
+            "trigger": "@NextIndexEntryRT",
+            "contents": "@NextIndexEntryRT()"
+        },
+        {
+            "trigger": "@NextIntersectOID",
+            "contents": "@NextIntersectOID(${1:Object.Index})"
+        },
+        {
+            "trigger": "@NextIntersectOIDRT",
+            "contents": "@NextIntersectOIDRT()"
+        },
+        {
+            "trigger": "@NextRID",
+            "contents": "@NextRID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@NextSetRecord",
+            "contents": "@NextSetRecord()"
+        },
+        {
+            "trigger": "@NextURN",
+            "contents": "@NextURN(${1:ObjectClass.KeyName})"
+        },
+        {
+            "trigger": "@OID",
+            "contents": "@OID()"
+        },
+        {
+            "trigger": "@OIDToFilename",
+            "contents": "@OIDToFilename(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@ObjectChanged",
+            "contents": "@ObjectChanged(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@ObjectFilePath",
+            "contents": "@ObjectFilePath()"
+        },
+        {
+            "trigger": "@ObjectInfo",
+            "contents": "@ObjectInfo()"
+        },
+        {
+            "trigger": "@ObjectLongLockStillOwned",
+            "contents": "@ObjectLongLockStillOwned(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@ObjectSnapshotExists",
+            "contents": "@ObjectSnapshotExists(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@ObjectSnapshotRT",
+            "contents": "@ObjectSnapshotRT()"
+        },
+        {
+            "trigger": "@ObjectUpdatedSinceImport",
+            "contents": "@ObjectUpdatedSinceImport(${1:Object})"
+        },
+        {
+            "trigger": "@OpenDirectoryEnumFile",
+            "contents": "@OpenDirectoryEnumFile()"
+        },
+        {
+            "trigger": "@OpenDirectoryForDirectories",
+            "contents": "@OpenDirectoryForDirectories(${1:ANP buffer override})"
+        },
+        {
+            "trigger": "@OpenDirectoryForFiles",
+            "contents": "@OpenDirectoryForFiles(${1:ANP buffer override})"
+        },
+        {
+            "trigger": "@OpenFileForReading",
+            "contents": "@OpenFileForReading()"
+        },
+        {
+            "trigger": "@OpenFileForWritingAppend",
+            "contents": "@OpenFileForWritingAppend()"
+        },
+        {
+            "trigger": "@OpenFileForWritingReplace",
+            "contents": "@OpenFileForWritingReplace()"
+        },
+        {
+            "trigger": "@OpenFixedWindow",
+            "contents": "@OpenFixedWindow()"
+        },
+        {
+            "trigger": "@OpenForRecordsByTimeSlice",
+            "contents": "@OpenForRecordsByTimeSlice(${1:Object.Record},${2:Element})"
+        },
+        {
+            "trigger": "@OpenForRecordsSince",
+            "contents": "@OpenForRecordsSince(${1:Object.Record})"
+        },
+        {
+            "trigger": "@OpenIndex",
+            "contents": "@OpenIndex(${1:ObjectClass.IndexName},${2:ANP buffer override})"
+        },
+        {
+            "trigger": "@OpenIndexForIntersect",
+            "contents": "@OpenIndexForIntersect(${1:Object.Index})"
+        },
+        {
+            "trigger": "@OpenIndexForIntersectRT",
+            "contents": "@OpenIndexForIntersectRT()"
+        },
+        {
+            "trigger": "@OpenIndexRT",
+            "contents": "@OpenIndexRT()"
+        },
+        {
+            "trigger": "@OpenMastConnection",
+            "contents": "@OpenMastConnection()"
+        },
+        {
+            "trigger": "@OpenReportSession",
+            "contents": "@OpenReportSession()"
+        },
+        {
+            "trigger": "@OpenSet",
+            "contents": "@OpenSet()"
+        },
+        {
+            "trigger": "@OrderFields",
+            "contents": "@OrderFields()"
+        },
+        {
+            "trigger": "@OverrideWebRequestTimeout",
+            "contents": "@OverrideWebRequestTimeout()"
+        },
+        {
+            "trigger": "@OverrideWebWaitMessage",
+            "contents": "@OverrideWebWaitMessage()"
+        },
+        {
+            "trigger": "@ParentProcess",
+            "contents": "@ParentProcess()"
+        },
+        {
+            "trigger": "@PhysicalFilePath",
+            "contents": "@PhysicalFilePath(${1:RootTT})"
+        },
+        {
+            "trigger": "@Ping",
+            "contents": "@Ping()"
+        },
+        {
+            "trigger": "@PopupNotify",
+            "contents": "@PopupNotify(${1:FunctionName: Notify / Options})"
+        },
+        {
+            "trigger": "@PostClientMessage",
+            "contents": "@PostClientMessage(${1:MessageName})"
+        },
+        {
+            "trigger": "@PostEmbeddedWebSiteMessage",
+            "contents": "@PostEmbeddedWebSiteMessage()"
+        },
+        {
+            "trigger": "@PrepHCISForConversions",
+            "contents": "@PrepHCISForConversions()"
+        },
+        {
+            "trigger": "@PrepareProgressiveConversionForDP",
+            "contents": "@PrepareProgressiveConversionForDP(${1:StopFunc})"
+        },
+        {
+            "trigger": "@PreviousRID",
+            "contents": "@PreviousRID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@PreviousReportIndexRecord",
+            "contents": "@PreviousReportIndexRecord(${1:Object.Index})"
+        },
+        {
+            "trigger": "@PreviousReportSortIndexRecord",
+            "contents": "@PreviousReportSortIndexRecord(${1:Object.Index})"
+        },
+        {
+            "trigger": "@PrintArchDoc",
+            "contents": "@PrintArchDoc()"
+        },
+        {
+            "trigger": "@PrintHTMLDoc",
+            "contents": "@PrintHTMLDoc()"
+        },
+        {
+            "trigger": "@ProcessLongLockStillOwned",
+            "contents": "@ProcessLongLockStillOwned(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@ProcessMessageKey",
+            "contents": "@ProcessMessageKey()"
+        },
+        {
+            "trigger": "@ProcessTimerKey",
+            "contents": "@ProcessTimerKey()"
+        },
+        {
+            "trigger": "@Program",
+            "contents": "@Program()"
+        },
+        {
+            "trigger": "@ProxyModeEnabled",
+            "contents": "@ProxyModeEnabled()"
+        },
+        {
+            "trigger": "@PurgeObject",
+            "contents": "@PurgeObject(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@PurgeObjectRT",
+            "contents": "@PurgeObjectRT()"
+        },
+        {
+            "trigger": "@PurgePDFFile",
+            "contents": "@PurgePDFFile()"
+        },
+        {
+            "trigger": "@PutField",
+            "contents": "@PutField(${1:ObjectClass.FieldName})"
+        },
+        {
+            "trigger": "@PutFieldRT",
+            "contents": "@PutFieldRT()"
+        },
+        {
+            "trigger": "@PutLocal",
+            "contents": "@PutLocal(${1:localVarName})"
+        },
+        {
+            "trigger": "@PutRecord",
+            "contents": "@PutRecord(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@PutRecordRT",
+            "contents": "@PutRecordRT()"
+        },
+        {
+            "trigger": "@PutRoot",
+            "contents": "@PutRoot()"
+        },
+        {
+            "trigger": "@PutStateVariable",
+            "contents": "@PutStateVariable(${1:State variable name})"
+        },
+        {
+            "trigger": "@PutSystemVariable",
+            "contents": "@PutSystemVariable(${1:System variable name})"
+        },
+        {
+            "trigger": "@PutUserInput",
+            "contents": "@PutUserInput()"
+        },
+        {
+            "trigger": "@PutWebCurrentInstance",
+            "contents": "@PutWebCurrentInstance()"
+        },
+        {
+            "trigger": "@PutWebIndexCurrentInstance",
+            "contents": "@PutWebIndexCurrentInstance()"
+        },
+        {
+            "trigger": "@QueryDirectories",
+            "contents": "@QueryDirectories()"
+        },
+        {
+            "trigger": "@QueryExternalApp",
+            "contents": "@QueryExternalApp()"
+        },
+        {
+            "trigger": "@QueryExternalFilesOnServer",
+            "contents": "@QueryExternalFilesOnServer(${1:Object.FieldName})"
+        },
+        {
+            "trigger": "@QueryExternalFilesOnServerRT",
+            "contents": "@QueryExternalFilesOnServerRT()"
+        },
+        {
+            "trigger": "@QueryFiles",
+            "contents": "@QueryFiles()"
+        },
+        {
+            "trigger": "@QueryPrinterConfig",
+            "contents": "@QueryPrinterConfig()"
+        },
+        {
+            "trigger": "@QueryProcess",
+            "contents": "@QueryProcess()"
+        },
+        {
+            "trigger": "@QueryProcessRaw",
+            "contents": "@QueryProcessRaw()"
+        },
+        {
+            "trigger": "@QueryReportPrinterConfig",
+            "contents": "@QueryReportPrinterConfig()"
+        },
+        {
+            "trigger": "@QueryToolset",
+            "contents": "@QueryToolset(${1:Toolset})"
+        },
+        {
+            "trigger": "@QueueProcessMessage",
+            "contents": "@QueueProcessMessage()"
+        },
+        {
+            "trigger": "@RID",
+            "contents": "@RID()"
+        },
+        {
+            "trigger": "@ReadKey",
+            "contents": "@ReadKey()"
+        },
+        {
+            "trigger": "@ReadKeyIPC",
+            "contents": "@ReadKeyIPC()"
+        },
+        {
+            "trigger": "@ReadOnlyRoots",
+            "contents": "@ReadOnlyRoots()"
+        },
+        {
+            "trigger": "@ReadProcessMessage",
+            "contents": "@ReadProcessMessage()"
+        },
+        {
+            "trigger": "@ReadRID",
+            "contents": "@ReadRID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ReconcileConversionIndexOIDs",
+            "contents": "@ReconcileConversionIndexOIDs()"
+        },
+        {
+            "trigger": "@RecordChanged",
+            "contents": "@RecordChanged(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@RecordCreated",
+            "contents": "@RecordCreated(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@RecordInfo",
+            "contents": "@RecordInfo()"
+        },
+        {
+            "trigger": "@RecordOwned",
+            "contents": "@RecordOwned(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@RecordTag",
+            "contents": "@RecordTag(${1:Object.Record})"
+        },
+        {
+            "trigger": "@RecordsChanged",
+            "contents": "@RecordsChanged(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@RecordsChangedRT",
+            "contents": "@RecordsChangedRT()"
+        },
+        {
+            "trigger": "@RecordsFullyInMemory",
+            "contents": "@RecordsFullyInMemory(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@RecordsFullyInMemoryRT",
+            "contents": "@RecordsFullyInMemoryRT()"
+        },
+        {
+            "trigger": "@RedirectToExternalURL",
+            "contents": "@RedirectToExternalURL(${1:CallbackMemberName})"
+        },
+        {
+            "trigger": "@RedirectToWebRoutine",
+            "contents": "@RedirectToWebRoutine()"
+        },
+        {
+            "trigger": "@RedisplayFullWindowTitle",
+            "contents": "@RedisplayFullWindowTitle()"
+        },
+        {
+            "trigger": "@RedistributeDistributedProcessingWorklist",
+            "contents": "@RedistributeDistributedProcessingWorklist()"
+        },
+        {
+            "trigger": "@RefreshIncrementalEntry",
+            "contents": "@RefreshIncrementalEntry()"
+        },
+        {
+            "trigger": "@RegisterHelpTopicPage",
+            "contents": "@RegisterHelpTopicPage()"
+        },
+        {
+            "trigger": "@ReleaseForeignLongLockRT",
+            "contents": "@ReleaseForeignLongLockRT()"
+        },
+        {
+            "trigger": "@ReleaseForeignObjectLongLock",
+            "contents": "@ReleaseForeignObjectLongLock(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@ReleaseForeignProcessLongLock",
+            "contents": "@ReleaseForeignProcessLongLock(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@ReleaseMutex",
+            "contents": "@ReleaseMutex(${1:Object.Mutex})"
+        },
+        {
+            "trigger": "@ReleaseMutexes",
+            "contents": "@ReleaseMutexes()"
+        },
+        {
+            "trigger": "@ReloadWebValidationProgram",
+            "contents": "@ReloadWebValidationProgram()"
+        },
+        {
+            "trigger": "@RelocateOIDIndex",
+            "contents": "@RelocateOIDIndex()"
+        },
+        {
+            "trigger": "@RemoveBranchDown",
+            "contents": "@RemoveBranchDown()"
+        },
+        {
+            "trigger": "@RemoveDuplicateCxImports",
+            "contents": "@RemoveDuplicateCxImports()"
+        },
+        {
+            "trigger": "@RemoveIconFromCache",
+            "contents": "@RemoveIconFromCache()"
+        },
+        {
+            "trigger": "@RenameDirectory",
+            "contents": "@RenameDirectory()"
+        },
+        {
+            "trigger": "@RenameFile",
+            "contents": "@RenameFile()"
+        },
+        {
+            "trigger": "@RenderWindowBitmap",
+            "contents": "@RenderWindowBitmap()"
+        },
+        {
+            "trigger": "@RenewAllForUpdateMutexes",
+            "contents": "@RenewAllForUpdateMutexes()"
+        },
+        {
+            "trigger": "@RenewMutexForUI",
+            "contents": "@RenewMutexForUI(${1:Object.Mutex},${2:optional ownership period override})"
+        },
+        {
+            "trigger": "@RenewMutexForUIQuiet",
+            "contents": "@RenewMutexForUIQuiet(${1:Object.Mutex},${2:optional ownership period override})"
+        },
+        {
+            "trigger": "@RenewMutexForUpdate",
+            "contents": "@RenewMutexForUpdate(${1:Object.Mutex})"
+        },
+        {
+            "trigger": "@RenewMutexForUpdateQuiet",
+            "contents": "@RenewMutexForUpdateQuiet(${1:Object.Mutex})"
+        },
+        {
+            "trigger": "@RenewMutexesForUI",
+            "contents": "@RenewMutexesForUI()"
+        },
+        {
+            "trigger": "@RenewMutexesForUpdate",
+            "contents": "@RenewMutexesForUpdate()"
+        },
+        {
+            "trigger": "@RenewMutexesInTxn",
+            "contents": "@RenewMutexesInTxn()"
+        },
+        {
+            "trigger": "@ReplaceHTMLSpecialChars",
+            "contents": "@ReplaceHTMLSpecialChars()"
+        },
+        {
+            "trigger": "@ReportBorderExists",
+            "contents": "@ReportBorderExists()"
+        },
+        {
+            "trigger": "@ReportFolioExists",
+            "contents": "@ReportFolioExists()"
+        },
+        {
+            "trigger": "@ReportTerminated",
+            "contents": "@ReportTerminated()"
+        },
+        {
+            "trigger": "@ResetConversionCrawler",
+            "contents": "@ResetConversionCrawler()"
+        },
+        {
+            "trigger": "@ResetConversionTask",
+            "contents": "@ResetConversionTask()"
+        },
+        {
+            "trigger": "@ResetDistributedProcessingNexter",
+            "contents": "@ResetDistributedProcessingNexter()"
+        },
+        {
+            "trigger": "@ResetEmbeddedSearch",
+            "contents": "@ResetEmbeddedSearch()"
+        },
+        {
+            "trigger": "@ResetIncrementalEntries",
+            "contents": "@ResetIncrementalEntries()"
+        },
+        {
+            "trigger": "@ResetProgressiveConversion",
+            "contents": "@ResetProgressiveConversion()"
+        },
+        {
+            "trigger": "@ResetReportFolio",
+            "contents": "@ResetReportFolio(${1:none OR Now})"
+        },
+        {
+            "trigger": "@ResetScrollPosition",
+            "contents": "@ResetScrollPosition()"
+        },
+        {
+            "trigger": "@ResetSubBodyButtons",
+            "contents": "@ResetSubBodyButtons()"
+        },
+        {
+            "trigger": "@ResizeChildWebRoutine",
+            "contents": "@ResizeChildWebRoutine()"
+        },
+        {
+            "trigger": "@RestoreObjectSnapshot",
+            "contents": "@RestoreObjectSnapshot(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@RetrieveConsolidatedDistributedProcessingIncompleteLog",
+            "contents": "@RetrieveConsolidatedDistributedProcessingIncompleteLog()"
+        },
+        {
+            "trigger": "@RetrieveDistributedProcessingIncompleteLog",
+            "contents": "@RetrieveDistributedProcessingIncompleteLog()"
+        },
+        {
+            "trigger": "@RetrieveExternalFile",
+            "contents": "@RetrieveExternalFile(${1:Object.FieldName or Object.Pointer.FieldName})"
+        },
+        {
+            "trigger": "@RetrieveExternalFileRT",
+            "contents": "@RetrieveExternalFileRT()"
+        },
+        {
+            "trigger": "@RetrieveField",
+            "contents": "@RetrieveField(${1:ObjectClass.FieldName or ObjectClass.Pointer.FieldName})"
+        },
+        {
+            "trigger": "@RetrieveFieldExternal",
+            "contents": "@RetrieveFieldExternal(${1:ObjectClass.FieldName or ObjectClass.Pointer.FieldName})"
+        },
+        {
+            "trigger": "@RetrieveFieldRT",
+            "contents": "@RetrieveFieldRT()"
+        },
+        {
+            "trigger": "@RetrieveRecord",
+            "contents": "@RetrieveRecord(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@RetrieveRecordCx",
+            "contents": "@RetrieveRecordCx(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@RetrieveRecordRT",
+            "contents": "@RetrieveRecordRT()"
+        },
+        {
+            "trigger": "@RetrieveRecordToOID",
+            "contents": "@RetrieveRecordToOID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@RetrieveRecordToOIDCx",
+            "contents": "@RetrieveRecordToOIDCx(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@ReturnToPriorWebRoutine",
+            "contents": "@ReturnToPriorWebRoutine()"
+        },
+        {
+            "trigger": "@RollUpFile",
+            "contents": "@RollUpFile(${1:ObjectClass.FileName})"
+        },
+        {
+            "trigger": "@RollUpFileRT",
+            "contents": "@RollUpFileRT()"
+        },
+        {
+            "trigger": "@Root",
+            "contents": "@Root(${1:TranslationTimeRoot},${2:AccessType})"
+        },
+        {
+            "trigger": "@RootClient",
+            "contents": "@RootClient(${1:TranslateTimeRoot},${2:AccessType})"
+        },
+        {
+            "trigger": "@RootRT",
+            "contents": "@RootRT()"
+        },
+        {
+            "trigger": "@RootServer",
+            "contents": "@RootServer(${1:RootTT},${2:AccessType})"
+        },
+        {
+            "trigger": "@RuntimeRecordTableExists",
+            "contents": "@RuntimeRecordTableExists()"
+        },
+        {
+            "trigger": "@SaveObjectSnapshot",
+            "contents": "@SaveObjectSnapshot(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@SaveProcessState",
+            "contents": "@SaveProcessState()"
+        },
+        {
+            "trigger": "@ScrollToItem",
+            "contents": "@ScrollToItem()"
+        },
+        {
+            "trigger": "@ScrollToPosition",
+            "contents": "@ScrollToPosition()"
+        },
+        {
+            "trigger": "@SearchFreeTextDocuments",
+            "contents": "@SearchFreeTextDocuments()"
+        },
+        {
+            "trigger": "@SearchLogEvents",
+            "contents": "@SearchLogEvents(${1:Object.LogFile})"
+        },
+        {
+            "trigger": "@SearchLogEventsRT",
+            "contents": "@SearchLogEventsRT()"
+        },
+        {
+            "trigger": "@SearchTCPProxyArriveQueue",
+            "contents": "@SearchTCPProxyArriveQueue()"
+        },
+        {
+            "trigger": "@SelectCDRowSet",
+            "contents": "@SelectCDRowSet(${1:CDRowSetHookName})"
+        },
+        {
+            "trigger": "@SelectCDRowSetRT",
+            "contents": "@SelectCDRowSetRT()"
+        },
+        {
+            "trigger": "@SelectCol",
+            "contents": "@SelectCol()"
+        },
+        {
+            "trigger": "@SelectColName",
+            "contents": "@SelectColName()"
+        },
+        {
+            "trigger": "@SelectHK",
+            "contents": "@SelectHK()"
+        },
+        {
+            "trigger": "@SelectRID",
+            "contents": "@SelectRID()"
+        },
+        {
+            "trigger": "@SelectRow",
+            "contents": "@SelectRow()"
+        },
+        {
+            "trigger": "@SelectUD",
+            "contents": "@SelectUD()"
+        },
+        {
+            "trigger": "@SendMessageToMobileApp",
+            "contents": "@SendMessageToMobileApp()"
+        },
+        {
+            "trigger": "@SendProcessMessage",
+            "contents": "@SendProcessMessage()"
+        },
+        {
+            "trigger": "@SendProcessMessageRaw",
+            "contents": "@SendProcessMessageRaw()"
+        },
+        {
+            "trigger": "@SendProcessPassword",
+            "contents": "@SendProcessPassword()"
+        },
+        {
+            "trigger": "@SendProcessPasswordRaw",
+            "contents": "@SendProcessPasswordRaw()"
+        },
+        {
+            "trigger": "@SerializeObject",
+            "contents": "@SerializeObject()"
+        },
+        {
+            "trigger": "@SetAccordionState",
+            "contents": "@SetAccordionState()"
+        },
+        {
+            "trigger": "@SetActiveWebSessionMenu",
+            "contents": "@SetActiveWebSessionMenu()"
+        },
+        {
+            "trigger": "@SetBodyButtonState",
+            "contents": "@SetBodyButtonState(${1:Button name})"
+        },
+        {
+            "trigger": "@SetBodyTitle",
+            "contents": "@SetBodyTitle()"
+        },
+        {
+            "trigger": "@SetCheckboxHighlight",
+            "contents": "@SetCheckboxHighlight()"
+        },
+        {
+            "trigger": "@SetControlState",
+            "contents": "@SetControlState()"
+        },
+        {
+            "trigger": "@SetCookie",
+            "contents": "@SetCookie()"
+        },
+        {
+            "trigger": "@SetCounterAhead",
+            "contents": "@SetCounterAhead(${1:Object.Counter})"
+        },
+        {
+            "trigger": "@SetCurrentBodyButtons",
+            "contents": "@SetCurrentBodyButtons()"
+        },
+        {
+            "trigger": "@SetCurrentConversionTask",
+            "contents": "@SetCurrentConversionTask()"
+        },
+        {
+            "trigger": "@SetCurrentFooter",
+            "contents": "@SetCurrentFooter()"
+        },
+        {
+            "trigger": "@SetCurrentOID",
+            "contents": "@SetCurrentOID(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@SetCurrentRID",
+            "contents": "@SetCurrentRID(${1:ObjectClass.RecordName})"
+        },
+        {
+            "trigger": "@SetCurrentRIDList",
+            "contents": "@SetCurrentRIDList(${1:ObjectClass})"
+        },
+        {
+            "trigger": "@SetCurrentTimeZone",
+            "contents": "@SetCurrentTimeZone()"
+        },
+        {
+            "trigger": "@SetDataModifiedFlag",
+            "contents": "@SetDataModifiedFlag()"
+        },
+        {
+            "trigger": "@SetDisplayIgnoreNavInputFlag",
+            "contents": "@SetDisplayIgnoreNavInputFlag(${1:DisplayName},${2:CodeMember})"
+        },
+        {
+            "trigger": "@SetErrorTrapFolder",
+            "contents": "@SetErrorTrapFolder()"
+        },
+        {
+            "trigger": "@SetFocusExternalApp",
+            "contents": "@SetFocusExternalApp()"
+        },
+        {
+            "trigger": "@SetFocusSearchSeed",
+            "contents": "@SetFocusSearchSeed()"
+        },
+        {
+            "trigger": "@SetFooterButtonState",
+            "contents": "@SetFooterButtonState(${1:Button name})"
+        },
+        {
+            "trigger": "@SetFooterButtonStateRT",
+            "contents": "@SetFooterButtonStateRT()"
+        },
+        {
+            "trigger": "@SetGraphBkColor",
+            "contents": "@SetGraphBkColor()"
+        },
+        {
+            "trigger": "@SetGraphColor",
+            "contents": "@SetGraphColor()"
+        },
+        {
+            "trigger": "@SetGraphFont",
+            "contents": "@SetGraphFont()"
+        },
+        {
+            "trigger": "@SetIPCAppBitFlag",
+            "contents": "@SetIPCAppBitFlag()"
+        },
+        {
+            "trigger": "@SetImageScaling",
+            "contents": "@SetImageScaling()"
+        },
+        {
+            "trigger": "@SetImportFlag",
+            "contents": "@SetImportFlag()"
+        },
+        {
+            "trigger": "@SetMImageLib",
+            "contents": "@SetMImageLib()"
+        },
+        {
+            "trigger": "@SetMenuButtonState",
+            "contents": "@SetMenuButtonState(${1:Button name})"
+        },
+        {
+            "trigger": "@SetMenuTopIcon",
+            "contents": "@SetMenuTopIcon()"
+        },
+        {
+            "trigger": "@SetNetworkZone",
+            "contents": "@SetNetworkZone()"
+        },
+        {
+            "trigger": "@SetPalette",
+            "contents": "@SetPalette()"
+        },
+        {
+            "trigger": "@SetRadioButtonHighlight",
+            "contents": "@SetRadioButtonHighlight()"
+        },
+        {
+            "trigger": "@SetReportParam",
+            "contents": "@SetReportParam(${1:ParameterName})"
+        },
+        {
+            "trigger": "@SetSelectedRIDs",
+            "contents": "@SetSelectedRIDs()"
+        },
+        {
+            "trigger": "@SetSortIndicator",
+            "contents": "@SetSortIndicator()"
+        },
+        {
+            "trigger": "@SetSubBodyButtonState",
+            "contents": "@SetSubBodyButtonState()"
+        },
+        {
+            "trigger": "@SetTimeStampAppData",
+            "contents": "@SetTimeStampAppData()"
+        },
+        {
+            "trigger": "@SetTimeStampEnvData",
+            "contents": "@SetTimeStampEnvData()"
+        },
+        {
+            "trigger": "@SetTimer",
+            "contents": "@SetTimer()"
+        },
+        {
+            "trigger": "@SetTypeAheadSeedValue",
+            "contents": "@SetTypeAheadSeedValue()"
+        },
+        {
+            "trigger": "@SetWebAssistedEntryReturnValue",
+            "contents": "@SetWebAssistedEntryReturnValue()"
+        },
+        {
+            "trigger": "@SetWebColumnSort",
+            "contents": "@SetWebColumnSort()"
+        },
+        {
+            "trigger": "@SetWebRoutineTitle",
+            "contents": "@SetWebRoutineTitle()"
+        },
+        {
+            "trigger": "@SetWebWaitMessage",
+            "contents": "@SetWebWaitMessage()"
+        },
+        {
+            "trigger": "@SetWindowTitle",
+            "contents": "@SetWindowTitle()"
+        },
+        {
+            "trigger": "@ShowAlert",
+            "contents": "@ShowAlert()"
+        },
+        {
+            "trigger": "@ShowChoicePopover",
+            "contents": "@ShowChoicePopover()"
+        },
+        {
+            "trigger": "@ShowGraph",
+            "contents": "@ShowGraph()"
+        },
+        {
+            "trigger": "@ShowHelpTopic",
+            "contents": "@ShowHelpTopic()"
+        },
+        {
+            "trigger": "@ShowHelpTopicPopup",
+            "contents": "@ShowHelpTopicPopup()"
+        },
+        {
+            "trigger": "@ShowMessageBox",
+            "contents": "@ShowMessageBox()"
+        },
+        {
+            "trigger": "@ShowWorkingIndicator",
+            "contents": "@ShowWorkingIndicator()"
+        },
+        {
+            "trigger": "@ShredFile",
+            "contents": "@ShredFile()"
+        },
+        {
+            "trigger": "@SizeIcon",
+            "contents": "@SizeIcon()"
+        },
+        {
+            "trigger": "@SkipConversionCrawler",
+            "contents": "@SkipConversionCrawler()"
+        },
+        {
+            "trigger": "@SkipProgressiveConversion",
+            "contents": "@SkipProgressiveConversion()"
+        },
+        {
+            "trigger": "@SortRecords",
+            "contents": "@SortRecords(${1:ObjectClass.RecordName},${2:SortKey},${3:SortOrder})"
+        },
+        {
+            "trigger": "@SortRecordsByColumn",
+            "contents": "@SortRecordsByColumn()"
+        },
+        {
+            "trigger": "@SplitProcess",
+            "contents": "@SplitProcess()"
+        },
+        {
+            "trigger": "@StackMemory",
+            "contents": "@StackMemory()"
+        },
+        {
+            "trigger": "@StartConversionCrawler",
+            "contents": "@StartConversionCrawler(${1:StopFunc})"
+        },
+        {
+            "trigger": "@StartProgressiveConversion",
+            "contents": "@StartProgressiveConversion(${1:StopFunc})"
+        },
+        {
+            "trigger": "@SubBodyButtonSelected",
+            "contents": "@SubBodyButtonSelected()"
+        },
+        {
+            "trigger": "@TerminateExternalApp",
+            "contents": "@TerminateExternalApp()"
+        },
+        {
+            "trigger": "@TerminateReport",
+            "contents": "@TerminateReport()"
+        },
+        {
+            "trigger": "@TestWebConnection",
+            "contents": "@TestWebConnection(${1:progress callback})"
+        },
+        {
+            "trigger": "@TextAppend",
+            "contents": "@TextAppend()"
+        },
+        {
+            "trigger": "@TextAppendEnd",
+            "contents": "@TextAppendEnd()"
+        },
+        {
+            "trigger": "@TextAppendTop",
+            "contents": "@TextAppendTop()"
+        },
+        {
+            "trigger": "@TextEditorClear",
+            "contents": "@TextEditorClear()"
+        },
+        {
+            "trigger": "@TextEditorDefaultCursorPosition",
+            "contents": "@TextEditorDefaultCursorPosition()"
+        },
+        {
+            "trigger": "@TextEditorDefaultFont",
+            "contents": "@TextEditorDefaultFont()"
+        },
+        {
+            "trigger": "@TextEditorDirty",
+            "contents": "@TextEditorDirty()"
+        },
+        {
+            "trigger": "@TextEditorGetCurrentFormat",
+            "contents": "@TextEditorGetCurrentFormat()"
+        },
+        {
+            "trigger": "@TextEditorGetDefaultFont",
+            "contents": "@TextEditorGetDefaultFont()"
+        },
+        {
+            "trigger": "@TextEditorGetPosition",
+            "contents": "@TextEditorGetPosition()"
+        },
+        {
+            "trigger": "@TextEditorHereField",
+            "contents": "@TextEditorHereField()"
+        },
+        {
+            "trigger": "@TextEditorLocate",
+            "contents": "@TextEditorLocate()"
+        },
+        {
+            "trigger": "@TextEditorMode",
+            "contents": "@TextEditorMode()"
+        },
+        {
+            "trigger": "@TextEditorModeRT",
+            "contents": "@TextEditorModeRT()"
+        },
+        {
+            "trigger": "@TextEditorOKToModify",
+            "contents": "@TextEditorOKToModify()"
+        },
+        {
+            "trigger": "@TextEditorPutPosition",
+            "contents": "@TextEditorPutPosition()"
+        },
+        {
+            "trigger": "@TextEditorQuickText",
+            "contents": "@TextEditorQuickText()"
+        },
+        {
+            "trigger": "@TextEditorSetWordList",
+            "contents": "@TextEditorSetWordList()"
+        },
+        {
+            "trigger": "@TextEditorWriteToFile",
+            "contents": "@TextEditorWriteToFile()"
+        },
+        {
+            "trigger": "@TextEditorWriteToFileClear",
+            "contents": "@TextEditorWriteToFileClear()"
+        },
+        {
+            "trigger": "@TextEnterEditor",
+            "contents": "@TextEnterEditor()"
+        },
+        {
+            "trigger": "@TextEnterViewer",
+            "contents": "@TextEnterViewer()"
+        },
+        {
+            "trigger": "@TextExitEditor",
+            "contents": "@TextExitEditor()"
+        },
+        {
+            "trigger": "@TextExitViewer",
+            "contents": "@TextExitViewer()"
+        },
+        {
+            "trigger": "@TextGetSelection",
+            "contents": "@TextGetSelection()"
+        },
+        {
+            "trigger": "@TextInsert",
+            "contents": "@TextInsert()"
+        },
+        {
+            "trigger": "@TextInsertTop",
+            "contents": "@TextInsertTop()"
+        },
+        {
+            "trigger": "@TextJoin",
+            "contents": "@TextJoin()"
+        },
+        {
+            "trigger": "@TextReadFromEditor",
+            "contents": "@TextReadFromEditor()"
+        },
+        {
+            "trigger": "@TextUpdate",
+            "contents": "@TextUpdate()"
+        },
+        {
+            "trigger": "@TimeStampAccessLocalData",
+            "contents": "@TimeStampAccessLocalData()"
+        },
+        {
+            "trigger": "@TimeStampAppData",
+            "contents": "@TimeStampAppData()"
+        },
+        {
+            "trigger": "@TimeStampAuthenticatedUser",
+            "contents": "@TimeStampAuthenticatedUser()"
+        },
+        {
+            "trigger": "@TimeStampDateTime",
+            "contents": "@TimeStampDateTime()"
+        },
+        {
+            "trigger": "@TimeStampDevice",
+            "contents": "@TimeStampDevice()"
+        },
+        {
+            "trigger": "@TimeStampDomainUser",
+            "contents": "@TimeStampDomainUser()"
+        },
+        {
+            "trigger": "@TimeStampEffectiveDateTime",
+            "contents": "@TimeStampEffectiveDateTime()"
+        },
+        {
+            "trigger": "@TimeStampEnvData",
+            "contents": "@TimeStampEnvData()"
+        },
+        {
+            "trigger": "@TimeStampMiniGuid",
+            "contents": "@TimeStampMiniGuid()"
+        },
+        {
+            "trigger": "@TimeStampRollUp",
+            "contents": "@TimeStampRollUp()"
+        },
+        {
+            "trigger": "@TimeStampSignonUserMnemonic",
+            "contents": "@TimeStampSignonUserMnemonic()"
+        },
+        {
+            "trigger": "@TimeStampSignonUserName",
+            "contents": "@TimeStampSignonUserName()"
+        },
+        {
+            "trigger": "@TimeStampVersionData",
+            "contents": "@TimeStampVersionData()"
+        },
+        {
+            "trigger": "@ToExternal",
+            "contents": "@ToExternal(${1:DataType})"
+        },
+        {
+            "trigger": "@ToExternalElement",
+            "contents": "@ToExternalElement(${1:ObjectClass.ElementName})"
+        },
+        {
+            "trigger": "@ToExternalReport",
+            "contents": "@ToExternalReport(${1:DataType})"
+        },
+        {
+            "trigger": "@ToInternal",
+            "contents": "@ToInternal(${1:DataType})"
+        },
+        {
+            "trigger": "@TreeRoot",
+            "contents": "@TreeRoot()"
+        },
+        {
+            "trigger": "@TriggerContentGeneration",
+            "contents": "@TriggerContentGeneration()"
+        },
+        {
+            "trigger": "@TriggerCx",
+            "contents": "@TriggerCx()"
+        },
+        {
+            "trigger": "@TriggerIncrementalLoad",
+            "contents": "@TriggerIncrementalLoad()"
+        },
+        {
+            "trigger": "@UWIDirectory",
+            "contents": "@UWIDirectory(${1:DirectoryType (MyDrive)})"
+        },
+        {
+            "trigger": "@UWITempDirectory",
+            "contents": "@UWITempDirectory(${1:DirectoryType (Session or Process)})"
+        },
+        {
+            "trigger": "@UnloadToolset",
+            "contents": "@UnloadToolset(${1:Toolset})"
+        },
+        {
+            "trigger": "@UnlockLongMulti",
+            "contents": "@UnlockLongMulti()"
+        },
+        {
+            "trigger": "@UnlockLongRT",
+            "contents": "@UnlockLongRT()"
+        },
+        {
+            "trigger": "@UnlockObjectLong",
+            "contents": "@UnlockObjectLong(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@UnlockObjectShort",
+            "contents": "@UnlockObjectShort(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@UnlockObjectShortCx",
+            "contents": "@UnlockObjectShortCx(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@UnlockProcessLong",
+            "contents": "@UnlockProcessLong(${1:Object.ProcessLock})"
+        },
+        {
+            "trigger": "@UnlockProcessShort",
+            "contents": "@UnlockProcessShort(${1:Object.ProcessLock})"
+        },
+        {
+            "trigger": "@UnlockProcessShortCx",
+            "contents": "@UnlockProcessShortCx(${1:Object.ProcessLock})"
+        },
+        {
+            "trigger": "@UnlockShortRT",
+            "contents": "@UnlockShortRT()"
+        },
+        {
+            "trigger": "@UnstackMemory",
+            "contents": "@UnstackMemory()"
+        },
+        {
+            "trigger": "@UpdateCodeBase",
+            "contents": "@UpdateCodeBase()"
+        },
+        {
+            "trigger": "@UpdateIcon",
+            "contents": "@UpdateIcon()"
+        },
+        {
+            "trigger": "@UpdateIndexEntries",
+            "contents": "@UpdateIndexEntries(${1:ObjectClass.IndexName})"
+        },
+        {
+            "trigger": "@UpdateIndexEntriesRT",
+            "contents": "@UpdateIndexEntriesRT()"
+        },
+        {
+            "trigger": "@UpdateLongLockRT",
+            "contents": "@UpdateLongLockRT()"
+        },
+        {
+            "trigger": "@UpdateObjectLongLock",
+            "contents": "@UpdateObjectLongLock(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@UpdateProcessLongLock",
+            "contents": "@UpdateProcessLongLock(${1:Object.Lock})"
+        },
+        {
+            "trigger": "@UpdateProgressIndicator",
+            "contents": "@UpdateProgressIndicator()"
+        },
+        {
+            "trigger": "@UpdateSessionStartTime",
+            "contents": "@UpdateSessionStartTime()"
+        },
+        {
+            "trigger": "@UpdateWorkingIndicator",
+            "contents": "@UpdateWorkingIndicator()"
+        },
+        {
+            "trigger": "@Valid",
+            "contents": "@Valid(${1:DataType})"
+        },
+        {
+            "trigger": "@ValidElement",
+            "contents": "@ValidElement(${1:ObjectClass.ElementName})"
+        },
+        {
+            "trigger": "@ValidElementExtToInt",
+            "contents": "@ValidElementExtToInt(${1:ObjectClass.ElementName})"
+        },
+        {
+            "trigger": "@ValidExtToInt",
+            "contents": "@ValidExtToInt(${1:DataType})"
+        },
+        {
+            "trigger": "@ValidOID",
+            "contents": "@ValidOID()"
+        },
+        {
+            "trigger": "@Var",
+            "contents": "@Var(${1:FS Variable},${2:SM-AT Variable},${3:Variable Description})"
+        },
+        {
+            "trigger": "@VerifyANPService",
+            "contents": "@VerifyANPService()"
+        },
+        {
+            "trigger": "@VerifyProgressiveConversion",
+            "contents": "@VerifyProgressiveConversion()"
+        },
+        {
+            "trigger": "@WPLAccelerator",
+            "contents": "@WPLAccelerator(${1:Accelerator data function callback},${2:Standard display function callback},${3:Event handler callback (optional)})"
+        },
+        {
+            "trigger": "@WPLCastBoolean",
+            "contents": "@WPLCastBoolean()"
+        },
+        {
+            "trigger": "@WPLCastMap",
+            "contents": "@WPLCastMap()"
+        },
+        {
+            "trigger": "@WPLCastNull",
+            "contents": "@WPLCastNull()"
+        },
+        {
+            "trigger": "@WPLCastNumber",
+            "contents": "@WPLCastNumber()"
+        },
+        {
+            "trigger": "@WPLCastRecursiveArray",
+            "contents": "@WPLCastRecursiveArray()"
+        },
+        {
+            "trigger": "@WPLData",
+            "contents": "@WPLData()"
+        },
+        {
+            "trigger": "@WPLDisplay",
+            "contents": "@WPLDisplay()"
+        },
+        {
+            "trigger": "@WPLFeaturesAvailable",
+            "contents": "@WPLFeaturesAvailable()"
+        },
+        {
+            "trigger": "@WPLHash",
+            "contents": "@WPLHash()"
+        },
+        {
+            "trigger": "@WPLInstallMESH",
+            "contents": "@WPLInstallMESH()"
+        },
+        {
+            "trigger": "@WPLMode",
+            "contents": "@WPLMode()"
+        },
+        {
+            "trigger": "@WPLProxyHttpRequest",
+            "contents": "@WPLProxyHttpRequest(${1:Method (GET or POST)})"
+        },
+        {
+            "trigger": "@WPLReferenceExternal",
+            "contents": "@WPLReferenceExternal()"
+        },
+        {
+            "trigger": "@WPLReferenceInternal",
+            "contents": "@WPLReferenceInternal()"
+        },
+        {
+            "trigger": "@WPLSetHtmlTitle",
+            "contents": "@WPLSetHtmlTitle()"
+        },
+        {
+            "trigger": "@WaitForProcess",
+            "contents": "@WaitForProcess()"
+        },
+        {
+            "trigger": "@WaitForProcessRaw",
+            "contents": "@WaitForProcessRaw()"
+        },
+        {
+            "trigger": "@WebAppServerLog",
+            "contents": "@WebAppServerLog()"
+        },
+        {
+            "trigger": "@WebBreak",
+            "contents": "@WebBreak(${1:String})"
+        },
+        {
+            "trigger": "@WebCaptureImage",
+            "contents": "@WebCaptureImage()"
+        },
+        {
+            "trigger": "@WebLogoff",
+            "contents": "@WebLogoff()"
+        },
+        {
+            "trigger": "@WebMeditorInsert",
+            "contents": "@WebMeditorInsert()"
+        },
+        {
+            "trigger": "@WebOpenFileUploadDialog",
+            "contents": "@WebOpenFileUploadDialog()"
+        },
+        {
+            "trigger": "@WebOpenPrintDialog",
+            "contents": "@WebOpenPrintDialog()"
+        },
+        {
+            "trigger": "@WebPdfView",
+            "contents": "@WebPdfView()"
+        },
+        {
+            "trigger": "@WebPdfViewCleanup",
+            "contents": "@WebPdfViewCleanup()"
+        },
+        {
+            "trigger": "@WebRegisterFile",
+            "contents": "@WebRegisterFile()"
+        },
+        {
+            "trigger": "@WebSchGridEventLowlight",
+            "contents": "@WebSchGridEventLowlight()"
+        },
+        {
+            "trigger": "@WebSchGridSetScrollPos",
+            "contents": "@WebSchGridSetScrollPos()"
+        },
+        {
+            "trigger": "@WebSessionResume",
+            "contents": "@WebSessionResume()"
+        },
+        {
+            "trigger": "@WebSessionResumeFailed",
+            "contents": "@WebSessionResumeFailed()"
+        },
+        {
+            "trigger": "@WebSessionSuspend",
+            "contents": "@WebSessionSuspend()"
+        },
+        {
+            "trigger": "@WebUnregisterFile",
+            "contents": "@WebUnregisterFile()"
+        },
+        {
+            "trigger": "@WebUpdateCredentials",
+            "contents": "@WebUpdateCredentials()"
+        },
+        {
+            "trigger": "@WindowDrawn",
+            "contents": "@WindowDrawn()"
+        },
+        {
+            "trigger": "@WithinNestedLookup",
+            "contents": "@WithinNestedLookup()"
+        },
+        {
+            "trigger": "@WriteLogEvent",
+            "contents": "@WriteLogEvent(${1:Object.LogFile})"
+        },
+        {
+            "trigger": "@WriteLogEventRT",
+            "contents": "@WriteLogEventRT()"
+        },
+        {
+            "trigger": "@WritePrintStream",
+            "contents": "@WritePrintStream()"
+        },
+        {
+            "trigger": "@WriteTCPProxyReturnQueue",
+            "contents": "@WriteTCPProxyReturnQueue()"
+        }
+    ]
 }

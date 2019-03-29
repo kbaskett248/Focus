@@ -1,0 +1,2 @@
+This release includes a new set of Focus Function completions. These completions are
+built directly from the wiki.
