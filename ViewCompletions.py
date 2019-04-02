@@ -56,8 +56,7 @@ class FocusFunctionTrigger(CompletionTrigger):
         the current selection.
 
         """
-        return ('meta.function.focus - '
-                'meta.function.arguments.translate-time.focus')
+        return 'meta.function.focus'
 
     def selection_check(self, prefix, locs):
         """Return a list of completion types for the current locations.
@@ -71,10 +70,14 @@ class FocusFunctionTrigger(CompletionTrigger):
 
         ring_view = get_view(self.view)
         span, string = ring_view.extract_focus_function(locs[0])
+        logger.debug("span=%s, string=%s", span, string)
 
         if span is not None:
             name, args = split_focus_function(string, span[0])
-            if args[0][0] <= locs[0] <= args[0][1]:
+            logger.debug("name=%s, args=%s", name, args)
+            first_arg = next(self.split_args(*args))
+            logger.debug("first_arg=%s", first_arg)
+            if first_arg[0][0] <= locs[0] <= first_arg[0][1]:
                 try:
                     comp = get_focus_function_argument_type(name[1])
                     return [comp]
@@ -82,6 +85,13 @@ class FocusFunctionTrigger(CompletionTrigger):
                     pass
 
         return []
+
+    @staticmethod
+    def split_args(range_, value):
+        start = range_[0]
+        for v in value.split(','):
+            yield((start, start + len(v)), v)
+            start += len(v) + 1
 
 
 class AliasTrigger(CompletionTrigger):
