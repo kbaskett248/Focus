@@ -137,7 +137,7 @@ repository:
     patterns:
     - comment: Named Variable Declaration
       name: meta.variable.other.local.named.declaration
-      begin: '^(var:) *'
+      begin: '^([Vv]ar:) *'
       beginCaptures:
         '1': {name: keyword.other}
       end: '$'

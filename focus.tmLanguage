@@ -256,7 +256,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>^(var:) *</string>
+					<string>^([Vv]ar:) *</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
