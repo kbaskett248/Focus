@@ -103,6 +103,7 @@ class CodeBlock(object):
         """
         (self.header_region,
          self.documentation_region,
+         self.var_declaration_region,
          self.code_region) = split_member_region(self.view,
                                                  self.codeblock_region)
 

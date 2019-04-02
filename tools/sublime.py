@@ -48,7 +48,15 @@ def split_member_region(view, codeblock_region):
             doc_region = sublime.Region(doc_start, doc_start)
         yield doc_region
 
-        yield sublime.Region(doc_region.end()+1, codeblock_region.end())
+        var_declaration_start = doc_region.end()+1
+        if view.score_selector(var_declaration_start,
+                'meta.variable.other.local.named.declaration') > 0:
+            var_declaration = view.line(var_declaration_start)
+        else:
+            var_declaration = sublime.Region(var_declaration_start, var_declaration_start)
+        yield var_declaration
+
+        yield sublime.Region(var_declaration.end()+1, codeblock_region.end())
 
 
 FOCUS_FUNCTION_MATCHER = re.compile(r"(?<!\@)\@[A-Za-z]{3,}[A-Za-z0-9]*"
