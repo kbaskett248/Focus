@@ -1970,7 +1970,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=SortRecords\()\w[\w._\- ]*?</string>
+					<string>(?&lt;=SortRecords\()\w[\w._\- ]*</string>
 					<key>name</key>
 					<string>variable.parameter.object.focus</string>
 				</dict>

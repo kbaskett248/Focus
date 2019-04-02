@@ -1,1 +1,2 @@
 Improve M-AT Function argument completions for functions with multiple arguments.
+Improve syntax highlighting for @SortRecords.

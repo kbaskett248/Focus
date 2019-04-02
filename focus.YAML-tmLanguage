@@ -154,7 +154,7 @@ repository:
   code-region:
     patterns:
     - include: '#externalized-list-separator'
-    
+
     - include: '#comment'
 
     - include: '#illegal-line-start'
@@ -207,9 +207,9 @@ repository:
     - comment: Member call
       match: '@\d+'
       name: meta.member.fs
-      
+
     # - name: constant.numeric.integer.decimal.fs
-    #   match: \b([1-9]+[0-9]*|0) 
+    #   match: \b([1-9]+[0-9]*|0)
     # - name: constant.numeric.float.fs
     #   match: (?<=[^0-9a-zA-Z_])(?i:(\.\d+(e[\-\+]?\d+)?))
 
@@ -300,7 +300,7 @@ repository:
       endCaptures:
         '0': {name: punctuation.definition.concatenate.end.fs}
       patterns:
-      - name: punctuation.definition.separator.comma.fs 
+      - name: punctuation.definition.separator.comma.fs
         match: ","
       - include: '#code-region'
       # This needs to be at the end so it doesn't find anything else it shouldn't
@@ -429,7 +429,7 @@ repository:
       match: '\|'
     - include: '#blank-line-error'
     - name: string.unquoted.string-list.fs
-      match: '[^{}|]' 
+      match: '[^{}|]'
 
   list-keyword:
     comment: List Member Keyword
@@ -497,7 +497,7 @@ repository:
       '0': {name: support.function.focus}
     patterns:
     - name: variable.parameter.object.focus
-      match: (?<=SortRecords\()\w[\w._\- ]*?
+      match: (?<=SortRecords\()\w[\w._\- ]*
     - match: ',[AD](?=\))'
     - include: '#code-region'
 
@@ -612,7 +612,7 @@ repository:
     - include: '#attribute_line'
     - include: '#translator_continuation'
     - include: '#comment'
-  
+
   screencomponent_translator:
     name: meta.translator.screencomponent.focus
     begin: ^(#ScreenComponent)\b\s*\n?
@@ -637,7 +637,7 @@ repository:
     - include: '#attribute_line'
     - include: '#translator_continuation'
     - include: '#comment'
-  
+
   screenpage_translator:
     name: meta.translator.screenpage.focus
     begin: ^(#ScreenPage)\b\s*$\n?
@@ -649,7 +649,7 @@ repository:
     - include: '#keyword_line'
     - include: '#attribute_line'
     - include: '#comment'
-  
+
   screenrecord_translator:
     name: meta.translator.screenrecord.focus
     begin: ^(#ScreenRecord)\b\s*$\n?
@@ -663,7 +663,7 @@ repository:
     - include: '#attribute_line'
     - include: '#translator_continuation'
     - include: '#comment'
-  
+
   string:
     comment: double quoted string
     name: string.quoted.double.single-line.fs
@@ -690,8 +690,8 @@ repository:
     - name: keyword.operator.comma.fs punctuation.definition.separator.comma.fs
       match: ","
     - name: string.unquoted.string-list.fs
-      match: '[^,''`]' 
-  
+      match: '[^,''`]'
+
   translator_continuation:
     name: meta.translator.continuation.focus
     contentName: meta.value.attribute.focus
