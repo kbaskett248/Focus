@@ -1,5 +1,6 @@
 Better support for named variables:
   - Named variables are now supported when updating or generating documentation.
+  - Completions are displayed for named variables.
   - A new command has been added to update the Named Variables declaration in a
     subroutine. Find it in the command palette under Update Variable Declaration.
     This command only appears when the cursor is in a subroutine with Named Variables.
