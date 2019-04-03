@@ -7,6 +7,7 @@ CT_INCLUDE_FILE = 'Include'
 CT_EXTERNAL_PAGESET = 'ExternalPageSet'
 CT_STATE = 'State'
 CT_SYSTEM = 'System'
+CT_SUBROUTINE_LOCAL = 'Subroutine Local'
 
 CT_OBJECT = "Object"
 CT_RECORD = "Record"

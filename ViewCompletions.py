@@ -9,6 +9,8 @@ except ImportError as e:
     logger.error('DynamicCompletions package not installed')
     raise e
 
+from .classes.views import ViewTypeException
+from .classes.code_blocks import InvalidCodeBlockError
 from .tools.classes import get_view
 from .tools.focus import TRANSLATOR_LINE_SPLITTER
 from .tools.load_translator_completions import get_translator_completions
@@ -25,6 +27,7 @@ from .misc.completion_types import (
     CT_SUBROUTINE,
     CT_LIST,
     CT_TRANSLATOR,
+    CT_SUBROUTINE_LOCAL,
 
     CT_OBJECT,
     CT_RECORD,
@@ -217,6 +220,37 @@ class TranslatorTrigger(CompletionTrigger):
             return [CT_TRANSLATOR]
         else:
             return translator.completion_types
+
+
+class VariablesTrigger(CompletionTrigger):
+    """Trigger to include subroutine variables."""
+
+    @classmethod
+    def view_scope(cls):
+        """
+        Return a scope to determine if a CompletionTrigger will be enabled for
+        a view.
+
+        """
+        return 'source.focus'
+
+    def selection_scope(self):
+        """
+        Return a scope to determine if a CompletionTrigger will be enabled for
+        the current selection.
+
+        """
+        return 'meta.keyword.code - string'
+
+    def selection_check(self, prefix, locs):
+        """
+        Return a list of completion types for the current locations.
+
+        If no completion types are handled for the current locations by this
+        trigger, return an empty list.
+
+        """
+        return [CT_SUBROUTINE_LOCAL]
 
 
 class AliasViewLoader(ViewLoader):
@@ -516,3 +550,52 @@ class TranslatorViewLoader(ViewLoader):
             self.completions = set([(x,) for x in translator.completions])
 
         logger.debug('Translator Completions: %s', self.completions)
+
+
+class VariableViewLoader(ViewLoader):
+    """
+    Loads completions for populating translators.
+    """
+
+    EmptyReturn = ([], )
+
+    @classmethod
+    def completion_types(cls):
+        """
+        Return a set of completion types that this CompletionLoader can return.
+        """
+        return [CT_SUBROUTINE_LOCAL]
+
+    @classmethod
+    def view_scope(cls):
+        """
+        Return a scope to determine if the CompletionLoader will be enabled
+        for a view.
+
+        """
+        return 'source.focus'
+
+    def load_completions(self, **kwargs):
+        """Load variable completions for the current code block.
+
+        """
+        selections = set(s.begin() for s in self.view.sel())
+        try:
+            focus_view = get_view(self.view)
+            codeblock = focus_view.get_codeblock(self.view.sel()[0].begin())
+        except ViewTypeException:
+            pass
+        except InvalidCodeBlockError:
+            pass
+        else:
+            var_dict = codeblock.get_variables_from_function()
+            # Exclude variables that show up due to the character that was typed
+            var_list = [v for v in var_dict.values() if
+                        set(s.end() for s in v.regions) != selections]
+            if any(len(v.var) > 1 for v in var_list):
+                self.completions = set((v.var,) for v in var_list
+                                       if len(v.var) > 0)
+
+    def filter_completions(self, completion_types, **kwargs):
+        """Override the return to replace the flags value."""
+        return (super().filter_completions(completion_types, **kwargs)[0], 0)
