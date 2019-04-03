@@ -1,3 +1,5 @@
+import logging
+logger = logging.getLogger(__name__)
 import re
 
 import sublime
@@ -14,9 +16,8 @@ from ..tools.settings import (
 
 class CodeBlock(object):
     """Represents a single subroutine in a Focus file."""
-
-    ARG_MATCHER = re.compile(r"^(\[.*?\])*\^([A-Z]|\{[A-Z,{}]*\})")
-    ARG_SPLITTER = re.compile(r"\{[A-Z,\d$]*\}")
+    ARG_MATCHER = re.compile(r"^(\[.*?\])*\^(\b[A-Za-z][A-Za-z0-9]*|\{(\b[A-Za-z][A-Za-z0-9]*|[,{}])*\})")
+    ARG_SPLITTER = re.compile(r"\{(?:\b[A-Za-z][A-Za-z0-9]*|[,\d$])*\}")
 
     def __init__(self, ring_view, point):
         super(CodeBlock, self).__init__()
@@ -89,6 +90,18 @@ class CodeBlock(object):
         self._codeblock_name = value
 
     @property
+    def var_declaration_region(self):
+        try:
+            return self._var_declaration_region
+        except AttributeError:
+            self.split_codeblock_region()
+            return self._var_declaration_region
+
+    @var_declaration_region.setter
+    def var_declaration_region(self, value):
+        self._var_declaration_region = value
+
+    @property
     def doc(self):
         try:
             return self._doc
@@ -134,7 +147,7 @@ class CodeBlock(object):
 
         while ('{' in arg_string) and proceed:
             proceed = False
-            matches = re.findall(r'\{[A-Z,\d$]*\}', arg_string)
+            matches = CodeBlock.ARG_SPLITTER.findall(arg_string)
             for m in matches:
                 proceed = True
                 arg_list = list()
