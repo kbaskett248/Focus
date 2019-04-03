@@ -427,6 +427,38 @@ class GenerateDocCommand(FocusViewCommand):
             return False
 
 
+class UpdateNamedVariables(FocusViewCommand):
+    def run(self, edit):
+        """Update the named variables declaration for a subroutine."""
+        codeblock = self.focus_view.get_codeblock(self.selection_start())
+        var_dict = codeblock.get_variables_from_function()
+        var_list = list(var_dict.values())
+        var_list.sort(key=lambda v: min(v.regions))
+        contents = "var: " + " ".join(v.var for v in var_list)
+        if codeblock.var_declaration_region.empty():
+            contents += "\n"
+
+        self.view.replace(edit, codeblock.var_declaration_region, contents)
+
+    def is_enabled(self):
+        """Enable if in a subroutine and there are any named variables."""
+        if super().is_enabled() and self.in_subroutine():
+            codeblock = self.focus_view.get_codeblock(self.selection_start())
+            return any(len(v.var) > 1 for v
+                       in codeblock.get_variables_from_function().values())
+        else:
+            return False
+
+    def selection_start(self):
+        """Return the start of the first selection."""
+        return self.view.sel()[0].begin()
+
+    def in_subroutine(self):
+        """Return True if the current selection is within a subroutine."""
+        return self.view.score_selector(self.selection_start(),
+                                        'meta.subroutine.fs') > 0
+
+
 class FoldSubroutineCommand(RingViewCommand):
     """Command to fold subroutines."""
 

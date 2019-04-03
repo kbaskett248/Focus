@@ -9,6 +9,10 @@
         "args": { "update_only": true, "use_snippets": true } 
     },
 
+    {   "caption": "Focus Tools: Update Variable Declaration",
+        "command": "update_named_variables"
+    },
+
     {   "caption": "Focus Tools: Document All Locals",
         "command": "document_all_locals",          
         "args": { "use_snippets": true } 
