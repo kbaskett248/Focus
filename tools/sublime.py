@@ -36,6 +36,7 @@ def split_member_region(view, codeblock_region):
         yield None
         yield None
         yield None
+        yield None
     else:
         header_region = view.line(start)
         yield header_region
