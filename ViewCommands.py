@@ -1,4 +1,5 @@
 from collections import deque
+from functools import partial
 import os
 import re
 
@@ -457,6 +458,56 @@ class UpdateNamedVariables(FocusViewCommand):
         """Return True if the current selection is within a subroutine."""
         return self.view.score_selector(self.selection_start(),
                                         'meta.subroutine.fs') > 0
+
+
+class RenameVariables(FocusViewCommand):
+    def run(self, edit):
+        """Update the named variables declaration for a subroutine."""
+        codeblock = self.focus_view.get_codeblock(self.selection_start())
+        var_dict = codeblock.get_variables_from_function()
+
+        var_queue = deque(v[1] for v in sorted(var_dict.items()))
+
+        self.update_and_request_next(var_queue, [], None, None)
+
+    def is_enabled(self):
+        """Enable if in a subroutine."""
+        return super().is_enabled() and self.in_subroutine()
+
+    def selection_start(self):
+        """Return the start of the first selection."""
+        return self.view.sel()[0].begin()
+
+    def in_subroutine(self):
+        """Return True if the current selection is within a subroutine."""
+        return self.view.score_selector(self.selection_start(),
+                                        'meta.subroutine.fs') > 0
+
+    def update_and_request_next(self, var_queue, update_list, current_var, new_var_name):
+        # self.view.replace(edit, codeblock.var_declaration_region, contents)
+        if current_var and new_var_name:
+            if current_var.var != new_var_name:
+                for reg in current_var.regions:
+                    update_list.append(((reg.begin(), reg.end()), new_var_name))
+
+        try:
+            current_var = var_queue.popleft()
+        except IndexError:
+            self.view.run_command('replace_multiple', {"replacements": update_list})
+        else:
+            self.view.window().show_input_panel(
+                "Rename " + current_var.var,
+                current_var.var,
+                partial(self.update_and_request_next, var_queue, update_list, current_var),
+                None,
+                None)
+
+
+class ReplaceMultiple(sublime_plugin.TextCommand):
+    def run(self, edit, replacements):
+        for reg, text in sorted(replacements, reverse=True):
+            r = sublime.Region(*reg)
+            self.view.replace(edit, r, text)
 
 
 class FoldSubroutineCommand(RingViewCommand):

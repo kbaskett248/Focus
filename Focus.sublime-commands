@@ -13,6 +13,10 @@
         "command": "update_named_variables"
     },
 
+    {   "caption": "Focus Tools: Rename Variables",
+        "command": "rename_variables"
+    },
+
     {   "caption": "Focus Tools: Document All Locals",
         "command": "document_all_locals",          
         "args": { "use_snippets": true } 
