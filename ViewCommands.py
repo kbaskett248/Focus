@@ -1,4 +1,4 @@
-from collections import deque
+from collections import deque, namedtuple
 from functools import partial
 import os
 import re
@@ -467,13 +467,25 @@ class RenameVariables(FocusViewCommand):
         var_dict = codeblock.get_variables_from_function()
 
         var_queue = deque(v[1] for v in sorted(var_dict.items()))
+        VarDeclInfo = namedtuple('VarDeclInfo', ('region', 'text'))
+        if codeblock.var_declaration_region.empty():
+            var_decl_text = "var: {}\n".format(
+                " ".join(v.var for v
+                         in sorted(var_queue, key=lambda x: min(x.regions)))
+            )
+        else:
+            var_decl_text = self.view.substr(codeblock.var_declaration_region)
+        var_decl_info = VarDeclInfo(
+            codeblock.var_declaration_region,
+            var_decl_text,
+        )
         for var_ in var_queue:
             regions = self.view.find_all(var_.var + r"(?= *[:\-=])")
             for reg in regions:
                 if codeblock.documentation_region.contains(reg):
                     var_.regions.append(reg)
 
-        self.update_and_request_next(var_queue, [], None, None)
+        self.update_and_request_next(var_queue, var_decl_info, [], None, None)
 
     def is_enabled(self):
         """Enable if in a subroutine."""
@@ -488,22 +500,47 @@ class RenameVariables(FocusViewCommand):
         return self.view.score_selector(self.selection_start(),
                                         'meta.subroutine.fs') > 0
 
-    def update_and_request_next(self, var_queue, update_list, current_var, new_var_name):
-        # self.view.replace(edit, codeblock.var_declaration_region, contents)
+    def update_and_request_next(self,
+                                var_queue,
+                                var_decl_info,
+                                update_list,
+                                current_var,
+                                new_var_name):
         if current_var and new_var_name:
             if current_var.var != new_var_name:
+                var_decl_info = var_decl_info._replace(
+                    text=var_decl_info.text.replace(current_var.var, new_var_name)
+                )
                 for reg in current_var.regions:
                     update_list.append(((reg.begin(), reg.end()), new_var_name))
 
         try:
             current_var = var_queue.popleft()
         except IndexError:
+            if update_list:
+                if any(len(v) > 1 for v
+                       in var_decl_info.text[5:].replace("\n", "").split(' ')):
+                    update_list.append(
+                        ((var_decl_info.region.begin(),
+                          var_decl_info.region.end()),
+                         var_decl_info.text)
+                    )
+                elif not var_decl_info.region.empty():
+                    update_list.append(
+                        ((var_decl_info.region.begin(),
+                          var_decl_info.region.end() + 1),
+                         "")
+                    )
             self.view.run_command('replace_multiple', {"replacements": update_list})
         else:
             self.view.window().show_input_panel(
                 "Rename " + current_var.var,
                 current_var.var,
-                partial(self.update_and_request_next, var_queue, update_list, current_var),
+                partial(self.update_and_request_next,
+                        var_queue,
+                        var_decl_info,
+                        update_list,
+                        current_var),
                 None,
                 None)
 
