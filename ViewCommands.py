@@ -504,7 +504,18 @@ class RenameVariables(FocusViewCommand):
 
 
 class ReplaceMultiple(sublime_plugin.TextCommand):
+    """Replace a collection of regions."""
+
     def run(self, edit, replacements):
+        """
+        Arguments:
+            replacements (list): A list of tuples. The first offset of each
+                tuple is the start and end of a region. The second offset is
+                the replacement text.
+
+        """
+        # Need to replace in reverse order by region so that updating an
+        # earlier region does not move a subsequent one.
         for reg, text in sorted(replacements, reverse=True):
             r = sublime.Region(*reg)
             self.view.replace(edit, r, text)
