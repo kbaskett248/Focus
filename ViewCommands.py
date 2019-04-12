@@ -467,6 +467,11 @@ class RenameVariables(FocusViewCommand):
         var_dict = codeblock.get_variables_from_function()
 
         var_queue = deque(v[1] for v in sorted(var_dict.items()))
+        for var_ in var_queue:
+            regions = self.view.find_all(var_.var + r"(?= *[:\-=])")
+            for reg in regions:
+                if codeblock.documentation_region.contains(reg):
+                    var_.regions.append(reg)
 
         self.update_and_request_next(var_queue, [], None, None)
 
