@@ -39,5 +39,12 @@
             // "path": "$RING_PATH\\System;$PATH",
             "encoding": "ascii"
         },
+
+        {   "name": "Unit test file",
+            "target": "window_foc_unit_test",
+            // "exec_cmd": "enhanced_exec",
+            // "path": "$RING_PATH\\System;$PATH",
+            "encoding": "ascii"
+        },
     ]
 }
