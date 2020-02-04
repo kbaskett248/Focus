@@ -433,8 +433,11 @@ class UpdateNamedVariables(FocusViewCommand):
         """Update the named variables declaration for a subroutine."""
         codeblock = self.focus_view.get_codeblock(self.selection_start())
         var_dict = codeblock.get_variables_from_function()
+        if not any(len(v.var) > 1 for v
+                   in codeblock.get_variables_from_function().values()):
+            return
         var_list = list(var_dict.values())
-        var_list.sort(key=lambda v: min(v.regions))
+        var_list.sort(key=lambda x: x.var)
         contents = "var: " + " ".join(v.var for v in var_list)
         if codeblock.var_declaration_region.empty():
             contents += "\n"
