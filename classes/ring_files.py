@@ -145,6 +145,9 @@ class RingFile(object, metaclass=MiniPluginMeta):
             pass
         return False
 
+    def is_includable(self):
+        return False
+
     def get_file_contents(self, split_lines=True, omit_empty_lines=True):
         lines = read_file(self.file_name, omit_empty_lines)
         if not split_lines:
